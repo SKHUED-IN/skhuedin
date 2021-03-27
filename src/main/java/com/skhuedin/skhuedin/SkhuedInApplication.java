@@ -10,4 +10,6 @@ public class SkhuedInApplication {
         SpringApplication.run(SkhuedInApplication.class, args);
     }
 
+
+
 }
