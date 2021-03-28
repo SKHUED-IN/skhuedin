@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
@@ -29,9 +30,13 @@ public class User extends BaseEntity {
 
 
     @Builder
-    public User(Long id, String email, String password, Provider provider,
+    public User( String email, String password, Provider provider,
                 String userImageUrl) {
-        this.id =id;
+        Assert.hasText(email, "email 값은 필수입니다. ");
+        Assert.hasText(password, "password 값은 필수입니다. ");
+        Assert.hasText(provider.toString(), "provider 값은 필수입니다. ");
+        Assert.hasText(userImageUrl, "userImageUrl 값은 필수입니다. ");
+
         this.email = email;
         this.password = password;
         this.provider = provider;

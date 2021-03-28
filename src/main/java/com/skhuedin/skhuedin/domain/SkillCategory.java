@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
@@ -25,8 +26,8 @@ public class SkillCategory extends BaseEntity {
 
 
     @Builder
-    public SkillCategory(Long id, String name) {
-        this.id = id;
+    public SkillCategory( String name) {
+        Assert.hasText(name, "이름 값은 필수입니다. ");
         this.name = name;
     }
 

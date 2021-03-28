@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,8 +27,9 @@ public class QuestionCategory extends BaseEntity{
 
 
     @Builder
-    public QuestionCategory(Long id, String name) {
-        this.id = id;
+    public QuestionCategory(String name) {
+        Assert.hasText(name, "이름 값은 필수입니다. ");
+
         this.name = name;
 
     }
