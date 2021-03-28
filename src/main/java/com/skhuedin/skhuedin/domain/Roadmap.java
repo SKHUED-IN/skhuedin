@@ -1,6 +1,7 @@
 package com.skhuedin.skhuedin.domain;
 
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class Roadmap {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Roadmap extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;

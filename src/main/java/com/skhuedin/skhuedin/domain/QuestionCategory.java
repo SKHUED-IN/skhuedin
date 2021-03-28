@@ -1,6 +1,7 @@
 package com.skhuedin.skhuedin.domain;
 
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class QuestionCategory {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class QuestionCategory extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -23,17 +24,12 @@ public class QuestionCategory {
     private Question question;
 
 
-    private LocalDateTime create;
-    private LocalDateTime updated;
-
 
     @Builder
-    public QuestionCategory(Long id, String name,
-                            LocalDateTime create, LocalDateTime updated) {
+    public QuestionCategory(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.create = create;
-        this.updated = updated;
+
     }
 
 }

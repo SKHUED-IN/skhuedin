@@ -1,6 +1,7 @@
 package com.skhuedin.skhuedin.domain;
 
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class Talent {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Talent extends BaseEntity{
     @Id
     @GeneratedValue
     private Long id;
@@ -41,13 +42,11 @@ public class Talent {
 
     private LocalDateTime start_career;
 
-    private LocalDateTime create;
-    private LocalDateTime updated;
 
     @Builder
     public Talent(Long id, String talentImageUrl, String content,
                   String view, LocalDateTime entranceYear, LocalDateTime graduationYear,
-                  LocalDateTime start_career, LocalDateTime create, LocalDateTime updated) {
+                  LocalDateTime start_career) {
         this.id = id;
         this.talentImageUrl = talentImageUrl;
         this.content = content;
@@ -55,8 +54,6 @@ public class Talent {
         this.entranceYear = entranceYear;
         this.graduationYear = graduationYear;
         this.start_career = start_career;
-        this.create = create;
-        this.updated = updated;
     }
 
 

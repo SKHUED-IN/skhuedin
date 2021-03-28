@@ -1,5 +1,6 @@
 package com.skhuedin.skhuedin.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class Follow {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Follow extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -21,20 +22,6 @@ public class Follow {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @CreatedDate
-    private LocalDateTime create;
-
-    @LastModifiedDate
-    private LocalDateTime updated;
-
-
-    @Builder
-    public Follow(Long id, LocalDateTime create, LocalDateTime updated) {
-        this.id = id;
-        this.create = create;
-        this.updated = updated;
-    }
 
 
 }
