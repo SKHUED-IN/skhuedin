@@ -1,4 +1,4 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.api.entity;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public class BaseEntity {
+
     @CreatedDate
-    private LocalDateTime create;
+    private LocalDateTime createdDate;
 
     @LastModifiedDate
-    private LocalDateTime updated;
-
+    private LocalDateTime lastModifiedDate;
 }
