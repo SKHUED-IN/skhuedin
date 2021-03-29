@@ -20,7 +20,8 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoadmapItem extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "roadmap_item_id")
     private Long id;
 
@@ -33,11 +34,13 @@ public class RoadmapItem extends BaseEntity {
     private LocalDate yearMonth;
 
     @Builder
-    public RoadmapItem(String content, LocalDate yearMonth) {
+    public RoadmapItem(String content, LocalDate yearMonth, Roadmap roadmap) {
 
         Assert.hasText(content, "내용 은 필수입니다. ");
         Assert.hasText(String.valueOf(yearMonth), "yearMonth 필수입니다. ");
+        Assert.hasText(String.valueOf(roadmap), "roadmap 필수입니다. ");
         this.content = content;
         this.yearMonth = yearMonth;
+        this.roadmap = roadmap;
     }
 }

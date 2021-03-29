@@ -39,7 +39,9 @@ public class Question extends BaseEntity {
     public Question(String title, String content, User targetUser, User writerUser) {
 
         Assert.hasText(title, "제목 값은 필수입니다. ");
-        Assert.hasText(content, "내 값은 필수입니다. ");
+        Assert.hasText(content, "내용 값은 필수입니다. ");
+        Assert.hasText(String.valueOf(targetUser), "targetUser 값은 필수입니다. ");
+        Assert.hasText(String.valueOf(writerUser), "writerUser 값은 필수입니다. ");
         this.title = title;
         this.content = content;
         this.targetUser = targetUser;

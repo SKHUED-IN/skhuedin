@@ -42,7 +42,7 @@ public class Talent extends BaseEntity {
 
     @Builder
     public Talent(String talentImageUrl, String content, int view,
-                  LocalDateTime entranceYear, LocalDateTime graduationYear, LocalDateTime startCareer) {
+                  LocalDateTime entranceYear, LocalDateTime graduationYear, LocalDateTime startCareer, User user) {
 
         Assert.hasText(talentImageUrl, "talentImageUrl 값은 필수입니다. ");
         Assert.hasText(content, "content 값은 필수입니다. ");
@@ -50,11 +50,13 @@ public class Talent extends BaseEntity {
         Assert.hasText(String.valueOf(entranceYear), "entranceYear 값은 필수입니다. ");
         Assert.hasText(String.valueOf(graduationYear), "graduationYear 값은 필수입니다. ");
         Assert.hasText(String.valueOf(startCareer), "start_career 값은 필수입니다. ");
+        Assert.hasText(String.valueOf(user), "user 값은 필수입니다. ");
         this.talentImageUrl = talentImageUrl;
         this.content = content;
         this.view = view;
         this.entranceYear = entranceYear;
         this.graduationYear = graduationYear;
         this.startCareer = startCareer;
+        this.user =user;
     }
 }
