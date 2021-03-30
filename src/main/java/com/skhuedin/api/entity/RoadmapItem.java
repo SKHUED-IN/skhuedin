@@ -34,13 +34,14 @@ public class RoadmapItem extends BaseEntity {
     private LocalDate yearMonth;
 
     @Builder
-    public RoadmapItem(String content, LocalDate yearMonth, Roadmap roadmap) {
+    public RoadmapItem(Roadmap roadmap, String content, LocalDate yearMonth) {
 
+        Assert.hasText(String.valueOf(roadmap), "roadmap 필수입니다. ");
         Assert.hasText(content, "내용 은 필수입니다. ");
         Assert.hasText(String.valueOf(yearMonth), "yearMonth 필수입니다. ");
-        Assert.hasText(String.valueOf(roadmap), "roadmap 필수입니다. ");
+
+        this.roadmap = roadmap;
         this.content = content;
         this.yearMonth = yearMonth;
-        this.roadmap = roadmap;
     }
 }

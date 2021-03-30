@@ -24,18 +24,18 @@ public class SkillCategory extends BaseEntity {
     @Column(name = "skill_category_id")
     private Long id;
 
-    private String name;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "talent_id")
     private Talent talent;
 
-    @Builder
-    public SkillCategory(String name, Talent talent) {
+    private String name;
 
-        Assert.hasText(name, "이름 값은 필수입니다. ");
+    @Builder
+    public SkillCategory(Talent talent, String name) {
+
         Assert.hasText(String.valueOf(talent), "talent 값은 필수입니다. ");
-        this.name = name;
+        Assert.hasText(name, "이름 값은 필수입니다. ");
         this.talent = talent;
+        this.name = name;
     }
 }

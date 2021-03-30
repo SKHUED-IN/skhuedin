@@ -34,7 +34,7 @@ public class QuestionCategory extends BaseEntity {
     public QuestionCategory(String name, Question question) {
 
         Assert.hasText(name, "이름 값은 필수입니다. ");
-        Assert.hasText(String.valueOf(question), "question 필수입니다. ");
+        Assert.hasText(String.valueOf(question), "question 필수입니다. s");
         this.name = name;
         this.question = question;
     }
