@@ -19,20 +19,23 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SkillCategory extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "skill_category_id")
     private Long id;
-
-    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "talent_id")
     private Talent talent;
 
-    @Builder
-    public SkillCategory( String name) {
+    private String name;
 
+    @Builder
+    public SkillCategory(Talent talent, String name) {
+
+        Assert.hasText(String.valueOf(talent), "talent 값은 필수입니다. ");
         Assert.hasText(name, "이름 값은 필수입니다. ");
+        this.talent = talent;
         this.name = name;
     }
 }

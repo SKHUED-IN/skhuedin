@@ -19,7 +19,8 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "question_id")
     private Long id;
 
@@ -36,13 +37,15 @@ public class Question extends BaseEntity {
     private String content;
 
     @Builder
-    public Question(String title, String content, User targetUser, User writerUser) {
+    public Question(User targetUser, User writerUser, String title, String content) {
 
+        Assert.hasText(String.valueOf(targetUser), "targetUser 값은 필수입니다. ");
+        Assert.hasText(String.valueOf(writerUser), "writerUser 값은 필수입니다. ");
         Assert.hasText(title, "제목 값은 필수입니다. ");
-        Assert.hasText(content, "내 값은 필수입니다. ");
-        this.title = title;
-        this.content = content;
+        Assert.hasText(content, "내용 값은 필수입니다. ");
         this.targetUser = targetUser;
         this.writerUser = writerUser;
+        this.title = title;
+        this.content = content;
     }
 }

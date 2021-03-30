@@ -19,7 +19,8 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionCategory extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "question_category_id")
     private Long id;
 
@@ -30,9 +31,11 @@ public class QuestionCategory extends BaseEntity {
     private Question question;
 
     @Builder
-    public QuestionCategory(String name) {
+    public QuestionCategory(String name, Question question) {
 
         Assert.hasText(name, "이름 값은 필수입니다. ");
+        Assert.hasText(String.valueOf(question), "question 필수입니다. s");
         this.name = name;
+        this.question = question;
     }
 }
