@@ -30,7 +30,9 @@ public class Roadmap extends BaseEntity {
 
     @Builder
     public Roadmap(Talent talent) {
-        Assert.hasText(String.valueOf(talent), "talent 필수입니다. ");
+
+        Assert.notNull(talent, "talent 필수입니다. ");
+
         this.talent = talent;
     }
 }

@@ -33,9 +33,14 @@ public class SkillCategory extends BaseEntity {
     @Builder
     public SkillCategory(Talent talent, String name) {
 
-        Assert.hasText(String.valueOf(talent), "talent 값은 필수입니다. ");
+        Assert.notNull(talent, "talent 값은 필수입니다. ");
         Assert.hasText(name, "이름 값은 필수입니다. ");
+
         this.talent = talent;
         this.name = name;
+    }
+
+    public void updateSkillCategory(SkillCategory skillCategory) {
+        this.name = skillCategory.name;
     }
 }
