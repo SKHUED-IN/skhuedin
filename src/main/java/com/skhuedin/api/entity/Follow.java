@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
@@ -30,6 +31,7 @@ public class Follow extends BaseEntity {
 
     @Builder
     public Follow(User user) {
+
         Assert.hasText(String.valueOf(user), "user 값은 필수입니다. ");
         this.user = user;
     }

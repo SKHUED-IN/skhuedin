@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
@@ -44,4 +45,9 @@ public class User extends BaseEntity {
         this.provider = provider;
         this.userImageUrl = userImageUrl;
     }
+
+    public void changeEmail(String email){
+        this.email =email;
+    }
+
 }
