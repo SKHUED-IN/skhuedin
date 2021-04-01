@@ -1,4 +1,4 @@
-package com.skhuedin.api.entity;
+package com.skhuedin.skhuedin.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,12 +36,17 @@ public class RoadmapItem extends BaseEntity {
     @Builder
     public RoadmapItem(Roadmap roadmap, String content, LocalDate yearMonth) {
 
-        Assert.hasText(String.valueOf(roadmap), "roadmap 필수입니다. ");
-        Assert.hasText(content, "내용 은 필수입니다. ");
-        Assert.hasText(String.valueOf(yearMonth), "yearMonth 필수입니다. ");
+        Assert.notNull(roadmap, "roadmap 필수입니다. ");
+        Assert.hasText(content, "내용은 필수입니다. ");
+        Assert.notNull(yearMonth, "yearMonth 필수입니다. ");
 
         this.roadmap = roadmap;
         this.content = content;
         this.yearMonth = yearMonth;
+    }
+
+    public void updateRoadmapItem(RoadmapItem roadmapItem) {
+        this.content = roadmapItem.content;
+        this.yearMonth = roadmapItem.yearMonth;
     }
 }
