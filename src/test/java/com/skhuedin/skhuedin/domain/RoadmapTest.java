@@ -1,4 +1,4 @@
-package com.skhuedin.api.entity;
+package com.skhuedin.skhuedin.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

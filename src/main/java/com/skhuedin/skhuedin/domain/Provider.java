@@ -1,4 +1,4 @@
-package com.skhuedin.api.entity;
+package com.skhuedin.skhuedin.domain;
 
 public enum Provider {
 

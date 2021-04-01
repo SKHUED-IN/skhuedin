@@ -1,4 +1,4 @@
-package com.skhuedin.api.entity;
+package com.skhuedin.skhuedin.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,30 +17,25 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SkillCategory extends BaseEntity {
+public class QuestionCategory extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "skill_category_id")
+    @Column(name = "question_category_id")
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "talent_id")
-    private Talent talent;
 
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id")
+    private Question question;
+
     @Builder
-    public SkillCategory(Talent talent, String name) {
+    public QuestionCategory(String name, Question question) {
 
-        Assert.notNull(talent, "talent 값은 필수입니다. ");
         Assert.hasText(name, "이름 값은 필수입니다. ");
-
-        this.talent = talent;
+        Assert.hasText(String.valueOf(question), "question 필수입니다. s");
         this.name = name;
-    }
-
-    public void updateSkillCategory(SkillCategory skillCategory) {
-        this.name = skillCategory.name;
+        this.question = question;
     }
 }

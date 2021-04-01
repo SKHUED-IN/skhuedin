@@ -1,4 +1,4 @@
-package com.skhuedin.api.entity;
+package com.skhuedin.skhuedin.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ class TalentTest {
 
     @Test
     @DisplayName("talent 를 생성하는 테스트")
-    void createTalent() {
+    void createTalentEntity() {
 
         // given
         User user = createUser();
@@ -152,22 +152,7 @@ class TalentTest {
     void updateTalent() {
 
         // given
-        User user = createUser();
-
-        String talentImageUrl = "/talent/img";
-        String content = "지식을 널리 알리고 싶은 자바 개발자";
-        LocalDateTime entranceYear = LocalDateTime.of(2016, 3, 1, 0, 0);
-        LocalDateTime graduationYear = LocalDateTime.of(2020, 2, 1, 0, 0);
-        LocalDateTime startCareer = LocalDateTime.of(2021, 3, 1, 0, 0);
-
-        Talent talent = Talent.builder()
-                .user(user)
-                .talentImageUrl(talentImageUrl)
-                .content(content)
-                .entranceYear(entranceYear)
-                .graduationYear(graduationYear)
-                .startCareer(startCareer)
-                .build();
+        Talent talent = createTalent();
 
         // when
         String updatedTalentImageUrl = "/talent/img";
@@ -177,7 +162,7 @@ class TalentTest {
         LocalDateTime updatedStartCareer = LocalDateTime.of(2021, 3, 1, 0, 0);
 
         Talent updatedTalent = Talent.builder()
-                .user(user)
+                .user(talent.getUser())
                 .talentImageUrl(updatedTalentImageUrl)
                 .content(updatedContent)
                 .entranceYear(updatedEntranceYear)
@@ -189,7 +174,7 @@ class TalentTest {
 
         // then
         assertAll(() -> {
-            assertEquals(user, talent.getUser());
+            assertEquals(talent.getUser(), talent.getUser());
             assertEquals(updatedTalentImageUrl, talent.getTalentImageUrl());
             assertEquals(updatedContent, talent.getContent());
             assertEquals(updatedEntranceYear, talent.getEntranceYear());
@@ -203,22 +188,7 @@ class TalentTest {
     void addView() {
 
         // given
-        User user = createUser();
-
-        String talentImageUrl = "/talent/img";
-        String content = "지식을 널리 알리고 싶은 자바 개발자";
-        LocalDateTime entranceYear = LocalDateTime.of(2016, 3, 1, 0, 0);
-        LocalDateTime graduationYear = LocalDateTime.of(2020, 2, 1, 0, 0);
-        LocalDateTime startCareer = LocalDateTime.of(2021, 3, 1, 0, 0);
-
-        Talent talent = Talent.builder()
-                .user(user)
-                .talentImageUrl(talentImageUrl)
-                .content(content)
-                .entranceYear(entranceYear)
-                .graduationYear(graduationYear)
-                .startCareer(startCareer)
-                .build();
+        Talent talent = createTalent();
 
         // when
         talent.addView();
@@ -234,6 +204,25 @@ class TalentTest {
                 .password("1234")
                 .provider(Provider.GOOGLE)
                 .userImageUrl("/img")
+                .build();
+    }
+
+    private Talent createTalent() {
+        User user = createUser();
+
+        String talentImageUrl = "/talent/img";
+        String content = "지식을 널리 알리고 싶은 자바 개발자";
+        LocalDateTime entranceYear = LocalDateTime.of(2016, 3, 1, 0, 0);
+        LocalDateTime graduationYear = LocalDateTime.of(2020, 2, 1, 0, 0);
+        LocalDateTime startCareer = LocalDateTime.of(2021, 3, 1, 0, 0);
+
+        return Talent.builder()
+                .user(user)
+                .talentImageUrl(talentImageUrl)
+                .content(content)
+                .entranceYear(entranceYear)
+                .graduationYear(graduationYear)
+                .startCareer(startCareer)
                 .build();
     }
 }

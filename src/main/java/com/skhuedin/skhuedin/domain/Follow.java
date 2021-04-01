@@ -1,4 +1,4 @@
-package com.skhuedin.api.entity;
+package com.skhuedin.skhuedin.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,22 +17,20 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Roadmap extends BaseEntity {
+public class Follow extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "roadmap_id")
+    @Column(name = "follow_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "talent_id")
-    private Talent talent;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder
-    public Roadmap(Talent talent) {
-
-        Assert.notNull(talent, "talent 필수입니다. ");
-
-        this.talent = talent;
+    public Follow(User user) {
+        Assert.hasText(String.valueOf(user), "user 값은 필수입니다. ");
+        this.user = user;
     }
 }
