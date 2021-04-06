@@ -11,24 +11,36 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Follow extends BaseEntity {
+public class Blog extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "follow_id")
+    @Column(name = "blog_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String profileImageUrl;
+
+    private String content;
+
     @Builder
-    public Follow(User user) {
+    public Blog(User user, String profileImageUrl, String content) {
         this.user = user;
+        this.profileImageUrl = profileImageUrl;
+        this.content = content;
+    }
+
+    public void updateBlog(Blog blog) {
+        this.user = blog.user;
+        this.profileImageUrl = blog.profileImageUrl;
+        this.content = blog.content;
     }
 }
