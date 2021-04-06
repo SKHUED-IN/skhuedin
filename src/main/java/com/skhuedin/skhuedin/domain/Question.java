@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.springframework.util.Assert;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,25 +35,34 @@ public class Question extends BaseEntity {
 
     private String content;
 
+    private Boolean status;
+
+    private Boolean fix;
+
+    private Integer view;
+
     @Builder
     public Question(User targetUser, User writerUser, String title, String content) {
-
-        Assert.notNull(targetUser, "targetUser 값은 필수입니다. ");
-        Assert.notNull(writerUser, "writerUser 값은 필수입니다. ");
-        Assert.hasText(title, "제목 값은 필수입니다. ");
-        Assert.hasText(content, "내용 값은 필수입니다. ");
         this.targetUser = targetUser;
         this.writerUser = writerUser;
         this.title = title;
         this.content = content;
+        this.status = true;
+        this.fix = true;
+        this.view = 0;
     }
 
     public void updateQuestion(Question question) {
-
         this.targetUser = question.targetUser;
         this.writerUser = question.writerUser;
         this.title = question.title;
         this.content = question.content;
+        this.status = question.status;
+        this.fix = question.fix;
+        this.view = question.view;
+    }
 
+    public void addView() {
+        this.view++;
     }
 }

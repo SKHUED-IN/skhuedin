@@ -7,28 +7,31 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Follow extends BaseEntity {
+public class Category extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "follow_id")
+    @Column(name = "skill_category_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String name;
+
+    private Integer weight;
 
     @Builder
-    public Follow(User user) {
-        this.user = user;
+    public Category(String name, Integer weight) {
+        this.name = name;
+        this.weight = weight;
+    }
+
+    public void updateCategory(Category category) {
+        this.name = category.name;
+        this.weight = category.weight;
     }
 }
