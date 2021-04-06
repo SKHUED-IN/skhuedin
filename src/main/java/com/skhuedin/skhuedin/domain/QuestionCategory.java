@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
@@ -34,7 +35,7 @@ public class QuestionCategory extends BaseEntity {
     public QuestionCategory(String name, Question question) {
 
         Assert.hasText(name, "이름 값은 필수입니다. ");
-        Assert.hasText(String.valueOf(question), "question 필수입니다. s");
+        Assert.notNull(question, "question 필수입니다. ");
         this.name = name;
         this.question = question;
     }

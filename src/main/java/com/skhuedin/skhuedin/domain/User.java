@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
@@ -37,11 +38,20 @@ public class User extends BaseEntity {
 
         Assert.hasText(email, "email 값은 필수입니다. ");
         Assert.hasText(password, "password 값은 필수입니다. ");
-        Assert.hasText(provider.toString(), "provider 값은 필수입니다. ");
+        Assert.notNull(provider, "provider 값은 필수입니다. ");
         Assert.hasText(userImageUrl, "userImageUrl 값은 필수입니다. ");
         this.email = email;
         this.password = password;
         this.provider = provider;
         this.userImageUrl = userImageUrl;
+    }
+
+    public void updateUser(User user) {
+
+        this.email = user.email;
+        this.password = user.password;
+        this.provider = user.provider;
+        this.userImageUrl = user.userImageUrl;
+
     }
 }
