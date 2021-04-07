@@ -1,4 +1,4 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.skhuedin.kakao;
 
 import lombok.Data;
 
@@ -35,7 +35,6 @@ public class KakaoProfile {
             private String nickname;
             private String thumbnail_image_url;
             private String profile_image_url;
-
         }
     }
 }
