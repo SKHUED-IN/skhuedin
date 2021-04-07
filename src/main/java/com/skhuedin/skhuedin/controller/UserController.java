@@ -4,15 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.KakaoProfile;
 import com.skhuedin.skhuedin.domain.OAuthToken;
+import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -64,8 +68,6 @@ public class UserController {
         headers2.add("Authorization", "Bearer " + oauthToken.getAccess_token());
         headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        //HttpBody 오브젝트 생성
-
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
                 new HttpEntity<>(headers2);
@@ -79,28 +81,13 @@ public class UserController {
         );
 
         ObjectMapper objectMapper2 = new ObjectMapper();
-        KakaoProfile kakaoProfile =null;
+        KakaoProfile kakaoProfile = null;
 
         try {
             kakaoProfile = objectMapper2.readValue(response2.getBody(), KakaoProfile.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        System.out.println("카카오 아이디: "+ kakaoProfile.getId());
-        System.out.println("카카오 email: "+ kakaoProfile.getKakao_account().getEmail());
-
-        System.out.println("skhuedin 유저네임: "+ kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
-        System.out.println("skhuedin email: "+ kakaoProfile.getKakao_account().getEmail());
-
-        UUID password = UUID.randomUUID();
-
-        System.out.println("skhuedin password: "+password );
-        //User에 들어가는 내용 : name, password, email
-
-        User user =User.builder()
-
-                .email(kakaoProfile.getKakao_account().getEmail())
-                build();
 
         return response2.getBody();
     }
