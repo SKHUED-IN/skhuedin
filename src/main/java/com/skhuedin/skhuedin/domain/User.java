@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.springframework.util.Assert;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -28,30 +27,36 @@ public class User extends BaseEntity {
 
     private String password;
 
+    private String name;
+
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
     private String userImageUrl;
 
-    @Builder
-    public User(String email, String password, Provider provider, String userImageUrl) {
+    LocalDateTime entranceYear;
 
-        Assert.hasText(email, "email 값은 필수입니다. ");
-        Assert.hasText(password, "password 값은 필수입니다. ");
-        Assert.notNull(provider, "provider 값은 필수입니다. ");
-        Assert.hasText(userImageUrl, "userImageUrl 값은 필수입니다. ");
+    LocalDateTime graduationYear;
+
+    @Builder
+    public User(String email, String password, String name, Provider provider,
+                String userImageUrl, LocalDateTime entranceYear, LocalDateTime graduationYear) {
         this.email = email;
         this.password = password;
+        this.name = name;
         this.provider = provider;
         this.userImageUrl = userImageUrl;
+        this.entranceYear = entranceYear;
+        this.graduationYear = graduationYear;
     }
 
     public void updateUser(User user) {
-
         this.email = user.email;
         this.password = user.password;
+        this.name = user.name;
         this.provider = user.provider;
         this.userImageUrl = user.userImageUrl;
-
+        this.entranceYear = user.entranceYear;
+        this.graduationYear = user.graduationYear;
     }
 }
