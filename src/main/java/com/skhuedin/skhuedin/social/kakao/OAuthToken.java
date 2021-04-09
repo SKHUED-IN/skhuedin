@@ -1,4 +1,4 @@
-package com.skhuedin.skhuedin.kakao;
+package com.skhuedin.skhuedin.social.kakao;
 
 import lombok.Data;
 
