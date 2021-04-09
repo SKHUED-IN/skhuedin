@@ -8,9 +8,9 @@
 /httpRequests/
 
 .idea
-misc.xml
-modules.xml
-vcs.xml
+/misc.xml
+/modules.xml
+/vcs.xml
 .xml
 *.iws
 *.iml
