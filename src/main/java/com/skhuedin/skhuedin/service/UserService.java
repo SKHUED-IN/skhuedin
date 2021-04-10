@@ -25,6 +25,11 @@ public class UserService {
         return user.getId();
     }
 
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("user 를 찾을 수 없습니다."));
+    }
+
     /**
      * 유저 전체 조회
      */
