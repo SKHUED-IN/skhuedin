@@ -50,18 +50,20 @@ class QuestionTest {
                 .content(content)
                 .writerUser(writerUser)
                 .targetUser(targetUser)
+                .status(false)
+                .fix(false)
                 .build();
 
         // then
-        assertAll(() -> {
-            assertEquals(question.getTitle(), title);
-            assertEquals(question.getContent(), content);
-            assertEquals(question.getWriterUser(), writerUser);
-            assertEquals(question.getTargetUser(), targetUser);
-            assertEquals(question.getView(), 0);
-            assertEquals(question.getStatus(), true);
-            assertEquals(question.getFix(), true);
-        });
+        assertAll(
+                () -> assertEquals(question.getTitle(), title),
+                () -> assertEquals(question.getContent(), content),
+                () -> assertEquals(question.getWriterUser(), writerUser),
+                () -> assertEquals(question.getTargetUser(), targetUser),
+                () -> assertEquals(question.getView(), 0),
+                () -> assertEquals(question.getStatus(), false),
+                () -> assertEquals(question.getFix(), false)
+        );
     }
 
     @Test
@@ -74,6 +76,8 @@ class QuestionTest {
                 .content("진로를 찾게된 계기는 무엇인가요?")
                 .writerUser(writerUser)
                 .targetUser(targetUser)
+                .status(false)
+                .fix(false)
                 .build();
 
         Question updateQuestion = Question.builder()
@@ -81,21 +85,23 @@ class QuestionTest {
                 .content("좋은 개발자로 성장하는 방법은 무엇이 있을까요?")
                 .writerUser(writerUser)
                 .targetUser(targetUser)
+                .status(false)
+                .fix(false)
                 .build();
 
         // when
         question.updateQuestion(updateQuestion);
 
         // then
-        assertAll(() -> {
-            assertEquals(question.getTitle(), updateQuestion.getTitle());
-            assertEquals(question.getContent(), updateQuestion.getContent());
-            assertEquals(question.getWriterUser(), writerUser);
-            assertEquals(question.getTargetUser(), targetUser);
-            assertEquals(question.getView(), 0);
-            assertEquals(question.getStatus(), true);
-            assertEquals(question.getFix(), true);
-        });
+        assertAll(
+                () -> assertEquals(question.getTitle(), updateQuestion.getTitle()),
+                () -> assertEquals(question.getContent(), updateQuestion.getContent()),
+                () -> assertEquals(question.getWriterUser(), writerUser),
+                () -> assertEquals(question.getTargetUser(), targetUser),
+                () -> assertEquals(question.getView(), 0),
+                () -> assertEquals(question.getStatus(), false),
+                () -> assertEquals(question.getFix(), false)
+        );
     }
 
     @Test

@@ -4,7 +4,6 @@ import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
-import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class QuestionServiceTest {
 
-    @Autowired UserRepository userRepository;
+    @Autowired UserService userService;
     @Autowired QuestionService questionService;
 
     User writerUser;
@@ -29,11 +27,8 @@ class QuestionServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        writerUser = userRepository.findById(1L).orElseThrow(() ->
-                new NoSuchElementException("user 를 찾을 수 없습니다."));
-
-        targetUser = userRepository.findById(2L).orElseThrow(() ->
-                new NoSuchElementException("user 를 찾을 수 없습니다."));
+        writerUser = userService.findById(1L);
+        targetUser = userService.findById(2L);
     }
 
     @Test
@@ -88,5 +83,86 @@ class QuestionServiceTest {
         
         // then
         assertEquals(questions.size(), 2);
+    }
+    
+    @Test
+    @DisplayName("question update 를 확인하는 테스트")
+    void update() {
+        
+        // given
+        QuestionSaveRequestDto saveDto = QuestionSaveRequestDto.builder()
+                .title("spring1")
+                .content("spring 이 재밌어요!")
+                .status(true)
+                .fix(false)
+                .build();
+
+        Long saveId = questionService.save(saveDto);
+
+        // when
+        QuestionSaveRequestDto updateDto = QuestionSaveRequestDto.builder()
+                .title("spring2")
+                .content("spring 이 너무 재밌어요!")
+                .status(true)
+                .fix(false)
+                .build();
+
+        Long updateId = questionService.update(saveId, updateDto);
+        Question updateQuestion = questionService.findById(updateId);
+
+        // then
+        assertAll(
+                () -> assertEquals(saveId, updateId),
+                () -> assertEquals(updateQuestion.getTitle(), updateDto.getTitle()),
+                () -> assertEquals(updateQuestion.getContent(), updateDto.getContent())
+        );
+    }
+
+    @Test
+    @DisplayName("question 삭제를 확인하는 테스트")
+    void delete() {
+
+        // given
+        QuestionSaveRequestDto saveDto = QuestionSaveRequestDto.builder()
+                .title("spring1")
+                .content("spring 이 재밌어요!")
+                .status(true)
+                .fix(false)
+                .build();
+
+        Long saveId = questionService.save(saveDto);
+
+        // when
+        questionService.delete(saveId);
+
+        // then
+        assertThrows(IllegalArgumentException.class, () ->
+                questionService.findById(saveId)
+        );
+    }
+
+    @Test
+    @DisplayName("조회수를 3 증가 시키는 테스트")
+    void addView() {
+
+        // given
+        QuestionSaveRequestDto saveDto = QuestionSaveRequestDto.builder()
+                .title("spring1")
+                .content("spring 이 재밌어요!")
+                .status(true)
+                .fix(false)
+                .build();
+
+        Long saveId = questionService.save(saveDto);
+
+        // when
+        Question question = questionService.findById(saveId);
+
+        question.addView();
+        question.addView();
+        question.addView();
+
+        // then
+        assertEquals(question.getView(), 3);
     }
 }

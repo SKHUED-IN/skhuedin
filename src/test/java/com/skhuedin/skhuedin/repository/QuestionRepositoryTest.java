@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -47,15 +48,15 @@ class QuestionRepositoryTest {
         Question saveQuestion = questionRepository.save(question);
 
         // then
-        assertAll(() -> {
-            assertEquals(question.getTitle(), saveQuestion.getTitle());
-            assertEquals(question.getContent(), saveQuestion.getContent());
-            assertEquals(question.getTargetUser(), saveQuestion.getTargetUser());
-            assertEquals(question.getWriterUser(), saveQuestion.getWriterUser());
-            assertEquals(question.getView(), saveQuestion.getView());
-            assertEquals(question.getStatus(), saveQuestion.getStatus());
-            assertEquals(question.getFix(), saveQuestion.getFix());
-        });
+        assertAll(
+                () -> assertEquals(question.getTitle(), saveQuestion.getTitle()),
+                () -> assertEquals(question.getContent(), saveQuestion.getContent()),
+                () -> assertEquals(question.getTargetUser(), saveQuestion.getTargetUser()),
+                () -> assertEquals(question.getWriterUser(), saveQuestion.getWriterUser()),
+                () -> assertEquals(question.getView(), saveQuestion.getView()),
+                () -> assertEquals(question.getStatus(), saveQuestion.getStatus()),
+                () -> assertEquals(question.getFix(), saveQuestion.getFix())
+        );
     }
 
     @Test
@@ -79,15 +80,15 @@ class QuestionRepositoryTest {
         );
 
         // then
-        assertAll(() -> {
-            assertEquals(saveQuestion.getTitle(), findQuestion.getTitle());
-            assertEquals(saveQuestion.getContent(), findQuestion.getContent());
-            assertEquals(saveQuestion.getTargetUser(), findQuestion.getTargetUser());
-            assertEquals(saveQuestion.getWriterUser(), findQuestion.getWriterUser());
-            assertEquals(saveQuestion.getView(), findQuestion.getView());
-            assertEquals(saveQuestion.getStatus(), findQuestion.getStatus());
-            assertEquals(saveQuestion.getFix(), findQuestion.getFix());
-        });
+        assertAll(
+                () -> assertEquals(saveQuestion.getTitle(), findQuestion.getTitle()),
+                () -> assertEquals(saveQuestion.getContent(), findQuestion.getContent()),
+                () -> assertEquals(saveQuestion.getTargetUser(), findQuestion.getTargetUser()),
+                () -> assertEquals(saveQuestion.getWriterUser(), findQuestion.getWriterUser()),
+                () -> assertEquals(saveQuestion.getView(), findQuestion.getView()),
+                () -> assertEquals(saveQuestion.getStatus(), findQuestion.getStatus()),
+                () -> assertEquals(saveQuestion.getFix(), findQuestion.getFix())
+        );
     }
 
     @Test
@@ -115,5 +116,38 @@ class QuestionRepositoryTest {
 
         // then
         assertEquals(questionRepository.findAll().size(), 2);
+    }
+    
+    @Test
+    @DisplayName("targetUser 별로 최근에 수정된 순서로 정렬된 question 을 조회하는 테스트")
+    void findByTargetUserIdOrderByLastModifiedDateDesc() {
+        
+        // given
+        Question question1 = Question.builder()
+                .title("java")
+                .content("java 는 너무 어려워요")
+                .targetUser(targetUser)
+                .writerUser(writerUser)
+                .build();
+
+        Question question2 = Question.builder()
+                .title("spring")
+                .content("spring 도 너무 어려워요")
+                .targetUser(targetUser)
+                .writerUser(writerUser)
+                .build();
+
+        // when
+        questionRepository.save(question1);
+        questionRepository.save(question2); // 좀 더 최근에 저장됨
+
+        // then
+        assertAll(
+                () -> assertEquals(questionRepository.findAll().size(), 2),
+                () -> assertEquals(questionRepository
+                        .findByTargetUserIdOrderByLastModifiedDateDesc(targetUser.getId()).get(0), question2),
+                () -> assertEquals(questionRepository
+                        .findByTargetUserIdOrderByLastModifiedDateDesc(targetUser.getId()).get(1), question1)
+        );
     }
 }

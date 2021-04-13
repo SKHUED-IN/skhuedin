@@ -16,7 +16,9 @@ public class QuestionSaveRequestDto {
 
     private String title;
     private String content;
+    private Long targetUserId;
     private User targetUser;
+    private Long writerUserId;
     private User writerUser;
     private Boolean status;
     private Boolean fix;
@@ -31,12 +33,12 @@ public class QuestionSaveRequestDto {
 
     public Question toEntity() {
         return Question.builder()
-                .title(title)
-                .content(content)
-                .targetUser(targetUser)
-                .writerUser(writerUser)
-                .status(status)
-                .fix(fix)
+                .title(this.title)
+                .content(this.content)
+                .targetUser(this.targetUser)
+                .writerUser(this.writerUser)
+                .status(this.status)
+                .fix(this.fix)
                 .build();
     }
 }
