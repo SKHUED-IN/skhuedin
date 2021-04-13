@@ -5,12 +5,14 @@ import com.skhuedin.skhuedin.social.google.GoogleOauth;
 import com.skhuedin.skhuedin.social.kakao.KakaoOauth;
 import com.skhuedin.skhuedin.social.naver.NaverOauth;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OauthService {
     private final GoogleOauth googleOauth;
@@ -40,7 +42,7 @@ public class OauthService {
         try {
             response.sendRedirect(redirectURL);
         } catch (IOException e) {
-            System.out.println("보내시려는 redirectURL값을 확인하세요.");
+            log.info("보내시려는 redirectURL 값을 확인하세요.");
             e.printStackTrace();
         }
     }
