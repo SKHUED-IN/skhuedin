@@ -40,6 +40,7 @@ public class OauthService {
         try {
             response.sendRedirect(redirectURL);
         } catch (IOException e) {
+            System.out.println("보내시려는 redirectURL값을 확인하세요.");
             e.printStackTrace();
         }
     }
