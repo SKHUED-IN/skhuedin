@@ -1,12 +1,11 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -15,30 +14,15 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    /**
-     * 유저 회원 가입
-     */
-    @Transactional //변경
-    public Long join(User user){
-//        validateDuplicateUser(user);
-        userRepository.save(user);
-        return user.getId();
+    @Transactional
+    public Long save(User user) {
+        return userRepository.save(user).getId();
     }
 
-    /**
-     * 유저 전체 조회
-     */
-    public List<User>findAll(){
-        return userRepository.findAll();
-    }
+    public UserMainResponseDto findById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
 
-    /**
-     * 유저 중복 확인
-     */
-//    private void validateDuplicateUser(User user) {
-//        User findUser = userRepository.findByEmail(user.getEmail());
-//        if(findUser !=null){
-//            throw new IllegalStateException("이미 존재하는 회원입니다.");
-//        }
-//    }
+        return new UserMainResponseDto(user);
+    }
 }

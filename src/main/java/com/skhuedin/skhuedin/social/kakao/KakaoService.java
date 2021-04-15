@@ -115,7 +115,7 @@ public class KakaoService {
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
-        userService.join(user);
+        userService.save(user);
         return user;
     }
 }
