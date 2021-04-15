@@ -43,13 +43,13 @@ public class Question extends BaseEntity {
     private Integer view;
 
     @Builder
-    public Question(User targetUser, User writerUser, String title, String content) {
+    public Question(User targetUser, User writerUser, String title, String content, Boolean status, Boolean fix) {
         this.targetUser = targetUser;
         this.writerUser = writerUser;
         this.title = title;
         this.content = content;
-        this.status = true;
-        this.fix = true;
+        this.status = status;
+        this.fix = fix;
         this.view = 0;
     }
 
