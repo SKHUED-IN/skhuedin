@@ -43,7 +43,7 @@ public class GoogleInnerProfile {
     public String givenName;
     public String familyName;
     public String locale;
-    public String iat;:
+    public String iat;
     public String exp;
     public String alg;
     public String kid;
