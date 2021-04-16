@@ -88,7 +88,8 @@ public class KakaoService {
         );
 
         ObjectMapper objectMapper2 = new ObjectMapper();
-        KakaoProfile kakaoProfile = null;
+        KakaoProfile
+                kakaoProfile = null;
 
         try {
             kakaoProfile = objectMapper2.readValue(response2.getBody(), KakaoProfile.class);

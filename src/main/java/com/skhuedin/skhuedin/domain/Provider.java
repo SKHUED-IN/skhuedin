@@ -4,5 +4,6 @@ public enum Provider {
 
     SELF,
     KAKAO,
-    GOOGLE
+    GOOGLE,
+    NAVER
 }
