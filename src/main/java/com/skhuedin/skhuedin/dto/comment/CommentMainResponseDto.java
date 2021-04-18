@@ -5,6 +5,7 @@ import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class CommentMainResponseDto {
     private UserMainResponseDto writerUser;
     private String content;
     private Long parentId;
-    private List<CommentMainResponseDto> children;
+    private List<CommentMainResponseDto> children = new ArrayList<>();
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 

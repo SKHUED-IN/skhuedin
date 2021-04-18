@@ -60,6 +60,11 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
+    public CommentMainResponseDto findById(Long id) {
+        Comment comment = getComment(id);
+        return new CommentMainResponseDto(comment);
+    }
+
     public List<CommentMainResponseDto> findByQuestionId(Long questionId) {
         List<Comment> parents = commentRepository.findByQuestionId(questionId); // 부모 comment 목록 조회
 
