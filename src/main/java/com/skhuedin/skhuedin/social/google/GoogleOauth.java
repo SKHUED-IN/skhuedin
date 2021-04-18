@@ -83,7 +83,7 @@ public class GoogleOauth implements SocialOauth {
                 });
                 // 사용자 유저로 저장.
                 User user = saveGoogleUser(profile);
-                return "성공";
+                return resultJson;
 
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
