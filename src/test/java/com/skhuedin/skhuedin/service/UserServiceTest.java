@@ -26,7 +26,6 @@ class UserServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        userRepository.deleteAll();
     }
 
     @Test

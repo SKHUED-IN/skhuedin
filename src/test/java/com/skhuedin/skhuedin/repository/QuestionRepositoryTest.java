@@ -29,9 +29,6 @@ class QuestionRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        userRepository.deleteAll();
-        questionRepository.deleteAll();
-
         targetUser = User.builder()
                 .email("target@email.com")
                 .password("1234")
@@ -94,7 +91,7 @@ class QuestionRepositoryTest {
 
     @AfterEach
     void afterEach() {
-        userRepository.deleteAll();
         questionRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

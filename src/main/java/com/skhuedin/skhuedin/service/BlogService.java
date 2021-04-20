@@ -21,7 +21,6 @@ public class BlogService {
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
 
-
     @Transactional
     public Long save(BlogSaveRequestDto requestDto) {
         User user = getUser(requestDto.getUserId());
