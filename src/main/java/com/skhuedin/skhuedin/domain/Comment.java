@@ -13,9 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -28,7 +25,7 @@ public class Comment extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", insertable = false, updatable = false)
+    @JoinColumn(name = "question_id")
     private Question question;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,14 +38,12 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "parent_comment_id")
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent")
-    private List<Comment> children = new ArrayList<>();
-
     @Builder
-    public Comment(Question question, User writerUser, String content) {
+    public Comment(Question question, User writerUser, String content, Comment parent) {
         this.question = question;
         this.writerUser = writerUser;
         this.content = content;
+        this.parent = parent;
     }
 
     public void updateComment(Comment comment) {
@@ -56,11 +51,5 @@ public class Comment extends BaseEntity {
         this.writerUser = comment.writerUser;
         this.content = comment.content;
         this.parent = comment.parent;
-        this.children = comment.children;
-    }
-
-    public void addChild(Comment child) {
-        children.add(child);
-        child.parent = this;
     }
 }

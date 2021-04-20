@@ -18,8 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class QuestionRepositoryTest {
 
-    @Autowired UserRepository userRepository;
-    @Autowired QuestionRepository questionRepository;
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    QuestionRepository questionRepository;
 
     User targetUser;
     User writerUser;

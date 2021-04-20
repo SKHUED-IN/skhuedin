@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
@@ -20,6 +21,7 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final CommentService commentService;
 
     @Transactional
     public Long save(QuestionSaveRequestDto requestDto) {
@@ -48,14 +50,17 @@ public class QuestionService {
 
     public QuestionMainResponseDto findById(Long id) {
         Question question = getQuestion(id);
-        return new QuestionMainResponseDto(question);
+        List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
+        return new QuestionMainResponseDto(question, comments);
     }
 
     public List<QuestionMainResponseDto> findByTargetUserId(Long id) {
-        User targetUser = getUser(id);
         List<Question> questions = questionRepository.findByTargetUserIdOrderByLastModifiedDateDesc(id);
         return questions.stream()
-                .map(question -> new QuestionMainResponseDto(question))
+                .map(question -> {
+                    List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
+                    return new QuestionMainResponseDto(question, comments);
+                })
                 .collect(Collectors.toList());
     }
 
