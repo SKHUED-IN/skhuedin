@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -37,6 +39,13 @@ public class BlogApiController {
         BlogMainResponseDto responseDto = blogService.findById(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
+    }
+
+    @GetMapping("blogs")
+    public ResponseEntity<? extends BasicResponse> findAll() {
+        List<BlogMainResponseDto> blogs = blogService.findAll();
+
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(blogs));
     }
 
     @PutMapping("blogs/{blogId}")
