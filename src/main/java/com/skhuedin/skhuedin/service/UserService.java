@@ -22,8 +22,8 @@ public class UserService {
     }
 
     @Transactional
-    public void update(String email, String token){
-        userRepository.update(email,token);
+    public void update(User user) {
+        user.updateUser(user);
     }
 
 
@@ -51,10 +51,10 @@ public class UserService {
 
     public void signUp(User user) {
         User checkUser = userRepository.findByEmail(user.getEmail()).get();
-        if (checkUser.getToken()  != null) {
+        if (checkUser != null) {
             signIn(user);
         } else {
-            update(user.getEmail(),createToken(user.getEmail()));
+            save(user);
             signIn(user);
         }
     }
@@ -65,7 +65,7 @@ public class UserService {
         if (!findUser.getPassword().equals(user.getPassword()))
             throw new IllegalArgumentException("암호 불일치");
 
-        return findUser.getToken();
+        return createToken(findUser.getEmail());
     }
 
     public User findByName(String name) {
