@@ -110,7 +110,7 @@ public class NaverOauth implements SocialOauth {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        User user = saveNaverUser(naverProfile);
+        userService.signUp(saveNaverUser(naverProfile));
         return response2.getBody();
     }
 
@@ -127,6 +127,7 @@ public class NaverOauth implements SocialOauth {
                 .provider(Provider.NAVER)
                 .userImageUrl(naverProfile.getResponse().getProfile_image())
                 .password(password.toString())
+                .token(null)
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();

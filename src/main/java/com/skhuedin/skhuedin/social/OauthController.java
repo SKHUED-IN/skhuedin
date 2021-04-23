@@ -1,8 +1,10 @@
 package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.infra.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,10 +36,12 @@ public class OauthController {
      */
 
     @GetMapping("/{socialLoginType}/callback")
-    public String callback(
+    public ResponseEntity<TokenResponse> callback(
             @PathVariable("socialLoginType") Provider socialLoginType,
             @RequestParam("code") String code) {
         log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", code);
-        return oauthService.requestAccessToken(socialLoginType, code);
+        String token = oauthService.requestAccessToken(socialLoginType, code);
+
+        return ResponseEntity.ok().body(new TokenResponse(token, "bearer"));
     }
 }

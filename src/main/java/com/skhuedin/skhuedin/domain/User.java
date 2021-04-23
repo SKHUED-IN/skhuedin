@@ -35,29 +35,22 @@ public class User extends BaseEntity {
 
     private String userImageUrl;
 
+    private String token;
+
     LocalDateTime entranceYear;
 
     LocalDateTime graduationYear;
 
     @Builder
     public User(String email, String password, String name, Provider provider,
-                String userImageUrl, LocalDateTime entranceYear, LocalDateTime graduationYear) {
+                String userImageUrl, String token, LocalDateTime entranceYear, LocalDateTime graduationYear) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.provider = provider;
         this.userImageUrl = userImageUrl;
+        this.token = token;
         this.entranceYear = entranceYear;
         this.graduationYear = graduationYear;
-    }
-
-    public void updateUser(User user) {
-        this.email = user.email;
-        this.password = user.password;
-        this.name = user.name;
-        this.provider = user.provider;
-        this.userImageUrl = user.userImageUrl;
-        this.entranceYear = user.entranceYear;
-        this.graduationYear = user.graduationYear;
     }
 }

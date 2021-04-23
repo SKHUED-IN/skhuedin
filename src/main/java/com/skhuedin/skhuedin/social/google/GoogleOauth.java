@@ -83,7 +83,9 @@ public class GoogleOauth implements SocialOauth {
                 });
                 // 사용자 유저로 저장.
                 User user = saveGoogleUser(profile);
-                return resultJson;
+                userService.signUp(user);
+
+                return responseEntity.getBody();
 
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
@@ -96,11 +98,12 @@ public class GoogleOauth implements SocialOauth {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
         User user = User.builder()
-                .email(googleProfile.getAtHash())
+                .email(googleProfile.getSub())// google 에서 이메일을 주지 않아 든 Google 계정에서 고유하며 재사용되지 않는 사용자의 식별자를 저장
                 .name(googleProfile.getName())
                 .provider(Provider.GOOGLE)
                 .userImageUrl(googleProfile.getPicture())
                 .password(password.toString())
+                .token(null)
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
