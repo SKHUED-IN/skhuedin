@@ -124,7 +124,6 @@ public class KakaoOauth implements SocialOauth {
                 .provider(Provider.KAKAO)
                 .userImageUrl(kakaoProfile.getProperties().getProfile_image())
                 .password(password.toString())
-                .token(null)
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();

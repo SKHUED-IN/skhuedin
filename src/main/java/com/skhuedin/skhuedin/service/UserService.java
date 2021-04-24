@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -25,13 +23,16 @@ public class UserService {
 
     @Transactional
     public void update(Long id, User user) {
-        User findUser = userRepository.findById(id).get();
+        User findUser = userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
         findUser.update(user);
     }
 
     @Transactional
     public void delete(Long id) {
-        User findUser = userRepository.findById(id).get(); // 영속성 컨텍스트에 등록
+        User findUser = userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
+        ; // 영속성 컨텍스트에 등록
         userRepository.delete(findUser);
     }
 
@@ -56,9 +57,9 @@ public class UserService {
         return jwtTokenProvider.getSubject(Token);
     }
 
-
     public void signUp(User user) {
-        User checkUser = userRepository.findByEmail(user.getEmail()).get();
+        User checkUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() ->
+                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + user.getId()));
         if (checkUser != null) {
             signIn(user);
         } else {
@@ -72,7 +73,6 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
         if (!findUser.getPassword().equals(user.getPassword()))
             throw new IllegalArgumentException("암호 불일치");
-
         return createToken(findUser.getEmail());
     }
 

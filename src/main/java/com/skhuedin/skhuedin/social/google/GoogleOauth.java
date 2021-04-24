@@ -103,7 +103,6 @@ public class GoogleOauth implements SocialOauth {
                 .provider(Provider.GOOGLE)
                 .userImageUrl(googleProfile.getPicture())
                 .password(password.toString())
-                .token(null)
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();

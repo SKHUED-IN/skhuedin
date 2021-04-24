@@ -127,7 +127,6 @@ public class NaverOauth implements SocialOauth {
                 .provider(Provider.NAVER)
                 .userImageUrl(naverProfile.getResponse().getProfile_image())
                 .password(password.toString())
-                .token(null)
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
