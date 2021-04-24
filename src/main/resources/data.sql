@@ -13,3 +13,6 @@ values (1, 2, 'parent 댓글 1', null, now(), now()),
        (1, 2, 'parent 댓글 1 대댓글 2', 1, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 1', 2, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 2', 2, now(), now());
+
+insert into blog (user_id, profile_image_url, content, created_date, last_modified_date)
+values (1, '/img', 'admin blog', now(), now());

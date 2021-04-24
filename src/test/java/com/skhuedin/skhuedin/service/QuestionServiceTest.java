@@ -35,9 +35,6 @@ class QuestionServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        questionRepository.deleteAll();
-        userRepository.deleteAll();
-
         targetUser = User.builder()
                 .email("target@email.com")
                 .password("1234")

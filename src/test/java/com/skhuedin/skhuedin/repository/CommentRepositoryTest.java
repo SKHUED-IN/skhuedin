@@ -34,10 +34,6 @@ class CommentRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        commentRepository.deleteAll();
-        questionRepository.deleteAll();
-        userRepository.deleteAll();
-
         targetUser = User.builder()
                 .email("target@email.com")
                 .password("1234")
