@@ -51,7 +51,7 @@ public class User extends BaseEntity {
         this.graduationYear = graduationYear;
     }
 
-    public void updateUser(User user) {
+    public void update(User user) {
         this.email = user.email;
         this.password = user.password;
         this.name = user.name;

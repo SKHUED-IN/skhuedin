@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -22,10 +24,16 @@ public class UserService {
     }
 
     @Transactional
-    public void update(User user) {
-        user.updateUser(user);
+    public void update(Long id, User user) {
+        User findUser = userRepository.findById(id).get();
+        findUser.update(user);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        User findUser = userRepository.findById(id).get(); // 영속성 컨텍스트에 등록
+        userRepository.delete(findUser);
+    }
 
     public UserMainResponseDto findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
