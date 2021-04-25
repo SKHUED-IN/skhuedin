@@ -10,7 +10,10 @@ import java.util.Map;
 @Builder
 public class GoogleInnerProfile {
 
-    public GoogleInnerProfile(String iss, String azp, String aud, String sub, String atHash, String name, String picture, String givenName, String familyName, String locale, String iat, String exp, String alg, String kid, String typ, Map<String, Object> additionalProperties) {
+    public GoogleInnerProfile(String iss, String azp, String aud, String sub, String atHash,
+                              String name, String picture, String givenName, String familyName,
+                              String locale, String iat, String exp, String alg, String kid, String typ, String email,
+                              Map<String, Object> additionalProperties) {
         this.iss = iss;
         this.azp = azp;
         this.aud = aud;
@@ -27,6 +30,7 @@ public class GoogleInnerProfile {
         this.kid = kid;
         this.typ = typ;
         this.additionalProperties = additionalProperties;
+        this.email = email;
     }
 
     public GoogleInnerProfile() {
@@ -48,6 +52,8 @@ public class GoogleInnerProfile {
     public String alg;
     public String kid;
     public String typ;
+    public String email;
+
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public Map<String, Object> getAdditionalProperties() {

@@ -1,9 +1,6 @@
 package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.social.google.GoogleOauth;
-import com.skhuedin.skhuedin.social.kakao.KakaoOauth;
-import com.skhuedin.skhuedin.social.naver.NaverOauth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
