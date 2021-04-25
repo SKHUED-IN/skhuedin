@@ -18,11 +18,11 @@ import javax.persistence.OneToOne;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseEntity {
+public class Posts extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
+    @Column(name = "posts_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,7 +40,7 @@ public class Post extends BaseEntity {
     private Category category;
 
     @Builder
-    public Post(Blog blog, String title, String content, Category category) {
+    public Posts(Blog blog, String title, String content, Category category) {
         this.blog = blog;
         this.title = title;
         this.content = content;
@@ -48,7 +48,7 @@ public class Post extends BaseEntity {
         this.category = category;
     }
 
-    public void updatePost(Post post) {
+    public void updatePost(Posts post) {
         this.blog = post.blog;
         this.title = post.title;
         this.content = post.content;
