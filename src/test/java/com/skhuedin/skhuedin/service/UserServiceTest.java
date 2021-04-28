@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +25,18 @@ class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    User user;
     @BeforeEach
     void beforeEach() {
+        user = User.builder()
+                .name("홍길동")
+                .email("hong@email.com")
+                .password("1234")
+                .userImageUrl("/img")
+                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDateTime.now())
+                .provider(Provider.KAKAO)
+                .build();
     }
 
     @Test
@@ -62,6 +73,24 @@ class UserServiceTest {
 
         // then
         assertThrows(IllegalArgumentException.class, () -> userService.findById(1L));
+    }
+
+    @Test
+    @DisplayName("equals 가 잘 동작하는지 확인함")
+    void equalsTest() {
+
+        //given 어떤 값이 주어지고
+       User user2 = User.builder()
+                .name("홍길동")
+                .email("hong@email.com")
+                .password("1234")
+                .userImageUrl("/img")
+                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDateTime.now())
+                .provider(Provider.KAKAO)
+                .build();
+        //when 무엇을 했을 때 then 어떤 값을 원한다.
+        Assertions.assertThat(userService.checkUpdate(user,user2)).isEqualTo(true);
     }
 
     @AfterEach

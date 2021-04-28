@@ -50,7 +50,7 @@ public class NaverOauth implements SocialOauth {
     }
 
     @Override
-    public String requestAccessToken(String code) {
+    public User requestAccessToken(String code) {
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -110,8 +110,9 @@ public class NaverOauth implements SocialOauth {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        userService.signUp(saveNaverUser(naverProfile));
-        return response2.getBody();
+        User user = saveNaverUser(naverProfile);
+        userService.signUp(user);
+        return user;
     }
 
     /**

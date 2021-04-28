@@ -47,10 +47,12 @@ public class KakaoOauth implements SocialOauth {
     }
 
     @Override
-    public String requestAccessToken(String code) {
+    public User requestAccessToken(String code) {
 
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
+        User user = null;
+
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         //HttpBody 오브젝트 생성
@@ -108,9 +110,11 @@ public class KakaoOauth implements SocialOauth {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        userService.signUp(saveKakaoUser(kakaoProfile));
-        return response2.getBody();
+        user = saveKakaoUser(kakaoProfile);
+        userService.signUp(user);
+        return user;
     }
+
     /**
      * 카카오에서 받은 프로필로
      * User 정보를 채운 후, 디비에 저장
@@ -127,7 +131,6 @@ public class KakaoOauth implements SocialOauth {
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
-        userService.save(user);
         return user;
     }
 }
