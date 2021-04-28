@@ -1,6 +1,7 @@
 package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class OauthService {
         }
     }
 
-    public String requestAccessToken(Provider socialLoginType, String code) {
+    public User requestAccessToken(Provider socialLoginType, String code) {
         SocialOauth socialOauth = this.findSocialOauthByType(socialLoginType);
         return socialOauth.requestAccessToken(code);
     }

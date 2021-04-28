@@ -49,10 +49,11 @@ public class GoogleOauth implements SocialOauth {
     }
 
     @Override
-    public String requestAccessToken(String code) {
+    public User requestAccessToken(String code) {
 
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
+        User user = null;
 
         //JSON 파싱을 위한 기본값 세팅
         //요청시 파라미터는 스네이크 케이스로 세팅되므로 Object mapper에 미리 설정해준다.
@@ -82,16 +83,14 @@ public class GoogleOauth implements SocialOauth {
                 GoogleInnerProfile profile = mapper.readValue(resultJson, new TypeReference<GoogleInnerProfile>() {
                 });
                 // 사용자 유저로 저장.
-                User user = saveGoogleUser(profile);
+                user = saveGoogleUser(profile);
                 userService.signUp(user);
-
-                return responseEntity.getBody();
 
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }
-        return "로그인 에러";
+        return user;
     }
 
     public User saveGoogleUser(GoogleInnerProfile googleProfile) {
@@ -106,7 +105,6 @@ public class GoogleOauth implements SocialOauth {
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
-        userService.save(user);
         return user;
     }
 }

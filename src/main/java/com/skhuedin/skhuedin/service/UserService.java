@@ -57,23 +57,35 @@ public class UserService {
         return jwtTokenProvider.getSubject(Token);
     }
 
-    public void signUp(User user) {
-        User checkUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() ->
-                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + user.getId()));
-        if (checkUser != null) {
-            signIn(user);
-        } else {
+    public String signUp(User user) { // 회원가입
+
             save(user);
-            signIn(user);
-        }
+
+      return signIn(user);
     }
 
-    public String signIn(User user) {
+    public User login(UserMainResponseDto user) { // 회원가입
+        User findUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
+        return findUser;
+    }
+
+    public String signIn(User user) { // 로그인
         User findUser = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
         if (!findUser.getPassword().equals(user.getPassword()))
             throw new IllegalArgumentException("암호 불일치");
+
+        // 로그인 전 변경 사항이 있는지 체크
+        if (!checkUpdate(findUser, user)) {
+            update(findUser.getId(), user);
+            return createToken(findUser.getEmail());
+        }
         return createToken(findUser.getEmail());
+    }
+
+    public boolean checkUpdate(User findUser, User newUser) {
+        return findUser.equals(newUser);
     }
 
     public User findByName(String name) {

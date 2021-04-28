@@ -23,14 +23,16 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
                              HttpServletResponse response, Object handler) {
         System.out.println(">>> interceptor.preHandle 호출");
         String token = authExtractor.extract(request, "Bearer");
-        if (StringUtils.isEmpty(token)) {
+        //값이 있으면 토큰 값을 저장한다.
+
+        if (StringUtils.isEmpty(token)) { // 값이 비어있으면 ture 를 반환한다.
             return true;
         }
 
         if (!jwtTokenProvider.validateToken(token)) {
             throw new IllegalArgumentException("유효하지 않은 토큰");
         }
-
+        //값이 있으면 그 값을 request.
         String name = jwtTokenProvider.getSubject(token);
         request.setAttribute("name", name);
         return true;
