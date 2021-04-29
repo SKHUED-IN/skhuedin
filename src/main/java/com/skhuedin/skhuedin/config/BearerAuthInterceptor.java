@@ -28,7 +28,7 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         String token = authExtractor.extract(request, "Bearer");
         //값이 있으면 토큰 값을 저장한다.
 
-        if (Strings.isEmpty(token)) { // 값이 비어있으면 ture 를 반환한다.
+        if (token.isEmpty()) { // 값이 비어있으면 ture 를 반환한다.
             return true;
         }
 

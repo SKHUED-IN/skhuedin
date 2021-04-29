@@ -4,15 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.service.UserService;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -22,11 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-@Component
 public class NaverOauth implements SocialOauth {
-
-    private final UserService userService;
 
     private String NAVER_SNS_BASE_URL = "https://nid.naver.com/oauth2.0/authorize";
     private String NAVER_SNS_CLIENT_ID = "xncCqLDs5xAMfdEgui3A";
@@ -111,7 +104,7 @@ public class NaverOauth implements SocialOauth {
             e.printStackTrace();
         }
         User user = saveNaverUser(naverProfile);
-        userService.signUp(user);
+
         return user;
     }
 
@@ -131,7 +124,7 @@ public class NaverOauth implements SocialOauth {
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
-        userService.save(user);
+
         return user;
     }
 }

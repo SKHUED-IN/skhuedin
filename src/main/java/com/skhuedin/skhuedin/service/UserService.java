@@ -22,10 +22,10 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Long id, User user) {
+    public void update(Long id, UserMainResponseDto userMainResponseDto) {
         User findUser = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
-        findUser.update(user);
+        findUser.update(userMainResponseDto.toEntity());
     }
 
     @Transactional
@@ -46,9 +46,6 @@ public class UserService {
      * token 으로 회원 가입
      */
     public String createToken(String email) {
-        User newUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("해당 user 가 존재하지 않습니다."));
-
         //비밀번호 확인 등의 유효성 검사 진행
         return jwtTokenProvider.createToken(email);
     }
@@ -57,30 +54,20 @@ public class UserService {
         return jwtTokenProvider.getSubject(Token);
     }
 
-    public String signUp(User user) { // 회원가입
-
-            save(user);
-
-      return signIn(user);
+    public String signUp(UserMainResponseDto userMainResponseDto) { // 회원가입
+        save(userMainResponseDto.toEntity());
+        return signIn(userMainResponseDto);
     }
 
-    public User login(UserMainResponseDto user) { // 회원가입
-        User findUser = userRepository.findByEmail(user.getEmail())
+    public String signIn(UserMainResponseDto userMainResponseDto) { // 로그인
+        User findUser = userRepository.findByEmail(userMainResponseDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
-        return findUser;
-    }
-
-    public String signIn(User user) { // 로그인
-        User findUser = userRepository.findByEmail(user.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
-        if (!findUser.getPassword().equals(user.getPassword()))
+        if (!findUser.getPassword().equals(userMainResponseDto.getPassword()))
             throw new IllegalArgumentException("암호 불일치");
 
         // 로그인 전 변경 사항이 있는지 체크
-        if (!checkUpdate(findUser, user)) {
-            update(findUser.getId(), user);
-            return createToken(findUser.getEmail());
-        }
+        update(findUser.getId(), userMainResponseDto);
+
         return createToken(findUser.getEmail());
     }
 
@@ -88,7 +75,10 @@ public class UserService {
         return findUser.equals(newUser);
     }
 
-    public User findByName(String name) {
-        return userRepository.findByName(name).get();
+    public User findByEmail(String email) {
+        // 값이 없는데 get 하면 오류가 나기 때문에 isPresent 로 잡아줌,
+        if (!userRepository.findByEmail(email).isPresent())
+            return null;
+        else return userRepository.findByEmail(email).get();
     }
 }

@@ -7,9 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.service.UserService;
 import com.skhuedin.skhuedin.social.SocialOauth;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,10 +20,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 public class GoogleOauth implements SocialOauth {
-
-    private final UserService userService;
 
     private String GOOGLE_SNS_BASE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
     private String GOOGLE_SNS_CLIENT_ID = "26388048524-72oe5ceuu1n8b51204ub9bmhochpp7gg.apps.googleusercontent.com";
@@ -84,7 +79,6 @@ public class GoogleOauth implements SocialOauth {
                 });
                 // 사용자 유저로 저장.
                 user = saveGoogleUser(profile);
-                userService.signUp(user);
 
             } catch (JsonProcessingException e) {
                 e.printStackTrace();

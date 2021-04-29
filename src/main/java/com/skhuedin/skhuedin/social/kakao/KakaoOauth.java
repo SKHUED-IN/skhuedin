@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.service.UserService;
 import com.skhuedin.skhuedin.social.SocialOauth;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,11 +19,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Component
 public class KakaoOauth implements SocialOauth {
-
-    private final UserService userService;
 
     private String KAKAO_SNS_BASE_URL = "https://kauth.kakao.com/oauth/authorize";
     private String KAKAO_SNS_CLIENT_ID = "f4f3a16b864f2046d38669b4f8a2a482";
@@ -113,9 +108,6 @@ public class KakaoOauth implements SocialOauth {
         //유저 형식에 맞게 저장하기
         user = saveKakaoUser(kakaoProfile);
 
-        //회원 가입으로 보내기
-        userService.signUp(user);
-       
         return user;
     }
 
