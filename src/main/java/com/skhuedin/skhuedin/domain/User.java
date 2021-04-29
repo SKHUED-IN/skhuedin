@@ -67,8 +67,7 @@ public class User extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id)
-                && Objects.equals(email, user.email)
+        return Objects.equals(email, user.email)
                 && Objects.equals(password, user.password)
                 && Objects.equals(name, user.name)
                 && provider == user.provider

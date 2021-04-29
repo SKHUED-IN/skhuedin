@@ -50,9 +50,9 @@ public class OauthController {
         log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", code);
         User user = oauthService.requestAccessToken(socialLoginType, code);
 
+        // user 인증을 위한 자체 토큰을 발급받아 헤더에 저장,데이터에 user 값도 저장 해서 보냄
         MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         header.add("Authorization", "Bearer " + userService.signIn(user));
-        header.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         return new ResponseEntity<>(new CommonResponse<>(user),header, HttpStatus.OK);
     }
