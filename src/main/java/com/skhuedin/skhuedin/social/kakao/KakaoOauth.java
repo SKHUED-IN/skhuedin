@@ -110,8 +110,12 @@ public class KakaoOauth implements SocialOauth {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        //유저 형식에 맞게 저장하기
         user = saveKakaoUser(kakaoProfile);
+
+        //회원 가입으로 보내기
         userService.signUp(user);
+       
         return user;
     }
 
