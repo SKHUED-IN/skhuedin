@@ -3,7 +3,7 @@ package com.skhuedin.skhuedin.social;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
@@ -38,7 +43,7 @@ public class OauthController {
      * Social Login API Server 요청에 의한 callback 을 처리
      *
      * @param socialLoginType (GOOGLE, FACEBOOK, NAVER, KAKAO)
-     * @param code            API Server 로부터 넘어노는 code
+     * @param code            API Server 로부터 넘어오는 code
      * @return SNS Login 요청 결과로 받은 Json 형태의 String 문자열 (access_token, refresh_token 등)
      */
 
@@ -48,12 +53,20 @@ public class OauthController {
             @RequestParam("code") String code) {
 
         log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", code);
-        User user = oauthService.requestAccessToken(socialLoginType, code);
+        // 소셜 로그인을 통해서 사용자의 값을 반환받
+        UserMainResponseDto user = oauthService.requestAccessToken(socialLoginType, code);
 
+        // 사용자가 현재 회원인지 아닌지 확인 작업. 회원이 아니면 회원 가입을 시키고
+        if (userService.findByEmail(user.getEmail()) == null) {
+            userService.signUp(user);
+            //회원이면 로그인을 시킴
+        } else {
+            userService.signIn(user);
+        }
         // user 인증을 위한 자체 토큰을 발급받아 헤더에 저장,데이터에 user 값도 저장 해서 보냄
         MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         header.add("Authorization", "Bearer " + userService.signIn(user));
 
-        return new ResponseEntity<>(new CommonResponse<>(user),header, HttpStatus.OK);
+        return new ResponseEntity<>(new CommonResponse<>(user), header, HttpStatus.OK);
     }
 }
