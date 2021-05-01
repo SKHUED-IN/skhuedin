@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,11 +45,11 @@ public class GoogleOauth implements SocialOauth {
     }
 
     @Override
-    public User requestAccessToken(String code) {
+    public UserSaveRequestDto requestAccessToken(String code) {
 
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
-        User user = null;
+        UserSaveRequestDto user = null;
 
         //JSON 파싱을 위한 기본값 세팅
         //요청시 파라미터는 스네이크 케이스로 세팅되므로 Object mapper에 미리 설정해준다.
@@ -87,10 +88,10 @@ public class GoogleOauth implements SocialOauth {
         return user;
     }
 
-    public User saveGoogleUser(GoogleInnerProfile googleProfile) {
+    public UserSaveRequestDto saveGoogleUser(GoogleInnerProfile googleProfile) {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
-        User user = User.builder()
+        UserSaveRequestDto user = UserSaveRequestDto.builder()
                 .email(googleProfile.getSub())// google 에서 이메일을 주지 않아 든 Google 계정에서 고유하며 재사용되지 않는 사용자의 식별자를 저장
                 .name(googleProfile.getName())
                 .provider(Provider.GOOGLE)

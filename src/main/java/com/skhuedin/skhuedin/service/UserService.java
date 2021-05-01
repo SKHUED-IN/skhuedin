@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,8 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Long id, UserMainResponseDto userMainResponseDto) {
-        User findUser = userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
-        findUser.update(userMainResponseDto.toEntity());
+    public void update(User user, UserSaveRequestDto requestDto) {
+        user.update(requestDto.toEntity());
     }
 
     @Transactional
@@ -54,25 +53,19 @@ public class UserService {
         return jwtTokenProvider.getSubject(Token);
     }
 
-    public String signUp(UserMainResponseDto userMainResponseDto) { // 회원가입
-        save(userMainResponseDto.toEntity());
-        return signIn(userMainResponseDto);
+    public String signUp(UserSaveRequestDto requestDto) { // 회원가입
+        User user = requestDto.toEntity();
+        save(user);
+        return signIn(requestDto);
     }
 
-    public String signIn(UserMainResponseDto userMainResponseDto) { // 로그인
-        User findUser = userRepository.findByEmail(userMainResponseDto.getEmail())
+    public String signIn(UserSaveRequestDto requestDto) { // 로그인
+        User findUser = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
-        if (!findUser.getPassword().equals(userMainResponseDto.getPassword()))
-            throw new IllegalArgumentException("암호 불일치");
-
-        // 로그인 전 변경 사항이 있는지 체크
-        update(findUser.getId(), userMainResponseDto);
+        // 로그인 전 변경 사항이 있는지 체크findUser
+        update(findUser, requestDto);
 
         return createToken(findUser.getEmail());
-    }
-
-    public boolean checkUpdate(User findUser, User newUser) {
-        return findUser.equals(newUser);
     }
 
     public User findByEmail(String email) {

@@ -3,10 +3,12 @@ package com.skhuedin.skhuedin.dto.user;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 public class UserMainResponseDto {
 
     private Long id;
@@ -27,18 +29,5 @@ public class UserMainResponseDto {
         this.userImageUrl = user.getUserImageUrl();
         this.entranceYear = user.getEntranceYear();
         this.graduationYear = user.getGraduationYear();
-    }
-
-    public User toEntity() {
-        User user = User.builder()
-                .email(this.email)
-                .password(this.password)
-                .name(this.name)
-                .provider(this.provider)
-                .userImageUrl(this.userImageUrl)
-                .entranceYear(this.entranceYear)
-                .graduationYear(this.graduationYear)
-                .build();
-        return user;
     }
 }

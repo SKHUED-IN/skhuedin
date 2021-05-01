@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,11 +43,11 @@ public class KakaoOauth implements SocialOauth {
     }
 
     @Override
-    public User requestAccessToken(String code) {
+    public UserSaveRequestDto requestAccessToken(String code) {
 
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        User user = null;
+        UserSaveRequestDto user = null;
 
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -115,10 +116,10 @@ public class KakaoOauth implements SocialOauth {
      * 카카오에서 받은 프로필로
      * User 정보를 채운 후, 디비에 저장
      */
-    public User saveKakaoUser(KakaoProfile kakaoProfile) {
+    public UserSaveRequestDto saveKakaoUser(KakaoProfile kakaoProfile) {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
-        User user = User.builder()
+        UserSaveRequestDto user = UserSaveRequestDto.builder()
                 .email(kakaoProfile.getKakao_account().getEmail())
                 .name(kakaoProfile.getKakao_account().getProfile().getNickname())
                 .provider(Provider.KAKAO)
