@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class TokenWithCommonResopnse extends CommonResponse {
+public class TokenWithCommonResopnse<T> extends CommonResponse {
 
     String token;
 
-    public TokenWithCommonResopnse(Object data, String token) {
+    public TokenWithCommonResopnse(T data, String token) {
         super(data);
         this.token = token;
     }
