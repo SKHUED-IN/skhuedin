@@ -1,6 +1,7 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
@@ -8,6 +9,10 @@ import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,7 +28,8 @@ public class UserService {
     }
 
     @Transactional
-    public void update(User user, UserSaveRequestDto requestDto) {
+    public void update(Long id, UserSaveRequestDto requestDto) {
+        User user = getUser(id);
         user.update(requestDto.toEntity());
     }
 
@@ -59,19 +65,35 @@ public class UserService {
         return signIn(requestDto);
     }
 
+    @Transactional
     public String signIn(UserSaveRequestDto requestDto) { // 로그인
         User findUser = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
-        // 로그인 전 변경 사항이 있는지 체크findUser
-        update(findUser, requestDto);
+        // 로그인 전 변경 사항이 있는지 체크 findUser
+        findUser.update(requestDto.toEntity());
 
         return createToken(findUser.getEmail());
     }
 
     public User findByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
         // 값이 없는데 get 하면 오류가 나기 때문에 isPresent 로 잡아줌,
-        if (!userRepository.findByEmail(email).isPresent())
+        if (!user.isPresent())
+            return null; // Bearer 검증에 null 값을 넘기기 위해 일부러 이렇게 작성함
+        else return user.get();
+    }
+
+    public List<UserMainResponseDto> findAll() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserMainResponseDto(user))
+                .collect(Collectors.toList());
+    }
+
+    public User getUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        // 값이 없는데 get 하면 오류가 나기 때문에 isPresent 로 잡아줌,
+        if (!user.isPresent())
             return null;
-        else return userRepository.findByEmail(email).get();
+        else return user.get();
     }
 }

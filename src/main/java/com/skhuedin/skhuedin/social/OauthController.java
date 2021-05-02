@@ -73,7 +73,7 @@ public class OauthController {
         } else {
             token = userService.signIn(user);
         }
-        UserMainResponseDto responseDto = new UserMainResponseDto(userService.findByEmail(user.getEmail()));
+        UserMainResponseDto responseDto = new UserMainResponseDto(user.toEntity());
         // user 인증을 위한 자체 토큰을 발급받아  저장,데이터에 user 값도 저장 해서 보냄
         return ResponseEntity.status(HttpStatus.OK).body((new TokenWithCommonResopnse(responseDto, token)));
     }

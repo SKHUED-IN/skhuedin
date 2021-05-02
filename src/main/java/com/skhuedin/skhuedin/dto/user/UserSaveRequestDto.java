@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.dto.user;
 
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.infra.Role;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -41,6 +42,7 @@ public class UserSaveRequestDto {
                 .userImageUrl(this.userImageUrl)
                 .entranceYear(this.entranceYear)
                 .graduationYear(this.graduationYear)
+                .role(Role.USER)
                 .build();
         return user;
     }

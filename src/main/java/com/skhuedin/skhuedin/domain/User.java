@@ -1,5 +1,6 @@
 package com.skhuedin.skhuedin.domain;
 
+import com.skhuedin.skhuedin.infra.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,9 +40,12 @@ public class User extends BaseEntity {
 
     LocalDateTime graduationYear;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Builder
     public User(String email, String password, String name, Provider provider,
-                String userImageUrl, LocalDateTime entranceYear, LocalDateTime graduationYear) {
+                String userImageUrl, LocalDateTime entranceYear, LocalDateTime graduationYear, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -49,6 +53,7 @@ public class User extends BaseEntity {
         this.userImageUrl = userImageUrl;
         this.entranceYear = entranceYear;
         this.graduationYear = graduationYear;
+        this.role = role;
     }
 
     public void update(User user) {
@@ -59,5 +64,6 @@ public class User extends BaseEntity {
         this.userImageUrl = user.userImageUrl;
         this.entranceYear = user.entranceYear;
         this.graduationYear = user.graduationYear;
+        this.role = role;
     }
 }
