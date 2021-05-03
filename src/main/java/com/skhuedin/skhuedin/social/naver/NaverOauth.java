@@ -3,11 +3,10 @@ package com.skhuedin.skhuedin.social.naver;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.service.UserService;
+
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,11 +21,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Component
 public class NaverOauth implements SocialOauth {
-
-    private final UserService userService;
 
     private String NAVER_SNS_BASE_URL = "https://nid.naver.com/oauth2.0/authorize";
     private String NAVER_SNS_CLIENT_ID = "xncCqLDs5xAMfdEgui3A";
@@ -50,7 +46,7 @@ public class NaverOauth implements SocialOauth {
     }
 
     @Override
-    public String requestAccessToken(String code) {
+    public UserSaveRequestDto requestAccessToken(String code) {
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -110,18 +106,19 @@ public class NaverOauth implements SocialOauth {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        userService.signUp(saveNaverUser(naverProfile));
-        return response2.getBody();
+        UserSaveRequestDto user = saveNaverUser(naverProfile);
+
+        return user;
     }
 
     /**
      * 네이버에서 받은 프로필로
      * User 정보를 채운 후, 디비에 저장
      */
-    public User saveNaverUser(NaverProfile naverProfile) {
+    public UserSaveRequestDto saveNaverUser(NaverProfile naverProfile) {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
-        User user = User.builder()
+        UserSaveRequestDto user = UserSaveRequestDto.builder()
                 .email(naverProfile.getResponse().getEmail())
                 .name(naverProfile.getResponse().getName())
                 .provider(Provider.NAVER)
@@ -130,7 +127,7 @@ public class NaverOauth implements SocialOauth {
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
-        userService.save(user);
+
         return user;
     }
 }

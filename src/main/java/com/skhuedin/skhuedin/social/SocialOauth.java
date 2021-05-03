@@ -1,6 +1,8 @@
 package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
+
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.google.GoogleOauth;
 import com.skhuedin.skhuedin.social.kakao.KakaoOauth;
 import com.skhuedin.skhuedin.social.naver.NaverOauth;
@@ -19,7 +21,7 @@ public interface SocialOauth {
      * @param code API Server 에서 받아온 code
      * @return API 서버로 부터 응답받은 Json 형태의 결과를 string으로 반
      */
-    String requestAccessToken(String code);
+    UserSaveRequestDto requestAccessToken(String code);
 
     default Provider type() {
         if (this instanceof GoogleOauth) {

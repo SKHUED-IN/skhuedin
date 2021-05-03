@@ -3,10 +3,9 @@ package com.skhuedin.skhuedin.social.kakao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.service.UserService;
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,11 +20,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Component
+@Slf4j
 public class KakaoOauth implements SocialOauth {
-
-    private final UserService userService;
 
     private String KAKAO_SNS_BASE_URL = "https://kauth.kakao.com/oauth/authorize";
     private String KAKAO_SNS_CLIENT_ID = "f4f3a16b864f2046d38669b4f8a2a482";
@@ -47,10 +44,12 @@ public class KakaoOauth implements SocialOauth {
     }
 
     @Override
-    public String requestAccessToken(String code) {
+    public UserSaveRequestDto requestAccessToken(String code) {
 
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
+        UserSaveRequestDto user = null;
+
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         //HttpBody 오브젝트 생성
@@ -108,17 +107,20 @@ public class KakaoOauth implements SocialOauth {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        userService.signUp(saveKakaoUser(kakaoProfile));
-        return response2.getBody();
+        //유저 형식에 맞게 저장하기
+        user = saveKakaoUser(kakaoProfile);
+
+        return user;
     }
+
     /**
      * 카카오에서 받은 프로필로
      * User 정보를 채운 후, 디비에 저장
      */
-    public User saveKakaoUser(KakaoProfile kakaoProfile) {
+    public UserSaveRequestDto saveKakaoUser(KakaoProfile kakaoProfile) {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
-        User user = User.builder()
+        UserSaveRequestDto user = UserSaveRequestDto.builder()
                 .email(kakaoProfile.getKakao_account().getEmail())
                 .name(kakaoProfile.getKakao_account().getProfile().getNickname())
                 .provider(Provider.KAKAO)
@@ -127,7 +129,6 @@ public class KakaoOauth implements SocialOauth {
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
-        userService.save(user);
         return user;
     }
 }

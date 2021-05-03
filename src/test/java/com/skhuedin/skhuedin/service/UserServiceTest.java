@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +25,18 @@ class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    User user;
     @BeforeEach
     void beforeEach() {
+        user = User.builder()
+                .name("홍길동")
+                .email("hong@email.com")
+                .password("1234")
+                .userImageUrl("/img")
+                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDateTime.now())
+                .provider(Provider.KAKAO)
+                .build();
     }
 
     @Test
@@ -63,6 +74,7 @@ class UserServiceTest {
         // then
         assertThrows(IllegalArgumentException.class, () -> userService.findById(1L));
     }
+
 
     @AfterEach
     void afterEach() {

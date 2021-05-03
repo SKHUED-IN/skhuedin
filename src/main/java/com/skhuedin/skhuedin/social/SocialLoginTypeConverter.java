@@ -1,10 +1,12 @@
 package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 
 @Configuration
+@Slf4j
 public class SocialLoginTypeConverter implements Converter<String, Provider> {
 
     /**
@@ -15,5 +17,6 @@ public class SocialLoginTypeConverter implements Converter<String, Provider> {
     @Override
     public Provider convert(String s) {
         return Provider.valueOf(s.toUpperCase());
+
     }
 }

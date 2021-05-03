@@ -1,6 +1,7 @@
 package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,20 +26,22 @@ public class OauthService {
     private final List<SocialOauth> socialOauthList;
     private final HttpServletResponse response;
 
-    public void request(Provider socialLoginType) {
+    public String request(Provider socialLoginType) {
         SocialOauth socialOauth = this.findSocialOauthByType(socialLoginType);
+        //페이지를 리다이렉트 할 주소 지정
         String redirectURL = socialOauth.getOauthRedirectURL();
-        try {
-            response.sendRedirect(redirectURL);
-        } catch (IOException e) {
-            log.info("redirectURL을 확인해보세요");
-            e.printStackTrace();
-        }
+
+        return redirectURL;
     }
 
-    public String requestAccessToken(Provider socialLoginType, String code) {
+    /**
+     * 리다이렉트 된 페이지에서 소셜 서버에 가서 사용자의 아이디, 비밀번호 입력하면 일회용 코드를 발급해 줌.
+     * 그 코드를 가지고 acce
+     */
+    public UserSaveRequestDto requestAccessToken(Provider socialLoginType, String code) {
         SocialOauth socialOauth = this.findSocialOauthByType(socialLoginType);
-        return socialOauth.requestAccessToken(code);
+        UserSaveRequestDto user =  socialOauth.requestAccessToken(code);
+        return user;
     }
 
     private SocialOauth findSocialOauthByType(Provider socialLoginType) {

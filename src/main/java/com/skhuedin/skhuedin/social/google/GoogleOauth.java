@@ -7,9 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.service.UserService;
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,10 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 public class GoogleOauth implements SocialOauth {
-
-    private final UserService userService;
 
     private String GOOGLE_SNS_BASE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
     private String GOOGLE_SNS_CLIENT_ID = "26388048524-72oe5ceuu1n8b51204ub9bmhochpp7gg.apps.googleusercontent.com";
@@ -49,10 +45,11 @@ public class GoogleOauth implements SocialOauth {
     }
 
     @Override
-    public String requestAccessToken(String code) {
+    public UserSaveRequestDto requestAccessToken(String code) {
 
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
+        UserSaveRequestDto user = null;
 
         //JSON 파싱을 위한 기본값 세팅
         //요청시 파라미터는 스네이크 케이스로 세팅되므로 Object mapper에 미리 설정해준다.
@@ -82,22 +79,19 @@ public class GoogleOauth implements SocialOauth {
                 GoogleInnerProfile profile = mapper.readValue(resultJson, new TypeReference<GoogleInnerProfile>() {
                 });
                 // 사용자 유저로 저장.
-                User user = saveGoogleUser(profile);
-                userService.signUp(user);
-
-                return responseEntity.getBody();
+                user = saveGoogleUser(profile);
 
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }
-        return "로그인 에러";
+        return user;
     }
 
-    public User saveGoogleUser(GoogleInnerProfile googleProfile) {
+    public UserSaveRequestDto saveGoogleUser(GoogleInnerProfile googleProfile) {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
-        User user = User.builder()
+        UserSaveRequestDto user = UserSaveRequestDto.builder()
                 .email(googleProfile.getSub())// google 에서 이메일을 주지 않아 든 Google 계정에서 고유하며 재사용되지 않는 사용자의 식별자를 저장
                 .name(googleProfile.getName())
                 .provider(Provider.GOOGLE)
@@ -106,7 +100,6 @@ public class GoogleOauth implements SocialOauth {
                 .entranceYear(null)
                 .graduationYear(null)
                 .build();
-        userService.save(user);
         return user;
     }
 }
