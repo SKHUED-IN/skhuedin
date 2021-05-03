@@ -14,18 +14,20 @@ import java.util.List;
 @Getter
 public class FollowMainResponseDto {
     private Long id;
-    private User user;
+    private UserMainResponseDto toUser;
+    private UserMainResponseDto fromUser;
     private List<UserMainResponseDto> users = new ArrayList<>();
-
 
     public FollowMainResponseDto(Follow follow) {
         this.id = follow.getId();
-        this.user = follow.getUser();
+        this.toUser = new UserMainResponseDto(follow.getToUser());
+        this.fromUser = new UserMainResponseDto(follow.getFromUser());
     }
 
     public FollowMainResponseDto(Follow follow, List<UserMainResponseDto> users) {
         this.id = follow.getId();
-        this.user = follow.getUser();
+        this.toUser = new UserMainResponseDto(follow.getToUser());
+        this.fromUser = new UserMainResponseDto(follow.getFromUser());
         this.users = users;
     }
 }
