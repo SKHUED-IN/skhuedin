@@ -32,7 +32,7 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @GetMapping("users{id}")
+    @GetMapping("users")
     public ResponseEntity<? extends BasicResponse> findAll() {
         List<UserMainResponseDto> users = userService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(users));

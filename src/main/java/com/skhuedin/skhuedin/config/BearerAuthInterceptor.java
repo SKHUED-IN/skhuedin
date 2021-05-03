@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @RequiredArgsConstructor
 public class BearerAuthInterceptor implements HandlerInterceptor {
-    private AuthorizationExtractor authExtractor;
-    private JwtTokenProvider jwtTokenProvider;
-    private UserService userService;
+    private final AuthorizationExtractor authExtractor;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -37,14 +37,14 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
         // @MyRole 받아오기
-        MyRole mySecured = handlerMethod.getMethodAnnotation(MyRole.class);
+        MyRole myRole = handlerMethod.getMethodAnnotation(MyRole.class);
 
 
         /**
          * 지금은 Controller 에 @MyRole을 달지 않았기 때문에 주석 표시.
          */
         // method에 @MyRole가 없는 경우, 즉 인증이 필요 없는 요청
-//        if (mySecured == null) {
+//        if (myRole == null) {
 //            return true;
 //        }
 
@@ -69,7 +69,7 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         User user = userService.findByEmail(email);
 
         // @MySecured의 Role이 admin 권한인 경우
-        String role = mySecured.role().toString();
+        String role = myRole.role().toString();
         if (role != null && user != null) {
             if ("ADMIN".equals(role)) {
                 if (user.getRole() != Role.ADMIN) {

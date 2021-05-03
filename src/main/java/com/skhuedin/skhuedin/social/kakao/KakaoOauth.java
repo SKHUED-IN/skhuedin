@@ -110,8 +110,6 @@ public class KakaoOauth implements SocialOauth {
         //유저 형식에 맞게 저장하기
         user = saveKakaoUser(kakaoProfile);
 
-        log.info(response2.getBody());
-
         return user;
     }
 

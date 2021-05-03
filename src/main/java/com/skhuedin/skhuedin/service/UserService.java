@@ -1,7 +1,6 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
@@ -77,10 +76,8 @@ public class UserService {
 
     public User findByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        // 값이 없는데 get 하면 오류가 나기 때문에 isPresent 로 잡아줌,
-        if (!user.isPresent())
-            return null; // Bearer 검증에 null 값을 넘기기 위해 일부러 이렇게 작성함
-        else return user.get();
+        // Bearer 검증에 null 값을 넘기기 위해 일부러 이렇게 작성함
+        return user.orElse(null);
     }
 
     public List<UserMainResponseDto> findAll() {
@@ -91,9 +88,6 @@ public class UserService {
 
     public User getUser(Long id) {
         Optional<User> user = userRepository.findById(id);
-        // 값이 없는데 get 하면 오류가 나기 때문에 isPresent 로 잡아줌,
-        if (!user.isPresent())
-            return null;
-        else return user.get();
+        return user.orElse(null);
     }
 }
