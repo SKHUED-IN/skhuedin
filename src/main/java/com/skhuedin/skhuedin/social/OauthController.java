@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 
 import com.skhuedin.skhuedin.controller.response.TokenWithCommonResopnse;
 import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.service.UserService;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,13 +59,11 @@ public class OauthController {
      */
 
     @GetMapping("/{socialLoginType}/callback")
-    public ResponseEntity<? extends BasicResponse> callback(
-            @PathVariable("socialLoginType") Provider socialLoginType,
-            @RequestParam("code") String code) {
+    public ResponseEntity<? extends BasicResponse> callback(@RequestBody socialRequestDto requestDto) {
 
-        log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", code);
+        log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", requestDto.getCode());
         // 소셜 로그인을 통해서 사용자의 값을 반환받
-        UserSaveRequestDto user = oauthService.requestAccessToken(socialLoginType, code);
+        UserSaveRequestDto user = oauthService.requestAccessToken(requestDto.getSocialLoginType(), requestDto.getCode());
         String token = Strings.EMPTY;
 
         // 사용자가 현재 회원인지 아닌지 확인 작업. 회원이 아니면 회원 가입을 시키고

@@ -7,6 +7,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class NaverOauth implements SocialOauth {
 
     private String NAVER_SNS_BASE_URL = "https://nid.naver.com/oauth2.0/authorize";
@@ -42,7 +44,11 @@ public class NaverOauth implements SocialOauth {
                 .map(x -> x.getKey() + "=" + x.getValue())
                 .collect(Collectors.joining("&"));
 
+
+        log.info(NAVER_SNS_BASE_URL + "?" + parameterString);
         return NAVER_SNS_BASE_URL + "?" + parameterString;
+
+
     }
 
     @Override
