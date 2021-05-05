@@ -2,13 +2,14 @@ package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
+import com.skhuedin.skhuedin.social.kakao.KakaoOauth;
+import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @Slf4j
@@ -24,30 +25,37 @@ public class OauthService {
      * findSocialOauthByType 함수를 통해 초기화되도록 수정
      */
     private final List<SocialOauth> socialOauthList;
-    private final HttpServletResponse response;
-
-    public String request(Provider socialLoginType) {
-        SocialOauth socialOauth = this.findSocialOauthByType(socialLoginType);
-        //페이지를 리다이렉트 할 주소 지정
-        String redirectURL = socialOauth.getOauthRedirectURL();
-
-        return redirectURL;
-    }
+    private final List<Provider> providerList;
 
     /**
      * 리다이렉트 된 페이지에서 소셜 서버에 가서 사용자의 아이디, 비밀번호 입력하면 일회용 코드를 발급해 줌.
      * 그 코드를 가지고 acce
      */
-    public UserSaveRequestDto requestAccessToken(Provider socialLoginType, String code) {
-        SocialOauth socialOauth = this.findSocialOauthByType(socialLoginType);
-        UserSaveRequestDto user =  socialOauth.requestAccessToken(code);
+    public UserSaveRequestDto requestAccessToken(String socialLoginType, OAuthToken oAuthToken) {
+        SocialOauth socialOauth = findSocialOauthByType(socialLoginType);
+        UserSaveRequestDto user = socialOauth.requestAccessToken(oAuthToken);
         return user;
+
     }
 
-    private SocialOauth findSocialOauthByType(Provider socialLoginType) {
+    private SocialOauth findSocialOauthByType(String socialLoginType) {
+
+        Provider provider = null;
+
+        if (socialLoginType.equals("kakao")) {
+            provider = Provider.KAKAO;
+        } else if (socialLoginType.equals("google")) {
+            provider = Provider.GOOGLE;
+        } else if (socialLoginType.equals("naver")) {
+            provider = Provider.NAVER;
+        } else {
+            throw new IllegalArgumentException("알 수 없는 SocialLoginType 입니다.");
+        }
+
+        Provider finalProvider = provider;
         return socialOauthList.stream()
-                .filter(x -> x.type() == socialLoginType)
+                .filter(x -> x.type() == finalProvider)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("알 수 없는 SocialLoginType 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("알 수 없는 SocialOauth 입니다."));
     }
 }

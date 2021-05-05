@@ -26,33 +26,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class NaverOauth implements SocialOauth {
 
-    private String NAVER_SNS_BASE_URL = "https://nid.naver.com/oauth2.0/authorize";
     private String NAVER_SNS_CLIENT_ID = "xncCqLDs5xAMfdEgui3A";
-    private String NAVER_SNS_CALLBACK_URL = "http://localhost:8080/auth/naver/callback";
     private String NAVER_SNS_CLIENT_SECRET = "G8wydgDb7C";
     private final String NAVER_SNS_TOKEN_BASE_URL = "https://nid.naver.com/oauth2.0/token";
 
-    @Override
-    public String getOauthRedirectURL() {
-        Map<String, Object> params = new HashMap<>();
-        params.put("client_id", NAVER_SNS_CLIENT_ID);
-        params.put("response_type", "code");
-        params.put("redirect_uri", NAVER_SNS_CALLBACK_URL);
-        params.put("state=", "state");
-
-        String parameterString = params.entrySet().stream()
-                .map(x -> x.getKey() + "=" + x.getValue())
-                .collect(Collectors.joining("&"));
-
-
-        log.info(NAVER_SNS_BASE_URL + "?" + parameterString);
-        return NAVER_SNS_BASE_URL + "?" + parameterString;
-
-
-    }
 
     @Override
-    public UserSaveRequestDto requestAccessToken(String code) {
+    public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -64,7 +44,7 @@ public class NaverOauth implements SocialOauth {
         params.add("client_secret", NAVER_SNS_CLIENT_SECRET);
         params.add("grant_type", "authorization_code");
         params.add("state", "state");
-        params.add("code", code);
+
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         HttpEntity<MultiValueMap<String, String>> naverTokenRequest =
