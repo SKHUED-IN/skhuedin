@@ -25,11 +25,21 @@ public class Follow extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "toUser_id")
+    private User toUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fromUser_id")
+    private User fromUser;
 
     @Builder
-    public Follow(User user) {
-        this.user = user;
+    public Follow(User toUser, User fromUser) {
+        this.toUser = toUser;
+        this.fromUser = fromUser;
+    }
+
+    public void Update(Follow follow) {
+        this.toUser = follow.getToUser();
+        this.fromUser = follow.getFromUser();
     }
 }
