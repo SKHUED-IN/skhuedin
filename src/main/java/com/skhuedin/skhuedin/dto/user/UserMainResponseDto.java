@@ -21,13 +21,13 @@ public class UserMainResponseDto {
     LocalDateTime lastModifiedDate;
 
     public UserMainResponseDto(User user) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.userImageUrl = userImageUrl;
-        this.entranceYear = entranceYear;
-        this.graduationYear = graduationYear;
-        this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate;
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.name = user.getName();
+        this.userImageUrl = user.getUserImageUrl();
+        this.entranceYear = user.getEntranceYear();
+        this.graduationYear = user.getGraduationYear();
+        this.createdDate = user.getCreatedDate();
+        this.lastModifiedDate = user.getLastModifiedDate();
     }
 }

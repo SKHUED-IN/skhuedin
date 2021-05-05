@@ -9,6 +9,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
+import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -29,23 +30,9 @@ public class GoogleOauth implements SocialOauth {
     private String GOOGLE_SNS_CLIENT_SECRET = "uLKmQf04pnRl3tfHsRxZpPYU";
     private final String GOOGLE_SNS_TOKEN_BASE_URL = "https://oauth2.googleapis.com/token";
 
-    @Override
-    public String getOauthRedirectURL() {
-        Map<String, Object> params = new HashMap<>();
-        params.put("scope", "profile");
-        params.put("response_type", "code");
-        params.put("client_id", GOOGLE_SNS_CLIENT_ID);
-        params.put("redirect_uri", GOOGLE_SNS_CALLBACK_URL);
-
-        String parameterString = params.entrySet().stream()
-                .map(x -> x.getKey() + "=" + x.getValue())
-                .collect(Collectors.joining("&"));
-
-        return GOOGLE_SNS_BASE_URL + "?" + parameterString;
-    }
 
     @Override
-    public UserSaveRequestDto requestAccessToken(String code) {
+    public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
 
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
@@ -57,7 +44,6 @@ public class GoogleOauth implements SocialOauth {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         Map<String, Object> params = new HashMap<>();
-        params.put("code", code);
         params.put("client_id", GOOGLE_SNS_CLIENT_ID);
         params.put("client_secret", GOOGLE_SNS_CLIENT_SECRET);
         params.put("redirect_uri", GOOGLE_SNS_CALLBACK_URL);
