@@ -1,13 +1,25 @@
 package com.skhuedin.skhuedin.service;
 
+import com.skhuedin.skhuedin.domain.Blog;
+import com.skhuedin.skhuedin.domain.Comment;
+import com.skhuedin.skhuedin.domain.Posts;
+import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
+
+import com.skhuedin.skhuedin.dto.user.AdminSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
+import com.skhuedin.skhuedin.infra.Role;
+import com.skhuedin.skhuedin.repository.BlogRepository;
+import com.skhuedin.skhuedin.repository.CommentRepository;
+import com.skhuedin.skhuedin.repository.PostsRepository;
+import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -22,6 +35,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final BlogRepository blogRepository;
+    private final PostsRepository postsRepository;
+    private final CommentRepository commentRepository;
+    private final QuestionRepository questionRepository;
 
     @Transactional
     public Long save(User user) {
@@ -38,6 +55,28 @@ public class UserService {
     public void delete(Long id) {
         User findUser = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
+        // 영속성 컨텍스트에 등록
+        Blog blogByUserId = blogRepository.findBlogByUserId(id);
+        List<Comment> comments = commentRepository.findCommentsByWriterUserId(id);
+        List<Question> questions = questionRepository.findQuestionByUserId(id);
+        List<Posts> posts;
+
+        for (Comment comment : comments) {
+            commentRepository.delete(comment);
+        }
+        for (Question question : questions) {
+            questionRepository.delete(question);
+        }
+
+        if (blogByUserId != null) {
+            posts = postsRepository.findPostsByBlogId(blogByUserId.getId());
+
+            for (Posts post : posts) {
+                log.info(post.getId().toString());
+                postsRepository.deleteById(post.getId());
+            }
+            blogRepository.delete(blogByUserId);
+        }
         userRepository.delete(findUser);
     }
 
@@ -71,6 +110,8 @@ public class UserService {
         return createToken(findUser.getEmail());
     }
 
+
+
     public User findByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         // Bearer 검증에 null 값을 넘기기 위해 일부러 이렇게 작성함
@@ -84,7 +125,7 @@ public class UserService {
     }
 
     public String adminSignIn(LoginRequest loginRequest) {
-        User user = userRepository.findByEmailAndPassword(loginRequest.getName(), loginRequest.getPwd()).orElseThrow(() ->
+        User user = userRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPwd()).orElseThrow(() ->
                 new IllegalArgumentException("email과 password가 일치하지 않습니다. "));
 
         return createToken(user.getEmail());

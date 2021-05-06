@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.dto.user;
 
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.infra.Role;
 import lombok.Getter;
 import lombok.Setter;
 
