@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
+import com.skhuedin.skhuedin.repository.CommentRepository;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Sql("/truncate.sql")
 class QuestionServiceTest {
 
     @Autowired
@@ -88,7 +91,7 @@ class QuestionServiceTest {
 
         // given
         QuestionSaveRequestDto requestDto = QuestionSaveRequestDto.builder()
-                .targetUserId(10L) // 존재하지 않는 유저
+                .targetUserId(0L) // 존재하지 않는 유저
                 .writerUserId(writerUser.getId())
                 .title("Spring")
                 .content("Spring 은 어떤식으로 공부하는 것이 좋을까요?")
@@ -170,7 +173,9 @@ class QuestionServiceTest {
         questionService.delete(saveId);
 
         // then
-        assertEquals(questionRepository.findAll().size(), 0);
+        assertThrows(IllegalArgumentException.class, () ->
+                questionService.findById(saveId)
+        );
     }
 
     @Test
@@ -179,7 +184,7 @@ class QuestionServiceTest {
 
         // given & when & then
         assertThrows(IllegalArgumentException.class, () ->
-                questionService.delete(100L)
+                questionService.delete(0L)
         );
     }
 

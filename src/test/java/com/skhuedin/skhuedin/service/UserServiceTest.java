@@ -4,19 +4,20 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Sql("/truncate.sql")
 class UserServiceTest {
 
     @Autowired
@@ -72,7 +73,7 @@ class UserServiceTest {
     void findById_false() {
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> userService.findById(1L));
+        assertThrows(IllegalArgumentException.class, () -> userService.findById(0L));
     }
 
 
