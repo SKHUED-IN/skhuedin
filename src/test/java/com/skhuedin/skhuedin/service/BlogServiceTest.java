@@ -12,12 +12,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Sql("/truncate.sql")
 class BlogServiceTest {
 
     @Autowired
@@ -120,7 +122,9 @@ class BlogServiceTest {
         blogService.delete(saveId);
 
         // then
-        assertEquals(blogRepository.findAll().size(), 0);
+        assertThrows(IllegalArgumentException.class, () ->
+                blogService.delete(saveId)
+        );
     }
 
     @Test
