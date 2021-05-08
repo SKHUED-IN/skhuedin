@@ -16,3 +16,6 @@ values (1, 2, 'parent 댓글 1', null, now(), now()),
 
 insert into blog (user_id, profile_image_url, content, created_date, last_modified_date)
 values (1, '/img', 'admin blog', now(), now());
+
+insert into posts (created_date, last_modified_date, content, title, view, blog_id, category_id)
+values (now(), now(), 'posts content', 'posts title', 0, 1, null);
