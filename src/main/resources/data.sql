@@ -18,4 +18,5 @@ insert into blog (user_id, profile_image_url, content, created_date, last_modifi
 values (1, '/img', 'admin blog', now(), now());
 
 insert into posts (created_date, last_modified_date, content, title, view, blog_id, category_id)
-values (now(), now(), 'posts content', 'posts title', 0, 1, null);
+values (now(), now(), 'posts content 1', 'posts title 1', 0, 1, null),
+       (now(), now(), 'posts content 2', 'posts title 2', 0, 1, null);

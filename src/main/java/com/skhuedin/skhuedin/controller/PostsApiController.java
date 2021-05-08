@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -53,5 +55,12 @@ public class PostsApiController {
         postsService.delete(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("blogs/{blogId}/posts")
+    public ResponseEntity<? extends BasicResponse> findByBlogId(@PathVariable("blogId") Long id) {
+        List<PostsMainResponseDto> posts = postsService.findByBlogId(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(posts));
     }
 }
