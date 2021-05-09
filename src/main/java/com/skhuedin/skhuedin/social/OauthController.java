@@ -8,6 +8,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
+import com.skhuedin.skhuedin.infra.TokenResponse;
 import com.skhuedin.skhuedin.service.UserService;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,10 +46,10 @@ public class OauthController {
     @GetMapping("/{socialLoginType}/callback")
     public ResponseEntity<? extends BasicResponse> callback(
             @PathVariable("socialLoginType") String socialLoginType,
-            @RequestParam("access_token") String access_token) {
+            @RequestBody TokenResponse response) {
 
         OAuthToken oAuthToken = new OAuthToken();
-        oAuthToken.setAccess_token(access_token);
+        oAuthToken.setAccess_token(response.getAccessToken());
 
         log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", oAuthToken.getAccess_token());
         // 소셜 로그인을 통해서 사용자의 값을 반환받
