@@ -6,6 +6,8 @@ import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
 import com.skhuedin.skhuedin.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -42,8 +42,9 @@ public class QuestionApiController {
     }
 
     @GetMapping("users/{targetUserId}/questions")
-    public ResponseEntity<? extends BasicResponse> findByTargetId(@PathVariable("targetUserId") Long id) {
-        List<QuestionMainResponseDto> questions = questionService.findByTargetUserId(id);
+    public ResponseEntity<? extends BasicResponse> findByTargetId(@PathVariable("targetUserId") Long id,
+                                                                  Pageable pageable) {
+        Page<QuestionMainResponseDto> questions = questionService.findByTargetUserId(id, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(questions));
     }
@@ -61,7 +62,7 @@ public class QuestionApiController {
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("questionId") Long id) {
         questionService.delete(id);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new CommonResponse<>("삭제에 성공하였습니다."));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("questions/{questionId}/views")

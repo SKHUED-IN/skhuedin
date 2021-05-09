@@ -8,6 +8,8 @@ import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +64,15 @@ public class QuestionService {
                     return new QuestionMainResponseDto(question, comments);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public Page<QuestionMainResponseDto> findByTargetUserId(Long id, Pageable pageable) {
+        Page<Question> questions = questionRepository.findByTargetUserId(id, pageable);
+        return questions
+                .map(question -> {
+                    List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
+                    return new QuestionMainResponseDto(question, comments);
+                });
     }
 
     @Transactional
