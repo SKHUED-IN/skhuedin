@@ -8,21 +8,20 @@ import lombok.Getter;
 
 @Getter
 public class FollowSaveRequestDto {
-    private Long id;
-    private User toUser;
-    private User fromUser;
+
+    private Long toUserId;
+    private Long fromUserId;
 
     @Builder
-    public FollowSaveRequestDto(Long id, User toUser, User fromUser) {
-        this.id = id;
-        this.toUser = toUser;
-        this.fromUser = fromUser;
+    public FollowSaveRequestDto(Long toUserId, Long fromUserId) {
+        this.toUserId = toUserId;
+        this.fromUserId = fromUserId;
     }
 
-    public Follow toEntity(Follow follow) {
+    public Follow toEntity(User toUSer, User fromUser) {
         return Follow.builder()
-                .toUser(follow.getToUser())
-                .fromUser(follow.getFromUser())
+                .toUser(toUSer)
+                .fromUser(fromUser)
                 .build();
     }
 }

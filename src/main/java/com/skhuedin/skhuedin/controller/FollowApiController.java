@@ -66,4 +66,11 @@ public class FollowApiController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @GetMapping("users/{toUserId}/follows")
+    public ResponseEntity<? extends BasicResponse> findByToUserId(@PathVariable("toUserId") Long toUserId) {
+        List<FollowMainResponseDto> follows = followService.findByToUserId(toUserId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(follows));
+    }
 }
