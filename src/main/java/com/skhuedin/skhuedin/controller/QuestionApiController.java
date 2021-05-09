@@ -7,7 +7,10 @@ import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
 import com.skhuedin.skhuedin.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,8 +45,10 @@ public class QuestionApiController {
     }
 
     @GetMapping("users/{targetUserId}/questions")
-    public ResponseEntity<? extends BasicResponse> findByTargetId(@PathVariable("targetUserId") Long id,
-                                                                  Pageable pageable) {
+    public ResponseEntity<? extends BasicResponse> findByTargetId(
+            @PathVariable("targetUserId") Long id,
+            @PageableDefault(sort="lastModifiedDate", direction = Sort.Direction.DESC) Pageable pageable) {
+
         Page<QuestionMainResponseDto> questions = questionService.findByTargetUserId(id, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(questions));
