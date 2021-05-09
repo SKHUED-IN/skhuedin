@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,7 @@ public class OauthController {
      * @return SNS Login 요청 결과로 받은 Json 형태의 String 문자열 (access_token, refresh_token 등)
      */
 
-    @GetMapping("/{socialLoginType}/callback")
+    @PostMapping("/{socialLoginType}/callback")
     public ResponseEntity<? extends BasicResponse> callback(
             @PathVariable("socialLoginType") String socialLoginType,
             @RequestBody TokenResponse response) {
