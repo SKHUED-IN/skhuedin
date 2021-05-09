@@ -1,10 +1,13 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Blog;
+import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
+import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
+import com.skhuedin.skhuedin.repository.PostsRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class BlogService {
 
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
+    private final PostsRepository postsRepository;
 
     @Transactional
     public Long save(BlogSaveRequestDto requestDto) {
@@ -46,8 +50,12 @@ public class BlogService {
 
     public BlogMainResponseDto findById(Long id) {
         Blog blog = getBlog(id);
+        List<Posts> posts = postsRepository.findByBlogIdOrderByLastModifiedDateDesc(blog.getId());
+        List<PostsMainResponseDto> collect = posts.stream()
+                .map(PostsMainResponseDto::new)
+                .collect(Collectors.toList());
 
-        return new BlogMainResponseDto(blog);
+        return new BlogMainResponseDto(blog, collect);
     }
 
     public List<BlogMainResponseDto> findAll() {
