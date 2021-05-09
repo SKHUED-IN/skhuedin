@@ -1,4 +1,4 @@
-package com.skhuedin.skhuedin.config;
+package com.skhuedin.skhuedin.interceptor;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
