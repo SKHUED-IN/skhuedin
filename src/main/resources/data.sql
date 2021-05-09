@@ -4,7 +4,31 @@ values (now(), now(), 'admin@email.com', '1234', 'admin', 'KAKAO', '/img', now()
        (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now());
 
 insert into question (target_user_id, writer_user_id, title, content, status, fix, view, created_date, last_modified_date)
-values (1, 2, 'spring', 'spring 공부 루트', false, false, 0, now(), now());
+values (1, 2, 'spring 1', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 2', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 3', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 4', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 5', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 6', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 7', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 8', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 9', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 10', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 11', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 12', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 13', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 14', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 15', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 16', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 17', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 18', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 19', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 20', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 21', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 22', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 23', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 24', 'spring 공부 루트', false, false, 0, now(), now()),
+       (1, 2, 'spring 25', 'spring 공부 루트', false, false, 0, now(), now());
 
 insert into comment (question_id, writer_user_id, content, parent_comment_id, created_date, last_modified_date)
 values (1, 2, 'parent 댓글 1', null, now(), now()),

@@ -1,10 +1,10 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
-import com.skhuedin.skhuedin.repository.CommentRepository;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +13,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
@@ -67,7 +70,7 @@ class QuestionServiceTest {
     void save() {
 
         // given
-        QuestionSaveRequestDto requestDto = getRequestDto();
+        QuestionSaveRequestDto requestDto = generateRequestDto();
 
         // when
         Long saveId = questionService.save(requestDto);
@@ -110,7 +113,7 @@ class QuestionServiceTest {
     void update() {
 
         // given
-        QuestionSaveRequestDto requestDto = getRequestDto();
+        QuestionSaveRequestDto requestDto = generateRequestDto();
 
         QuestionSaveRequestDto updateDto = QuestionSaveRequestDto.builder()
                 .targetUserId(targetUser.getId())
@@ -143,7 +146,7 @@ class QuestionServiceTest {
     void update_user_false() {
 
         // given
-        QuestionSaveRequestDto requestDto = getRequestDto();
+        QuestionSaveRequestDto requestDto = generateRequestDto();
 
         QuestionSaveRequestDto updateDto = QuestionSaveRequestDto.builder()
                 .targetUserId(20L) // 존재하지 않는 유저
@@ -166,7 +169,7 @@ class QuestionServiceTest {
     void delete() {
 
         // given
-        QuestionSaveRequestDto requestDto = getRequestDto();
+        QuestionSaveRequestDto requestDto = generateRequestDto();
         Long saveId = questionService.save(requestDto);
 
         // when
@@ -193,9 +196,9 @@ class QuestionServiceTest {
     void findByTargetUserId() {
 
         // given
-        QuestionSaveRequestDto requestDto1 = getRequestDto();
-        QuestionSaveRequestDto requestDto2 = getRequestDto();
-        QuestionSaveRequestDto requestDto3 = getRequestDto();
+        QuestionSaveRequestDto requestDto1 = generateRequestDto();
+        QuestionSaveRequestDto requestDto2 = generateRequestDto();
+        QuestionSaveRequestDto requestDto3 = generateRequestDto();
 
         questionService.save(requestDto1);
         questionService.save(requestDto2);
@@ -208,7 +211,43 @@ class QuestionServiceTest {
         assertEquals(questions.size(), 3);
     }
 
-    private QuestionSaveRequestDto getRequestDto() {
+    @Test
+    @DisplayName("target user id 로 question 목록을 paging 하여 조회하는 테스트")
+    void findByTargetId_paging() {
+
+        // given
+        for (int i = 0; i < 30; i++) {
+            QuestionSaveRequestDto requestDto = generateRequestDto(i);
+            questionService.save(requestDto);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 5,
+                Sort.by(Sort.Direction.DESC, "lastModifiedDate"));
+
+        Page<QuestionMainResponseDto> page = questionService.findByTargetUserId(targetUser.getId(), pageRequest);
+
+        // then
+        assertEquals(page.getContent().size(), 5); // 조회된 데이터 수
+        assertEquals(page.getTotalElements(), 30); // 전체 데이터 수
+        assertEquals(page.getNumber(), 0); // 페이지 번호
+        assertEquals(page.getTotalPages(), 6); // 전체 페이지 번호
+        assertTrue(page.isFirst()); // 첫 번째 페이지 t/f
+        assertTrue(page.hasNext()); // 다음 페이지 t/f
+    }
+
+    private QuestionSaveRequestDto generateRequestDto(int index) {
+        return QuestionSaveRequestDto.builder()
+                .targetUserId(targetUser.getId())
+                .writerUserId(writerUser.getId())
+                .title("Spring " + index)
+                .content("Spring 은 어떤식으로 공부하는 것이 좋을까요?")
+                .status(false)
+                .fix(false)
+                .build();
+    }
+
+    private QuestionSaveRequestDto generateRequestDto() {
         return QuestionSaveRequestDto.builder()
                 .targetUserId(targetUser.getId())
                 .writerUserId(writerUser.getId())
