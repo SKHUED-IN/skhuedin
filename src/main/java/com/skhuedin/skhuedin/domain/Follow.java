@@ -38,7 +38,7 @@ public class Follow extends BaseEntity {
         this.fromUser = fromUser;
     }
 
-    public void Update(Follow follow) {
+    public void UpdateFollow(Follow follow) {
         this.toUser = follow.getToUser();
         this.fromUser = follow.getFromUser();
     }
