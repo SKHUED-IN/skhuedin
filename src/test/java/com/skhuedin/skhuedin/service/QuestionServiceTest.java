@@ -192,26 +192,6 @@ class QuestionServiceTest {
     }
 
     @Test
-    @DisplayName("target user id 로 question 을 조회하는 테스트")
-    void findByTargetUserId() {
-
-        // given
-        QuestionSaveRequestDto requestDto1 = generateRequestDto();
-        QuestionSaveRequestDto requestDto2 = generateRequestDto();
-        QuestionSaveRequestDto requestDto3 = generateRequestDto();
-
-        questionService.save(requestDto1);
-        questionService.save(requestDto2);
-        questionService.save(requestDto3);
-
-        // when
-        List<QuestionMainResponseDto> questions = questionService.findByTargetUserId(targetUser.getId());
-
-        // then
-        assertEquals(questions.size(), 3);
-    }
-
-    @Test
     @DisplayName("target user id 로 question 목록을 paging 하여 조회하는 테스트")
     void findByTargetId_paging() {
 

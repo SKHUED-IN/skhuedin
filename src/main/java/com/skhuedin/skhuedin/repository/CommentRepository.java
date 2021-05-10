@@ -10,10 +10,11 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @EntityGraph(attributePaths = {"question" , "writerUser", "parent"})
+    @EntityGraph(
+            attributePaths = {"question", "question.targetUser", "question.writerUser", "writerUser"})
     @Query("select c from Comment c where c.question.id = :questionId and c.parent is null")
     List<Comment> findByQuestionId(@Param("questionId") Long questionId);
 
-    @EntityGraph(attributePaths = {"question" , "writerUser", "parent"})
+    @EntityGraph(attributePaths = {"question", "question.targetUser", "question.writerUser", "writerUser"})
     List<Comment> findByParentId(Long parentId);
 }

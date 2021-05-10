@@ -63,42 +63,6 @@ class QuestionRepositoryTest {
     }
 
     @Test
-    @DisplayName("target user 의 id 별 question 목록을 수정날짜 내림차순으로 조회하는 테스트")
-    void findByTargetId() {
-
-        // given
-        Question question1 = Question.builder()
-                .targetUser(targetUser)
-                .writerUser(writerUser)
-                .title("질문 1")
-                .content("질문1의 질문 내용")
-                .status(false)
-                .fix(false)
-                .build();
-
-        Question question2 = Question.builder()
-                .targetUser(targetUser)
-                .writerUser(writerUser)
-                .title("질문 2")
-                .content("질문2의 질문 내용")
-                .status(false)
-                .fix(false)
-                .build();
-
-        questionRepository.save(question1);
-        questionRepository.save(question2);
-
-        // when
-        List<Question> questions = questionRepository.findByTargetUserIdOrderByLastModifiedDateDesc(targetUser.getId());
-
-        // then
-        assertAll(
-                () -> assertEquals(questions.get(0).getLastModifiedDate()
-                        .compareTo(questions.get(1).getLastModifiedDate()), 1)
-        );
-    }
-
-    @Test
     @DisplayName("target user 의 id 별 question 목록을 paging 처리하여 조회하는 테스트")
     void findByTargetUserId_paging() {
 
