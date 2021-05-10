@@ -6,6 +6,7 @@ import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;
 import com.skhuedin.skhuedin.dto.follow.FollowSaveRequestDto;
 
+import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

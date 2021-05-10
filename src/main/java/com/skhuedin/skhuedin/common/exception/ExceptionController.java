@@ -1,4 +1,4 @@
-package com.skhuedin.skhuedin.controller;
+package com.skhuedin.skhuedin.common.exception;
 
 import com.skhuedin.skhuedin.controller.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +11,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class ExceptionController {
 
+    // 401
+    @ExceptionHandler({EmptyTokenException.class})
+    public ResponseEntity<ErrorResponse> EmptyTokenException(RuntimeException e) {
+        log.warn("error", e);
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(e.getMessage(), "401"));
+    }
+
     // 404
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<ErrorResponse> NotFoundException(RuntimeException e) {
         log.warn("error", e);
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(e.getMessage()));
     }
 
     // 500
@@ -25,6 +37,8 @@ public class ExceptionController {
         log.info(e.getClass().getName());
         log.error("error", e);
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(e.getMessage()));
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(e.getMessage(), "500"));
     }
 }

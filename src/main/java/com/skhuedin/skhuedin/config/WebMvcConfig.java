@@ -15,7 +15,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(bearerAuthInterceptor).addPathPatterns("/info");
+        registry.addInterceptor(bearerAuthInterceptor)
+                .addPathPatterns("/**")     // 모든 페이지에 적용
+                .excludePathPatterns("/static/**"); // 정적 파일 제외
     }
 
     @Override
