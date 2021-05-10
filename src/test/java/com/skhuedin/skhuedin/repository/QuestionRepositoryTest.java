@@ -13,8 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Sql("/truncate.sql")
-@Transactional
 class QuestionRepositoryTest {
 
     @Autowired
@@ -30,6 +29,9 @@ class QuestionRepositoryTest {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    EntityManager em;
 
     User targetUser;
     User writerUser;
@@ -121,6 +123,38 @@ class QuestionRepositoryTest {
         assertTrue(page.hasNext()); // 다음 페이지 t/f
     }
 
+    @Test
+    @DisplayName("findByTargetUserId의 N + 1 문제를 확인하는 테스트")
+    void findByTargetId_N1() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            User writerUser = generateUser(i);
+            userRepository.save(writerUser);
+            Question question = generateQuestion(writerUser, i);
+            questionRepository.save(question);
+        }
+
+        // when
+        em.flush();
+        em.clear();
+        PageRequest pageRequest = PageRequest.of(0, 5,
+                Sort.by(Sort.Direction.DESC, "lastModifiedDate"));
+
+        Page<Question> page = questionRepository.findByTargetUserId(targetUser.getId(), pageRequest);
+        for (Question question : page) {
+            question.getWriterUser().getEmail(); // 의도적으로 사용
+        }
+
+        // then
+        assertEquals(page.getContent().size(), 5); // 조회된 데이터 수
+        assertEquals(page.getTotalElements(), 10); // 전체 데이터 수
+        assertEquals(page.getNumber(), 0); // 페이지 번호
+        assertEquals(page.getTotalPages(), 2); // 전체 페이지 번호
+        assertTrue(page.isFirst()); // 첫 번째 페이지 t/f
+        assertTrue(page.hasNext()); // 다음 페이지 t/f
+    }
+
     private Question generateQuestion(int index) {
         return Question.builder()
                 .targetUser(targetUser)
@@ -129,6 +163,29 @@ class QuestionRepositoryTest {
                 .content("질문의 질문 내용")
                 .status(false)
                 .fix(false)
+                .build();
+    }
+
+    private Question generateQuestion(User writerUser, int index) {
+        return Question.builder()
+                .targetUser(targetUser)
+                .writerUser(writerUser)
+                .title("질문 " + index)
+                .content("질문의 질문 내용")
+                .status(false)
+                .fix(false)
+                .build();
+    }
+
+    User generateUser(int index) {
+        return User.builder()
+                .email("user" + index + "@email.com")
+                .password("1234")
+                .name("user" + index)
+                .userImageUrl("/img")
+                .graduationYear(LocalDateTime.now())
+                .entranceYear(LocalDateTime.now())
+                .provider(Provider.SELF)
                 .build();
     }
 

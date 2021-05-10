@@ -10,13 +10,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@Sql("/truncate.sql")
 class CommentRepositoryTest {
 
     @Autowired
@@ -27,6 +30,9 @@ class CommentRepositoryTest {
 
     @Autowired
     CommentRepository commentRepository;
+
+    @Autowired
+    EntityManager em;
 
     Question question;
     User targetUser;
@@ -74,24 +80,9 @@ class CommentRepositoryTest {
     void findByQuestionId() {
 
         // given
-        Comment comment1 = Comment.builder()
-                .question(question)
-                .writerUser(writerUser)
-                .content("부모 댓글1")
-                .build();
-
-        Comment comment2 = Comment.builder()
-                .question(question)
-                .writerUser(writerUser)
-                .content("부모 댓글2")
-                .build();
-
-        Comment comment3 = Comment.builder()
-                .question(question)
-                .writerUser(writerUser)
-                .content("부모 댓글1의 대댓글")
-                .parent(comment1)
-                .build();
+        Comment comment1 = generateParent(1);
+        Comment comment2 = generateParent(2);
+        Comment comment3 = generateChild(comment1, 1);
 
         commentRepository.save(comment1);
         commentRepository.save(comment2);
@@ -109,25 +100,9 @@ class CommentRepositoryTest {
     void findByParentId() {
 
         // given
-        Comment parent = Comment.builder()
-                .question(question)
-                .writerUser(writerUser)
-                .content("부모 댓글1")
-                .build();
-
-        Comment child1 = Comment.builder()
-                .question(question)
-                .writerUser(writerUser)
-                .content("부모 댓글1의 대댓글")
-                .parent(parent)
-                .build();
-
-        Comment child2 = Comment.builder()
-                .question(question)
-                .writerUser(writerUser)
-                .content("부모 댓글2의 대댓글")
-                .parent(parent)
-                .build();
+        Comment parent = generateParent(1);
+        Comment child1 = generateChild(parent, 1);
+        Comment child2 = generateChild(parent, 2);
 
         commentRepository.save(parent);
         commentRepository.save(child1);
@@ -138,6 +113,107 @@ class CommentRepositoryTest {
 
         // then
         assertEquals(children.size(), 2);
+    }
+
+    @Test
+    @DisplayName("findByQuestionId의 n + 1 문제를 확인하는 테스트")
+    void findByQuestionId_N1() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            User user = generateUser(i);
+            userRepository.save(user);
+            Comment parent = generateParent(user, i);
+            commentRepository.save(parent);
+        }
+
+        // when
+        em.flush();
+        em.clear();
+        System.out.println("==================== 영속성 컨텍스트 초기화 ====================");
+
+        List<Comment> comments = commentRepository.findByQuestionId(question.getId());
+        for (Comment comment : comments) {
+            comment.getWriterUser().getEmail(); // 의도적으로 사용
+        }
+
+        // then
+        assertEquals(comments.size(), 10);
+    }
+
+    @Test
+    @DisplayName("findByParentId의 n + 1 문제를 확인하는 테스트")
+    void findByParentId_N1() {
+
+        // given
+        Comment parent = generateParent(1);
+        commentRepository.save(parent);
+
+        for (int i = 0; i < 10; i++) {
+            User user = generateUser(i);
+            userRepository.save(user);
+            Comment comment = generateChild(user, parent, i);
+            commentRepository.save(comment);
+        }
+
+        // when
+        em.flush();
+        em.clear();
+        System.out.println("==================== 영속성 컨텍스트 초기화 ====================");
+
+        List<Comment> comments = commentRepository.findByParentId(parent.getId());
+        for (Comment comment : comments) {
+            comment.getWriterUser().getEmail();
+        }
+
+        // then
+        assertEquals(comments.size(), 10);
+    }
+
+    Comment generateParent(int index) {
+        return Comment.builder()
+                .question(question)
+                .writerUser(writerUser)
+                .content("부모 댓글 " + index)
+                .build();
+    }
+
+    Comment generateParent(User user, int index) {
+        return Comment.builder()
+                .question(question)
+                .writerUser(user)
+                .content("부모 댓글 " + index)
+                .build();
+    }
+
+    Comment generateChild(Comment parent, int index) {
+        return Comment.builder()
+                .question(question)
+                .writerUser(writerUser)
+                .content("부모 댓글 " + index)
+                .parent(parent)
+                .build();
+    }
+
+    Comment generateChild(User user, Comment parent, int index) {
+        return Comment.builder()
+                .question(question)
+                .writerUser(user)
+                .content("부모 댓글 " + index)
+                .parent(parent)
+                .build();
+    }
+
+    User generateUser(int index) {
+        return User.builder()
+                .email("user" + index + "@email.com")
+                .password("1234")
+                .name("user" + index)
+                .userImageUrl("/img")
+                .graduationYear(LocalDateTime.now())
+                .entranceYear(LocalDateTime.now())
+                .provider(Provider.SELF)
+                .build();
     }
 
     @AfterEach
