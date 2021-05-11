@@ -20,18 +20,13 @@ import java.util.UUID;
 @Slf4j
 public class KakaoOauth implements SocialOauth {
 
-    private String KAKAO_SNS_BASE_URL = "https://kauth.kakao.com/oauth/authorize";
-    private String KAKAO_SNS_CLIENT_ID = "f4f3a16b864f2046d38669b4f8a2a482";
-    private String KAKAO_SNS_CALLBACK_URL = "http://localhost:8080/auth/kakao/callback";
-
-
     public UserSaveRequestDto requestAccessToken(OAuthToken oauthToken) {
         UserSaveRequestDto user = null;
 
         // 프로필 받아오기
         RestTemplate rt2 = new RestTemplate();
         HttpHeaders headers2 = new HttpHeaders();
-        headers2.add("Authorization", "Bearer " + oauthToken.getAccess_token());
+        headers2.add("Authorization", "Bearer " + oauthToken.getAccessToken());
         headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
