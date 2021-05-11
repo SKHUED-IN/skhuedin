@@ -59,7 +59,6 @@ public class GoogleOauth implements SocialOauth {
 
         return user;
     }
-
     public UserSaveRequestDto saveGoogleUser(GoogleInnerProfile googleProfile) {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
