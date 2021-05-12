@@ -1,5 +1,6 @@
 package com.skhuedin.skhuedin.domain;
 
+import com.skhuedin.skhuedin.dto.user.UserAddInfoRequestDto;
 import com.skhuedin.skhuedin.infra.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -65,5 +66,10 @@ public class User extends BaseEntity {
         this.entranceYear = user.entranceYear;
         this.graduationYear = user.graduationYear;
         this.role = role;
+    }
+
+    public void update(UserAddInfoRequestDto requestDto) {
+        this.entranceYear = requestDto.getEntranceYear();
+        this.graduationYear = requestDto.getGraduationYear();
     }
 }
