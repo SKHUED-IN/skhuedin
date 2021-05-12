@@ -3,8 +3,8 @@ package com.skhuedin.skhuedin.controller;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 
-import com.skhuedin.skhuedin.dto.user.UserAddInfoRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
+import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,8 +35,8 @@ public class UserApiController {
     }
 
     @PostMapping("users/{userId}")
-    public ResponseEntity<? extends BasicResponse> updateUserAddInfo(@PathVariable("userId") Long id, @RequestBody UserAddInfoRequestDto requestDto) {
-        userService.update(id, requestDto);
+    public ResponseEntity<? extends BasicResponse> updateUserAddInfo(@PathVariable("userId") Long id, @RequestBody UserSaveRequestDto requestDto) {
+        userService.updateInfo(id, requestDto);
         UserMainResponseDto responseDto = userService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }

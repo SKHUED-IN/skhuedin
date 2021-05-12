@@ -1,7 +1,6 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.dto.user.UserAddInfoRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
@@ -34,9 +33,9 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Long id, UserAddInfoRequestDto requestDto) {
+    public void updateInfo(Long id, UserSaveRequestDto requestDto) {
         User user = getUser(id);
-        user.update(requestDto);
+        user.update(requestDto.toEntity(user,requestDto));
     }
 
     @Transactional
