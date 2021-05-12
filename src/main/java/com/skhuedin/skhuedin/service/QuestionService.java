@@ -56,16 +56,6 @@ public class QuestionService {
         return new QuestionMainResponseDto(question, comments);
     }
 
-    public List<QuestionMainResponseDto> findByTargetUserId(Long id) {
-        List<Question> questions = questionRepository.findByTargetUserIdOrderByLastModifiedDateDesc(id);
-        return questions.stream()
-                .map(question -> {
-                    List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
-                    return new QuestionMainResponseDto(question, comments);
-                })
-                .collect(Collectors.toList());
-    }
-
     public Page<QuestionMainResponseDto> findByTargetUserId(Long id, Pageable pageable) {
         Page<Question> questions = questionRepository.findByTargetUserId(id, pageable);
         return questions
