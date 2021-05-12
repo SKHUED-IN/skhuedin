@@ -13,64 +13,23 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
+
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 public class NaverOauth implements SocialOauth {
 
-    private String NAVER_SNS_CLIENT_ID = "xncCqLDs5xAMfdEgui3A";
-    private String NAVER_SNS_CLIENT_SECRET = "G8wydgDb7C";
-    private final String NAVER_SNS_TOKEN_BASE_URL = "https://nid.naver.com/oauth2.0/token";
-
-
     @Override
     public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
-        RestTemplate rt = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        //HttpBody 오브젝트 생성
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-
-        params.add("client_id", NAVER_SNS_CLIENT_ID);
-        params.add("client_secret", NAVER_SNS_CLIENT_SECRET);
-        params.add("grant_type", "authorization_code");
-        params.add("state", "state");
-
-
-        //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
-        HttpEntity<MultiValueMap<String, String>> naverTokenRequest =
-                new HttpEntity<>(params, headers);
-
-        // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
-        ResponseEntity<String> response = rt.exchange(
-                NAVER_SNS_TOKEN_BASE_URL,
-                HttpMethod.POST,
-                naverTokenRequest,
-                String.class
-        );
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        OAuthToken oauthToken = null;
-
-        try {
-            oauthToken = objectMapper.readValue(response.getBody(), OAuthToken.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
 
         // 프로필 받아오기
         RestTemplate rt2 = new RestTemplate();
         HttpHeaders headers2 = new HttpHeaders();
-        headers2.add("Authorization", "Bearer " + oauthToken.getAccess_token());
+        headers2.add("Authorization", "Bearer " + oAuthToken.getAccessToken());
         headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기

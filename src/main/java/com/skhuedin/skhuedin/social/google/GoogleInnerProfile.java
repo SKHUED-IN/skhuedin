@@ -2,65 +2,59 @@ package com.skhuedin.skhuedin.social.google;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
-@Builder
+@RequiredArgsConstructor
 public class GoogleInnerProfile {
 
-    public GoogleInnerProfile(String iss, String azp, String aud, String sub, String atHash,
-                              String name, String picture, String givenName, String familyName,
-                              String locale, String iat, String exp, String alg, String kid, String typ, String email,
-                              Map<String, Object> additionalProperties) {
+    @Builder
+    public GoogleInnerProfile(String typ, String iss, String azp, String aud, String sub, String iat, String exp, String hd, String alg, String kid, String jti, String email, String email_verified, String at_hash, String name, String picture, String given_name, String family_name, String locale, String nonce, String profile) {
+        this.typ = typ;
         this.iss = iss;
         this.azp = azp;
         this.aud = aud;
         this.sub = sub;
-        this.atHash = atHash;
-        this.name = name;
-        this.picture = picture;
-        this.givenName = givenName;
-        this.familyName = familyName;
-        this.locale = locale;
         this.iat = iat;
         this.exp = exp;
+        this.hd = hd;
         this.alg = alg;
         this.kid = kid;
-        this.typ = typ;
-        this.additionalProperties = additionalProperties;
+        this.jti = jti;
         this.email = email;
+        this.email_verified = email_verified;
+        this.at_hash = at_hash;
+        this.name = name;
+        this.picture = picture;
+        this.given_name = given_name;
+        this.family_name = family_name;
+        this.locale = locale;
+        this.nonce = nonce;
+        this.profile = profile;
     }
 
-    public GoogleInnerProfile() {
-
-    }
-
+    public String typ;
     public String iss;
     public String azp;
     public String aud;
     public String sub;
-    public String atHash;
-    public String name;
-    public String picture;
-    public String givenName;
-    public String familyName;
-    public String locale;
     public String iat;
     public String exp;
+    public String hd;
     public String alg;
     public String kid;
-    public String typ;
+    public String jti;
+
     public String email;
+    public String email_verified;
+    public String at_hash;
+    public String name;
+    public String picture;
+    public String given_name;
+    public String family_name;
+    public String locale;
+    public String nonce;
+    public String profile;
 
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 }

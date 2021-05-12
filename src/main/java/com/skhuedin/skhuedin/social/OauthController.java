@@ -3,9 +3,7 @@ package com.skhuedin.skhuedin.social;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 
 import com.skhuedin.skhuedin.controller.response.TokenWithCommonResopnse;
-import com.skhuedin.skhuedin.domain.Provider;
 
-import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.infra.TokenResponse;
@@ -17,13 +15,13 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -50,9 +48,9 @@ public class OauthController {
             @RequestBody TokenResponse response) {
 
         OAuthToken oAuthToken = new OAuthToken();
-        oAuthToken.setAccess_token(response.getAccessToken());
+        oAuthToken.setAccessToken(response.getAccessToken());
 
-        log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", oAuthToken.getAccess_token());
+        log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", oAuthToken.getAccessToken());
         // 소셜 로그인을 통해서 사용자의 값을 반환받
         UserSaveRequestDto user = oauthService.requestAccessToken(socialLoginType, oAuthToken);
         String token = Strings.EMPTY;
