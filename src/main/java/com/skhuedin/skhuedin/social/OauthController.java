@@ -2,7 +2,7 @@ package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 
-import com.skhuedin.skhuedin.controller.response.TokenWithCommonResopnse;
+import com.skhuedin.skhuedin.controller.response.TokenWithCommonResponse;
 
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
@@ -65,6 +65,6 @@ public class OauthController {
 
         UserMainResponseDto responseDto = new UserMainResponseDto(userService.findByEmail(user.getEmail()));
         // user 인증을 위한 자체 토큰을 발급받아  저장,데이터에 user 값도 저장 해서 보냄
-        return ResponseEntity.status(HttpStatus.OK).body((new TokenWithCommonResopnse(responseDto, token)));
+        return ResponseEntity.status(HttpStatus.OK).body((new TokenWithCommonResponse(responseDto, token)));
     }
 }
