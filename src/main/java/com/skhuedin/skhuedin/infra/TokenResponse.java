@@ -1,8 +1,13 @@
 package com.skhuedin.skhuedin.infra;
 
-import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class TokenResponse {
 
     private String accessToken;
@@ -10,4 +15,5 @@ public class TokenResponse {
     public TokenResponse(String accessToken) {
         this.accessToken = accessToken;
     }
+
 }
