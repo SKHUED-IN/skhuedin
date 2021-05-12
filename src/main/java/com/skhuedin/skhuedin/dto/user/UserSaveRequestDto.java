@@ -49,15 +49,15 @@ public class UserSaveRequestDto {
         return user;
     }
 
-    public User toEntity(User targetUser, UserSaveRequestDto requestDto) {
+    public User toEntity(User targetUser) {
         User user = User.builder()
                 .email(targetUser.getEmail())
                 .password(targetUser.getPassword())
                 .name(targetUser.getName())
                 .provider(targetUser.getProvider())
                 .userImageUrl(targetUser.getUserImageUrl())
-                .entranceYear(requestDto.getEntranceYear())
-                .graduationYear(requestDto.getGraduationYear())
+                .entranceYear(this.getEntranceYear())
+                .graduationYear(this.getGraduationYear())
                 .role(Role.USER)
                 .build();
         return user;

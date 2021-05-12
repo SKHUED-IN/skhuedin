@@ -35,7 +35,7 @@ public class UserService {
     @Transactional
     public void updateInfo(Long id, UserSaveRequestDto requestDto) {
         User user = getUser(id);
-        user.update(requestDto.toEntity(user,requestDto));
+        user.update(requestDto.toEntity(user));
     }
 
     @Transactional
