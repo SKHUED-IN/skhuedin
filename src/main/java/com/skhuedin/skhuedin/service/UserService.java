@@ -33,6 +33,12 @@ public class UserService {
     }
 
     @Transactional
+    public void updateInfo(Long id, UserSaveRequestDto requestDto) {
+        User user = getUser(id);
+        user.update(requestDto.toEntity(user));
+    }
+
+    @Transactional
     public void delete(Long id) {
         User findUser = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
@@ -52,10 +58,6 @@ public class UserService {
     public String createToken(String email) {
         //비밀번호 확인 등의 유효성 검사 진행
         return jwtTokenProvider.createToken(email);
-    }
-
-    public String getToken(String Token) {
-        return jwtTokenProvider.getSubject(Token);
     }
 
     public String signUp(UserSaveRequestDto requestDto) { // 회원가입
