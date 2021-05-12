@@ -76,14 +76,13 @@ class UserServiceTest {
 
         //given 어떤 값이 주어지고
 
-        LocalDateTime targetDateTime = LocalDateTime.of(2019, 11, 12, 12, 32,22,3333);
         User user = User.builder()
                 .name("홍길동")
                 .email("hong@email.com")
                 .password("1234")
                 .userImageUrl("/img")
-                .entranceYear(targetDateTime)
-                .graduationYear(targetDateTime)
+                .entranceYear(LocalDateTime.now().plusDays(1))
+                .graduationYear(LocalDateTime.now().plusDays(2))
                 .provider(Provider.KAKAO)
                 .build();
 
