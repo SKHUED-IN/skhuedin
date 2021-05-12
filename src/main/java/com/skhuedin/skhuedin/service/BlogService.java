@@ -10,6 +10,8 @@ import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,10 +60,14 @@ public class BlogService {
         return new BlogMainResponseDto(blog, collect);
     }
 
-    public List<BlogMainResponseDto> findAll() {
-        return blogRepository.findAll().stream()
-                .map(blog -> new BlogMainResponseDto(blog))
-                .collect(Collectors.toList());
+    public Page<BlogMainResponseDto> findAll(Pageable pageable) {
+        return blogRepository.findAllFetchPaging(pageable)
+                .map(blog -> new BlogMainResponseDto(blog));
+    }
+
+    public Page<BlogMainResponseDto> findAllOrderByPostsView(Pageable pageable) {
+        return blogRepository.findAllOrderByPostsViewPaging(pageable)
+                .map(blog -> new BlogMainResponseDto(blog));
     }
 
     private Blog getBlog(Long id) {

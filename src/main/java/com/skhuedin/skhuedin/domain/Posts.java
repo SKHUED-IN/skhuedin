@@ -59,4 +59,8 @@ public class Posts extends BaseEntity {
     public void addView() {
         this.view++;
     }
+
+    public void addBlog(Blog blog) {
+        this.blog = blog;
+    }
 }
