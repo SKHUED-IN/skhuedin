@@ -35,7 +35,6 @@ public class OauthService {
         SocialOauth socialOauth = findSocialOauthByType(socialLoginType);
         UserSaveRequestDto user = socialOauth.requestAccessToken(oAuthToken);
         return user;
-
     }
 
     private SocialOauth findSocialOauthByType(String socialLoginType) {
