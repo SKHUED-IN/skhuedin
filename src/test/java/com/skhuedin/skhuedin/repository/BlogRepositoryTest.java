@@ -49,19 +49,7 @@ class BlogRepositoryTest {
     void findAllFetch() {
         
         // given
-        List<User> users = userRepository.findAll();
-        for (int i = 0; i < 10; i++) {
-            Blog blog = generateBlog(users.get(i), i);
-            blogRepository.save(blog);
-
-            for (int j = 0; j < 5; j++) {
-                Posts posts = generatePosts(blog, j);
-                posts.addView();
-                posts.addView();
-                blog.addPosts(posts);
-                postsRepository.save(posts);
-            }
-        }
+        generateBlogAndPosts();
 
         // when
         List<Blog> blogs = blogRepository.findAllFetch();
@@ -77,19 +65,7 @@ class BlogRepositoryTest {
     void findAllFetchPaging() {
 
         // given
-        List<User> users = userRepository.findAll();
-        for (int i = 0; i < 10; i++) {
-            Blog blog = generateBlog(users.get(i), i);
-            blogRepository.save(blog);
-
-            for (int j = 0; j < 5; j++) {
-                Posts posts = generatePosts(blog, j);
-                posts.addView();
-                posts.addView();
-                blog.addPosts(posts);
-                postsRepository.save(posts);
-            }
-        }
+        generateBlogAndPosts();
 
         // when
         PageRequest pageRequest = PageRequest.of(0, 5);
@@ -241,6 +217,22 @@ class BlogRepositoryTest {
                 .content("저는 이렇게 저렇게 공부했어요!")
                 .category(null)
                 .build();
+    }
+
+    private void generateBlogAndPosts() {
+        List<User> users = userRepository.findAll();
+        for (int i = 0; i < 10; i++) {
+            Blog blog = generateBlog(users.get(i), i);
+            blogRepository.save(blog);
+
+            for (int j = 0; j < 5; j++) {
+                Posts posts = generatePosts(blog, j);
+                posts.addView();
+                posts.addView();
+                blog.addPosts(posts);
+                postsRepository.save(posts);
+            }
+        }
     }
 
     @AfterEach
