@@ -61,12 +61,12 @@ public class BlogService {
     }
 
     public Page<BlogMainResponseDto> findAll(Pageable pageable) {
-        return blogRepository.findAllFetchPaging(pageable)
+        return blogRepository.findAll(pageable)
                 .map(blog -> new BlogMainResponseDto(blog));
     }
 
     public Page<BlogMainResponseDto> findAllOrderByPostsView(Pageable pageable) {
-        return blogRepository.findAllOrderByPostsViewPaging(pageable)
+        return blogRepository.findAllOrderByPostsView(pageable)
                 .map(blog -> new BlogMainResponseDto(blog));
     }
 
