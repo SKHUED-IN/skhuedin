@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
+import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ public class BlogApiController {
 
     private final BlogService blogService;
 
+    @MyRole
     @PostMapping("blogs")
     public ResponseEntity<? extends BasicResponse> save(@RequestBody BlogSaveRequestDto requestDto) {
         Long saveId = blogService.save(requestDto);
@@ -55,6 +57,7 @@ public class BlogApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(blogs));
     }
 
+    @MyRole
     @PutMapping("blogs/{blogId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("blogId") Long id,
                                                           @RequestBody BlogSaveRequestDto updateDto) {
@@ -64,6 +67,7 @@ public class BlogApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
+    @MyRole
     @DeleteMapping("blogs/{blogId}")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("blogId") Long id) {
         blogService.delete(id);

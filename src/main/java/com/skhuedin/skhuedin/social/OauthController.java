@@ -2,8 +2,10 @@ package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.TokenWithCommonResponse;
+import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
+import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.TokenResponse;
 import com.skhuedin.skhuedin.service.UserService;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
@@ -25,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/auth")
 @Slf4j
 public class OauthController {
+
     private final OauthService oauthService;
     private final UserService userService;
-
 
     /**
      * Social Login API Server 요청에 의한 callback 을 처리
@@ -35,7 +37,6 @@ public class OauthController {
      * @param socialLoginType (GOOGLE, FACEBOOK, NAVER, KAKAO)
      * @return SNS Login 요청 결과로 받은 Json 형태의 String 문자열 (access_token, refresh_token 등)
      */
-
     @PostMapping("/{socialLoginType}/callback")
     public ResponseEntity<? extends BasicResponse> callback(
             @PathVariable("socialLoginType") String socialLoginType,
@@ -59,6 +60,6 @@ public class OauthController {
 
         UserMainResponseDto responseDto = new UserMainResponseDto(userService.findByEmail(user.getEmail()));
         // user 인증을 위한 자체 토큰을 발급받아  저장,데이터에 user 값도 저장 해서 보냄
-        return ResponseEntity.status(HttpStatus.OK).body((new TokenWithCommonResponse(responseDto, token)));
+        return ResponseEntity.status(HttpStatus.OK).body((new TokenWithCommonResponse<>(responseDto, token)));
     }
 }

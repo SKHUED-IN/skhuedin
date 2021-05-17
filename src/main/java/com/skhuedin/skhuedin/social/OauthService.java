@@ -23,7 +23,7 @@ public class OauthService {
      * findSocialOauthByType 함수를 통해 초기화되도록 수정
      */
     private final List<SocialOauth> socialOauthList;
-    private final List<Provider> providerList;
+//    private final List<Provider> providerList;
 
     /**
      * 리다이렉트 된 페이지에서 소셜 서버에 가서 사용자의 아이디, 비밀번호 입력하면 일회용 코드를 발급해 줌.

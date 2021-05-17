@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
+import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -86,6 +87,13 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(user -> new UserMainResponseDto(user))
                 .collect(Collectors.toList());
+    }
+
+    public String adminSignIn(LoginRequest loginRequest) {
+        User user = userRepository.findByEmailAndPassword(loginRequest.getName(), loginRequest.getPwd()).orElseThrow(() ->
+                new IllegalArgumentException("email과 password가 일치하지 않습니다. "));
+
+        return createToken(user.getEmail());
     }
 
     public User getUser(Long id) {
