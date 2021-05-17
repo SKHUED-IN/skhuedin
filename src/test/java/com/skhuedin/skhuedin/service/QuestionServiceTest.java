@@ -109,7 +109,7 @@ class QuestionServiceTest {
     }
 
     @Test
-    @DisplayName("question 을 갱신하고 조회하는 테스트")        
+    @DisplayName("question 을 갱신하고 조회하는 테스트")
     void update() {
 
         // given
@@ -123,7 +123,7 @@ class QuestionServiceTest {
                 .status(false)
                 .fix(false)
                 .build();
-                
+
         // when
         Long saveId = questionService.save(requestDto);
         Long updateId = questionService.update(saveId, updateDto);
@@ -160,7 +160,7 @@ class QuestionServiceTest {
         // when & then
         Long saveId = questionService.save(requestDto);
         assertThrows(IllegalArgumentException.class, () ->
-             questionService.update(saveId, updateDto)
+                questionService.update(saveId, updateDto)
         );
     }
 

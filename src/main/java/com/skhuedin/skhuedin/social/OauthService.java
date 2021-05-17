@@ -2,14 +2,12 @@ package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
-import com.skhuedin.skhuedin.social.kakao.KakaoOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 
 @Service
 @Slf4j

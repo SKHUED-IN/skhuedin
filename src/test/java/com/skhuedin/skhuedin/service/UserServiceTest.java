@@ -29,6 +29,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     User user;
+
     @BeforeEach
     void beforeEach() {
         user = User.builder()

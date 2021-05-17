@@ -63,9 +63,9 @@ public class PostsService {
     }
 
     private Blog getBlog(Long id) {
-       return blogRepository.findById(id).orElseThrow(() ->
-               new IllegalArgumentException("존재하지 않는 blog 입니다. id=" + id)
-       );
+        return blogRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 blog 입니다. id=" + id)
+        );
     }
 
     private Posts getPosts(Long id) {

@@ -65,14 +65,15 @@ public class SwaggerConfig {
                 .build();
     }
 
-    @Getter @Setter
+    @Getter
+    @Setter
     @ApiModel
     static class Page {
 
         @ApiModelProperty(value = "페이지 번호(0부터 시작)")
         private Integer page;
 
-        @ApiModelProperty(value = "페이지 크기", allowableValues="range[0, 20]")
+        @ApiModelProperty(value = "페이지 크기", allowableValues = "range[0, 20]")
         private Integer size;
 
         @ApiModelProperty(value = "정렬(사용법: 컬럼명,ASC|DESC)")

@@ -145,7 +145,7 @@ class PostsServiceTest {
 
         // then
         assertThrows(IllegalArgumentException.class, () ->
-            postsService.update(0L, updateDto)
+                postsService.update(0L, updateDto)
         );
 
     }

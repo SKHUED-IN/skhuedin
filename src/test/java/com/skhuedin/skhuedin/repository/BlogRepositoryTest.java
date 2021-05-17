@@ -47,8 +47,8 @@ class BlogRepositoryTest {
 
     @Test
     @DisplayName("findAll 메소드를 fetch join 하고 paging 하여 조회하는 테스트")
-    // WARN 14288 --- [           main] o.h.h.internal.ast.QueryTranslatorImpl   :
-    // HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
+        // WARN 14288 --- [           main] o.h.h.internal.ast.QueryTranslatorImpl   :
+        // HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
     void findAll() {
 
         // given
@@ -174,7 +174,7 @@ class BlogRepositoryTest {
     @Test
     @DisplayName("findAll 메소드를 blog 의 각 posts 의 조회수 합을 기준으로 정렬하고 paging 하여 조회하는 테스트")
     void findAllOrderByPostsView() {
-        
+
         // given
         List<User> users = userRepository.findAll();
         User user1 = users.get(0);

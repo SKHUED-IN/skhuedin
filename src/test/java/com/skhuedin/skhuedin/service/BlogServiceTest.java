@@ -44,14 +44,14 @@ class BlogServiceTest {
                 .entranceYear(LocalDateTime.now())
                 .provider(Provider.SELF)
                 .build();
-        
+
         userRepository.save(user);
     }
-    
+
     @Test
     @DisplayName("dto 를 받아 blog 를 저장하고 조회하는 테스트")
     void save() {
-        
+
         // given
         BlogSaveRequestDto requestDto = generateBlog();
 

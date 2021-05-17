@@ -1,6 +1,3 @@
-
-
-
 fetch("/login", {
     method: 'post',
     headers: {

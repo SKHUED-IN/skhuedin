@@ -98,11 +98,11 @@ class CommentServiceTest {
                 () -> assertNull(comment.getParent())
         );
     }
-    
+
     @Test
     @DisplayName("존재하지 않는 question 으로 인하여 저장하던 중 예외를 던지는 테스트")
     void save_question_false() {
-        
+
         // given
         CommentSaveRequestDto requestDto = CommentSaveRequestDto.builder()
                 .questionId(0L) // 존재하지 않는 question
@@ -136,7 +136,7 @@ class CommentServiceTest {
     @Test
     @DisplayName("comment 를 갱신하고 조회하는 테스트")
     void update() {
-        
+
         // given
         CommentSaveRequestDto requestDto = generateDto("parent 댓글");
         CommentSaveRequestDto updateDto = generateDto("수정된 parent 댓글");
@@ -223,7 +223,7 @@ class CommentServiceTest {
     @Test
     @DisplayName("question 별 댓글 목록 및 대댓글 목록을 조회하는 테스트")
     void findByQuestionId() {
-        
+
         // given
         CommentSaveRequestDto requestDto = generateDto("parent 댓글");
         Long parentId = commentService.save(requestDto);
@@ -245,7 +245,7 @@ class CommentServiceTest {
                 () -> assertEquals(comments.get(0).getChildren().size(), 3)
         );
     }
-    
+
     private CommentSaveRequestDto generateDto(String content) {
         return CommentSaveRequestDto.builder()
                 .questionId(question.getId())

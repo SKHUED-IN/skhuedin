@@ -15,7 +15,7 @@ public class PostsSaveRequestDto {
     private String content;
 
     @Builder
-    public PostsSaveRequestDto (Long blogId, String title, String content) {
+    public PostsSaveRequestDto(Long blogId, String title, String content) {
         this.blogId = blogId;
         this.title = title;
         this.content = content;
