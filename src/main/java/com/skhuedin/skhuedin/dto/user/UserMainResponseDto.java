@@ -1,6 +1,5 @@
 package com.skhuedin.skhuedin.dto.user;
 
-
 import com.skhuedin.skhuedin.domain.User;
 import lombok.Getter;
 import lombok.Setter;

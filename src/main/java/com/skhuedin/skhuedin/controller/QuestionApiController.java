@@ -7,7 +7,6 @@ import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
 import com.skhuedin.skhuedin.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -47,7 +46,7 @@ public class QuestionApiController {
     @GetMapping("users/{targetUserId}/questions")
     public ResponseEntity<? extends BasicResponse> findByTargetId(
             @PathVariable("targetUserId") Long id,
-            @PageableDefault(sort="lastModifiedDate", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(sort = "lastModifiedDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<QuestionMainResponseDto> questions = questionService.findByTargetUserId(id, pageable);
 

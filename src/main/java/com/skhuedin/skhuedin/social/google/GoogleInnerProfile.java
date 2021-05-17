@@ -2,15 +2,15 @@ package com.skhuedin.skhuedin.social.google;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-
 
 @Data
-@RequiredArgsConstructor
 public class GoogleInnerProfile {
 
     @Builder
-    public GoogleInnerProfile(String typ, String iss, String azp, String aud, String sub, String iat, String exp, String hd, String alg, String kid, String jti, String email, String email_verified, String at_hash, String name, String picture, String given_name, String family_name, String locale, String nonce, String profile) {
+    public GoogleInnerProfile(String typ, String iss, String azp, String aud, String sub, String iat, String exp,
+                              String hd, String alg, String kid, String jti, String email, String email_verified,
+                              String at_hash, String name, String picture, String given_name, String family_name,
+                              String locale, String nonce, String profile) {
         this.typ = typ;
         this.iss = iss;
         this.azp = azp;

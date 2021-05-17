@@ -56,7 +56,6 @@ public class KakaoOauth implements SocialOauth {
         return user;
     }
 
-
     /**
      * 카카오에서 받은 프로필로
      * User 정보를 채운 후, 디비에 저장

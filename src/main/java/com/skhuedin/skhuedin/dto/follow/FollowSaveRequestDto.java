@@ -1,6 +1,5 @@
 package com.skhuedin.skhuedin.dto.follow;
 
-
 import com.skhuedin.skhuedin.domain.Follow;
 import com.skhuedin.skhuedin.domain.User;
 import lombok.Builder;
