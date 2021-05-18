@@ -35,7 +35,7 @@ public class AdminController {
 
     @GetMapping("/")
     public String main() {
-        return "kakaoLogin";
+        return "home";
     }
 
     @GetMapping("/admin")

@@ -1,0 +1,55 @@
+@font-face {
+    font-family: 'BMEULJIRO';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/BMEULJIRO.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GongGothicMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+    .fixed-navbar{
+    width : 100%;
+    height : 90px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 0px 20px 0px 20px;
+    margin : 0, auto;
+    background: #1d84df;
+    color: #ffffff;
+    text-align:center;
+    border-radius: 40px 80px;
+}
+
+    .footer{
+    padding: 10px 50px 10px 20px;
+    position: absolute;
+    clear:left;
+    width : 100%;
+    height: 50px;
+    bottom : 10px;
+    left: 100px;
+    font-size: 20px;
+    font-family : 'BMEULJIRO';
+
+    }
+
+    .fixed-navbar div {
+    padding-top : 15px;
+    width : 20%;
+    text-align : center;
+    margin : 0, auto;
+    float: left;
+    font-family : 'BMEULJIRO';
+    font-size : 31px;
+}
+
+    .fixed-navbar div:hover {
+    color:black;
+}
+
