@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;
 import com.skhuedin.skhuedin.dto.follow.FollowSaveRequestDto;
+import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class FollowApiController {
 
     private final FollowService followService;
 
+    @MyRole
     @PostMapping("follows")
     public ResponseEntity<? extends BasicResponse> save(@RequestBody FollowSaveRequestDto requestDto) {
         Long saveId = followService.save(requestDto);
@@ -48,6 +50,7 @@ public class FollowApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(follows));
     }
 
+    @MyRole
     @PutMapping("follows/{followId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("followId") Long id,
                                                           @RequestBody FollowSaveRequestDto updateDto) {
@@ -57,6 +60,7 @@ public class FollowApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
+    @MyRole
     @DeleteMapping("follows/{followId}")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("followId") Long id) {
         followService.delete(id);

@@ -6,11 +6,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.skhuedin.skhuedin.domain.Provider;
-
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,12 +34,14 @@ public class GoogleOauth implements SocialOauth {
         String requestUrl = UriComponentsBuilder.fromHttpUrl("https://oauth2.googleapis.com/tokeninfo").queryParam("id_token", oAuthToken.getAccessToken()).toUriString();
         String resultJson = restTemplate.getForObject(requestUrl, String.class);
         GoogleInnerProfile profile = null;
+
         try {
             profile = mapper.readValue(resultJson, new TypeReference<GoogleInnerProfile>() {
             });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         // 사용자 유저로 저장.
         user = saveGoogleUser(profile);
 

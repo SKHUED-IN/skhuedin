@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
+import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class CommentApiController {
 
     private final CommentService commentService;
 
+    @MyRole
     @PostMapping("comments")
     public ResponseEntity<? extends BasicResponse> save(@RequestBody CommentSaveRequestDto requestDto) {
         Long saveId = commentService.save(requestDto);
@@ -41,6 +43,7 @@ public class CommentApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
+    @MyRole
     @PutMapping("comments/{commentId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("commentId") Long id,
                                                           @RequestBody CommentSaveRequestDto updateDto) {
@@ -50,6 +53,7 @@ public class CommentApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
+    @MyRole
     @DeleteMapping("comments/{commentId}")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("commentId") Long id) {
         commentService.delete(id);

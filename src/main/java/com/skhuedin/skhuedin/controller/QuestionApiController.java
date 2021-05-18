@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
+import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ public class QuestionApiController {
 
     private final QuestionService questionService;
 
+    @MyRole
     @PostMapping("questions")
     public ResponseEntity<? extends BasicResponse> save(@RequestBody QuestionSaveRequestDto requestDto) {
         Long saveId = questionService.save(requestDto);
@@ -53,6 +55,7 @@ public class QuestionApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(questions));
     }
 
+    @MyRole
     @PutMapping("questions/{questionId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("questionId") Long id,
                                                           @RequestBody QuestionSaveRequestDto updateDto) {
@@ -62,6 +65,7 @@ public class QuestionApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
+    @MyRole
     @DeleteMapping("questions/{questionId}")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("questionId") Long id) {
         questionService.delete(id);
@@ -69,6 +73,7 @@ public class QuestionApiController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @MyRole
     @PostMapping("questions/{questionId}/views")
     public ResponseEntity<? extends BasicResponse> addView(@PathVariable("questionId") Long id) {
         questionService.addView(id);

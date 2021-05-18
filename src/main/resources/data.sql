@@ -1,8 +1,9 @@
 insert into user (created_date, last_modified_date, email, password, name, provider, user_image_url, entrance_year,
-                  graduation_year)
-values (now(), now(), 'admin@email.com', '1234', 'admin', 'KAKAO', '/img', now(), now()),
-       (now(), now(), 'user1@email.com', '1234', '홍길동', 'KAKAO', '/img', now(), now()),
-       (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now());
+                  graduation_year, role)
+values (now(), now(), 'admin@email.com', '1234', 'admin', 'KAKAO', '/img', now(), now(), 'ADMIN'),
+       (now(), now(), 'user1@email.com', '1234', '홍길동', 'KAKAO', '/img', now(), now(), null),
+       (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now(), null),
+       (now(), now(), 'dev.hyeonic@gmail.com', '1234', 'hyeonic', 'KAKAO', '/img', now(), now(), 'ADMIN');
 
 insert into question (target_user_id, writer_user_id, title, content, status, fix, view, created_date,
                       last_modified_date)

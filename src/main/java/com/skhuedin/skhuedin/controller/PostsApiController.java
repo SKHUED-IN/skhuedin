@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
+import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class PostsApiController {
 
     private final PostsService postsService;
 
+    @MyRole
     @PostMapping("posts")
     public ResponseEntity<? extends BasicResponse> save(@RequestBody PostsSaveRequestDto requestDto) {
         Long saveId = postsService.save(requestDto);
@@ -41,6 +43,7 @@ public class PostsApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
+    @MyRole
     @PutMapping("posts/{postsId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("postsId") Long id,
                                                           @RequestBody PostsSaveRequestDto updateDto) {
@@ -50,6 +53,7 @@ public class PostsApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
+    @MyRole
     @DeleteMapping("posts/{postsId}")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("postsId") Long id) {
         postsService.delete(id);
