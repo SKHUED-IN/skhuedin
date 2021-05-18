@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -53,7 +54,7 @@ public class FollowApiController {
     @MyRole
     @PutMapping("follows/{followId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("followId") Long id,
-                                                          @RequestBody FollowSaveRequestDto updateDto) {
+                                                          @Valid @RequestBody FollowSaveRequestDto updateDto) {
         Long blogId = followService.update(id, updateDto);
         FollowMainResponseDto responseDto = followService.findById(blogId);
 

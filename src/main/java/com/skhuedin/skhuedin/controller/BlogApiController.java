@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class BlogApiController {
 
     @MyRole
     @PostMapping("blogs")
-    public ResponseEntity<? extends BasicResponse> save(@RequestBody BlogSaveRequestDto requestDto) {
+    public ResponseEntity<? extends BasicResponse> save(@Valid @RequestBody BlogSaveRequestDto requestDto) {
         Long saveId = blogService.save(requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -60,7 +62,7 @@ public class BlogApiController {
     @MyRole
     @PutMapping("blogs/{blogId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("blogId") Long id,
-                                                          @RequestBody BlogSaveRequestDto updateDto) {
+                                                          @Valid @RequestBody BlogSaveRequestDto updateDto) {
         Long blogId = blogService.update(id, updateDto);
         BlogMainResponseDto responseDto = blogService.findById(blogId);
 
