@@ -9,6 +9,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,12 +17,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class GoogleOauth implements SocialOauth {
+
+    private final RestTemplate restTemplate;
 
     @Override
     public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
 
-        RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
         UserSaveRequestDto user = null;
 

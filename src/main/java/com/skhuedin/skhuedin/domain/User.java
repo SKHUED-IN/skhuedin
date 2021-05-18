@@ -13,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,16 +37,16 @@ public class User extends BaseEntity {
 
     private String userImageUrl;
 
-    LocalDateTime entranceYear;
+    private LocalDate entranceYear;
 
-    LocalDateTime graduationYear;
+    private LocalDate graduationYear;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder
     public User(String email, String password, String name, Provider provider,
-                String userImageUrl, LocalDateTime entranceYear, LocalDateTime graduationYear, Role role) {
+                String userImageUrl, LocalDate entranceYear, LocalDate graduationYear, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -64,6 +65,11 @@ public class User extends BaseEntity {
         this.userImageUrl = user.userImageUrl;
         this.entranceYear = user.entranceYear;
         this.graduationYear = user.graduationYear;
-        this.role = role;
+        this.role = user.role;
+    }
+
+    public void addYear(LocalDate entranceYear, LocalDate graduationYear) {
+        this.entranceYear = entranceYear;
+        this.graduationYear = graduationYear;
     }
 }

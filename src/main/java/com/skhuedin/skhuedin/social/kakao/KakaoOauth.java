@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,23 +19,25 @@ import java.util.UUID;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class KakaoOauth implements SocialOauth {
+
+    private final RestTemplate restTemplate;
 
     public UserSaveRequestDto requestAccessToken(OAuthToken oauthToken) {
         UserSaveRequestDto user = null;
 
         // 프로필 받아오기
-        RestTemplate rt2 = new RestTemplate();
-        HttpHeaders headers2 = new HttpHeaders();
-        headers2.add("Authorization", "Bearer " + oauthToken.getAccessToken());
-        headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + oauthToken.getAccessToken());
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
-                new HttpEntity<>(headers2);
+                new HttpEntity<>(headers);
 
         // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
-        ResponseEntity<String> response2 = rt2.exchange(
+        ResponseEntity<String> response2 = restTemplate.exchange(
                 "https://kapi.kakao.com/v2/user/me",
                 HttpMethod.POST,
                 kakaoProfileRequest2,

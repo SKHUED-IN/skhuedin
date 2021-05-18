@@ -3,6 +3,7 @@ package com.skhuedin.skhuedin.service;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
+import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.repository.UserRepository;
@@ -28,22 +29,15 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Long id, UserSaveRequestDto requestDto) {
+    public void update(Long id, UserUpdateDto updateDto) {
         User user = getUser(id);
-        user.update(requestDto.toEntity());
-    }
-
-    @Transactional
-    public void updateInfo(Long id, UserSaveRequestDto requestDto) {
-        User user = getUser(id);
-        user.update(requestDto.toEntity(user));
+        user.addYear(updateDto.getEntranceYear(), updateDto.getGraduationYear());
     }
 
     @Transactional
     public void delete(Long id) {
         User findUser = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
-        ; // 영속성 컨텍스트에 등록
         userRepository.delete(findUser);
     }
 
@@ -97,7 +91,6 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        return userRepository.findById(id).orElse(null);
     }
 }
