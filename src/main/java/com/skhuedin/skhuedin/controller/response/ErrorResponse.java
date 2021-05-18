@@ -5,17 +5,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ErrorResponse extends BasicResponse {
+public class ErrorResponse<T> extends BasicResponse {
 
-    private String errorMessage;
+    private T errorMessage;
     private String errorCode;
 
-    public ErrorResponse(String errorMessage) {
+    public ErrorResponse(T errorMessage) {
         this.errorMessage = errorMessage;
         this.errorCode = "404";
     }
 
-    public ErrorResponse(String errorMessage, String errorCode) {
+    public ErrorResponse(T errorMessage, String errorCode) {
         this.errorMessage = errorMessage;
         this.errorCode = errorCode;
     }

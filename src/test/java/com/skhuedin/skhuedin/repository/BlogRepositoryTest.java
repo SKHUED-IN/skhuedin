@@ -82,8 +82,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user1")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now().minusYears(2))
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
@@ -92,8 +92,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user2")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now().minusYears(1))
+                .graduationYear("2016")
+                .entranceYear("2021")
                 .provider(Provider.SELF)
                 .build();
 
@@ -133,8 +133,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user1")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now().minusYears(2))
+                .graduationYear("2016")
+                .entranceYear("2020")
                 .provider(Provider.SELF)
                 .build();
 
@@ -143,8 +143,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user2")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now().minusYears(1))
+                .graduationYear("2016")
+                .entranceYear("2019")
                 .provider(Provider.SELF)
                 .build();
 
@@ -240,8 +240,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user" + index)
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
     }

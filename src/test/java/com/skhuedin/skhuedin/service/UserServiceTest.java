@@ -39,8 +39,8 @@ class UserServiceTest {
                 .email("hong@email.com")
                 .password("1234")
                 .userImageUrl("/img")
-                .entranceYear(LocalDate.now())
-                .graduationYear(LocalDate.now())
+                .entranceYear("2016")
+                .graduationYear("2022")
                 .provider(Provider.KAKAO)
                 .build();
     }
@@ -55,10 +55,9 @@ class UserServiceTest {
                 .email("hong@email.com")
                 .password("1234")
                 .userImageUrl("/img")
-                .entranceYear(LocalDate.now())
-                .graduationYear(LocalDate.now())
+                .entranceYear("2016")
+                .graduationYear("2022")
                 .provider(Provider.KAKAO)
-
                 .build();
 
         User saveUser = userRepository.save(user);
@@ -87,16 +86,16 @@ class UserServiceTest {
                 .email("hong@email.com")
                 .password("1234")
                 .userImageUrl("/img")
-                .entranceYear(LocalDate.now().plusDays(1))
-                .graduationYear(LocalDate.now().plusDays(2))
+                .entranceYear("2012")
+                .graduationYear("2013")
                 .provider(Provider.KAKAO)
                 .build();
 
         User saveUser = userRepository.save(user);
 
         UserUpdateDto requestDto = UserUpdateDto.builder()
-                .entranceYear(LocalDate.now())
-                .graduationYear(LocalDate.now())
+                .entranceYear("2010")
+                .graduationYear("2020")
                 .build();
 
         //when 무엇을 했을 때

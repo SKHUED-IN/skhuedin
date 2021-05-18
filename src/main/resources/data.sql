@@ -3,7 +3,8 @@ insert into user (created_date, last_modified_date, email, password, name, provi
 values (now(), now(), 'admin@email.com', '1234', 'admin', 'KAKAO', '/img', now(), now(), 'ADMIN'),
        (now(), now(), 'user1@email.com', '1234', '홍길동', 'KAKAO', '/img', now(), now(), null),
        (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now(), null),
-       (now(), now(), 'dev.hyeonic@gmail.com', '1234', 'hyeonic', 'KAKAO', '/img', now(), now(), 'ADMIN');
+       (now(), now(), 'dev.hyeonic@gmail.com', null, 'hyeonic', 'KAKAO', '/img', '2016', null, 'ADMIN'),
+       (now(), now(), 'evan3566@naver.com', null, '최기현', 'KAKAO', '/img', '2016', null, 'USER');
 
 insert into question (target_user_id, writer_user_id, title, content, status, fix, view, created_date,
                       last_modified_date)

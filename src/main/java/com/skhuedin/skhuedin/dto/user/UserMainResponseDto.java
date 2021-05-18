@@ -15,10 +15,10 @@ public class UserMainResponseDto {
     private String email;
     private String name;
     private String userImageUrl;
-    LocalDate entranceYear;
-    LocalDate graduationYear;
-    LocalDateTime createdDate;
-    LocalDateTime lastModifiedDate;
+    private String entranceYear;
+    private String graduationYear;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
 
     public UserMainResponseDto(User user) {
         this.id = user.getId();

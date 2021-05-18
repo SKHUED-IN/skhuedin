@@ -37,16 +37,16 @@ public class User extends BaseEntity {
 
     private String userImageUrl;
 
-    private LocalDate entranceYear;
+    private String entranceYear;
 
-    private LocalDate graduationYear;
+    private String graduationYear;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder
     public User(String email, String password, String name, Provider provider,
-                String userImageUrl, LocalDate entranceYear, LocalDate graduationYear, Role role) {
+                String userImageUrl, String entranceYear, String graduationYear, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -68,7 +68,7 @@ public class User extends BaseEntity {
         this.role = user.role;
     }
 
-    public void addYear(LocalDate entranceYear, LocalDate graduationYear) {
+    public void addYear(String entranceYear, String graduationYear) {
         this.entranceYear = entranceYear;
         this.graduationYear = graduationYear;
     }

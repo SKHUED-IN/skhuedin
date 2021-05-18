@@ -41,8 +41,8 @@ class BlogServiceTest {
                 .password("1234")
                 .name("user")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 

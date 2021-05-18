@@ -40,8 +40,8 @@ class FollowRepositoryTest {
                 .password("1234")
                 .name("toUser")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
@@ -50,8 +50,8 @@ class FollowRepositoryTest {
                 .password("1234")
                 .name("fromUser1")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
@@ -60,8 +60,8 @@ class FollowRepositoryTest {
                 .password("1234")
                 .name("fromUser2")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
@@ -70,8 +70,8 @@ class FollowRepositoryTest {
                 .password("1234")
                 .name("fromUser3")
                 .userImageUrl("/img")
-                .graduationYear(LocalDate.now())
-                .entranceYear(LocalDate.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
