@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
+import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,8 +39,8 @@ class UserServiceTest {
                 .email("hong@email.com")
                 .password("1234")
                 .userImageUrl("/img")
-                .entranceYear(LocalDateTime.now())
-                .graduationYear(LocalDateTime.now())
+                .entranceYear(LocalDate.now())
+                .graduationYear(LocalDate.now())
                 .provider(Provider.KAKAO)
                 .build();
     }
@@ -53,9 +55,10 @@ class UserServiceTest {
                 .email("hong@email.com")
                 .password("1234")
                 .userImageUrl("/img")
-                .entranceYear(LocalDateTime.now())
-                .graduationYear(LocalDateTime.now())
+                .entranceYear(LocalDate.now())
+                .graduationYear(LocalDate.now())
                 .provider(Provider.KAKAO)
+
                 .build();
 
         User saveUser = userRepository.save(user);
@@ -84,27 +87,26 @@ class UserServiceTest {
                 .email("hong@email.com")
                 .password("1234")
                 .userImageUrl("/img")
-                .entranceYear(LocalDateTime.now().plusDays(1))
-                .graduationYear(LocalDateTime.now().plusDays(2))
+                .entranceYear(LocalDate.now().plusDays(1))
+                .graduationYear(LocalDate.now().plusDays(2))
                 .provider(Provider.KAKAO)
                 .build();
 
         User saveUser = userRepository.save(user);
 
-        UserSaveRequestDto requestDto = UserSaveRequestDto.builder()
-                .entranceYear(LocalDateTime.now())
-                .graduationYear(LocalDateTime.now())
+        UserUpdateDto requestDto = UserUpdateDto.builder()
+                .entranceYear(LocalDate.now())
+                .graduationYear(LocalDate.now())
                 .build();
 
         //when 무엇을 했을 때
 
-        userService.updateInfo(saveUser.getId(), requestDto);
+        userService.update(saveUser.getId(), requestDto);
         User user1 = userService.getUser(saveUser.getId());
 
         //then 어떤 값을 원한다.
 
         assertAll(
-
                 () -> assertEquals(requestDto.getEntranceYear(), user1.getEntranceYear()),
                 () -> assertEquals(requestDto.getGraduationYear(), user1.getGraduationYear()),
                 // 내가 요청한  입학년도, 졸업년도가 잘 업데이트가 되었는가.

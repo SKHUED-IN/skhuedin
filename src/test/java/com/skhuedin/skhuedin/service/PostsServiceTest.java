@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,8 +48,8 @@ class PostsServiceTest {
                 .password("1234")
                 .name("user")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now())
                 .provider(Provider.SELF)
                 .build();
 

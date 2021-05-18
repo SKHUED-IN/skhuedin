@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,8 +47,8 @@ class QuestionServiceTest {
                 .password("1234")
                 .name("target")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now())
                 .provider(Provider.SELF)
                 .build();
 
@@ -56,8 +57,8 @@ class QuestionServiceTest {
                 .password("1234")
                 .name("writer")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now())
                 .provider(Provider.SELF)
                 .build();
 

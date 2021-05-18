@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -49,8 +50,8 @@ class CommentServiceTest {
                 .password("1234")
                 .name("target")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now())
                 .provider(Provider.SELF)
                 .build();
 
@@ -59,8 +60,8 @@ class CommentServiceTest {
                 .password("1234")
                 .name("writer")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now())
                 .provider(Provider.SELF)
                 .build();
 

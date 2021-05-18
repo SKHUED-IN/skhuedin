@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -81,8 +82,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user1")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now().minusYears(2))
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now().minusYears(2))
                 .provider(Provider.SELF)
                 .build();
 
@@ -91,8 +92,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user2")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now().minusYears(1))
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now().minusYears(1))
                 .provider(Provider.SELF)
                 .build();
 
@@ -132,8 +133,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user1")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now().minusYears(2))
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now().minusYears(2))
                 .provider(Provider.SELF)
                 .build();
 
@@ -142,8 +143,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user2")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now().minusYears(1))
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now().minusYears(1))
                 .provider(Provider.SELF)
                 .build();
 
@@ -239,8 +240,8 @@ class BlogRepositoryTest {
                 .password("1234")
                 .name("user" + index)
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now())
                 .provider(Provider.SELF)
                 .build();
     }
