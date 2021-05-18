@@ -5,7 +5,7 @@ import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.controller.response.TokenWithCommonResponse;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
-import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
+import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.UserService;
@@ -36,9 +36,9 @@ public class UserApiController {
 
     @MyRole
     @PostMapping("users/{userId}")
-    public ResponseEntity<? extends BasicResponse> updateUserAddInfo(@PathVariable("userId") Long id,
-                                                                     @RequestBody UserSaveRequestDto requestDto) {
-        userService.updateInfo(id, requestDto);
+    public ResponseEntity<? extends BasicResponse> update(@PathVariable("userId") Long id,
+                                                          @RequestBody UserUpdateDto updateDto) {
+        userService.update(id, updateDto);
         UserMainResponseDto responseDto = userService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }

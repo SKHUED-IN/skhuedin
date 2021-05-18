@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,8 +19,8 @@ class QuestionTest {
                 .password("1234")
                 .name("target")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now())
                 .provider(Provider.SELF)
                 .build();
 
@@ -29,8 +29,8 @@ class QuestionTest {
                 .password("1234")
                 .name("writer")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear(LocalDate.now())
+                .entranceYear(LocalDate.now())
                 .provider(Provider.SELF)
                 .build();
 

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,14 +19,14 @@ public class UserSaveRequestDto {
     private String name;
     private Provider provider;
     private String userImageUrl;
-    LocalDateTime entranceYear;
-    LocalDateTime graduationYear;
+    LocalDate entranceYear;
+    LocalDate graduationYear;
 
     @Builder
     public UserSaveRequestDto(String email,
                               String password, String name,
                               Provider provider, String userImageUrl,
-                              LocalDateTime entranceYear, LocalDateTime graduationYear) {
+                              LocalDate entranceYear, LocalDate graduationYear) {
         this.email = email;
         this.password = password;
         this.name = name;

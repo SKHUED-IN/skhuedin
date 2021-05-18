@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,8 +15,8 @@ public class UserMainResponseDto {
     private String email;
     private String name;
     private String userImageUrl;
-    LocalDateTime entranceYear;
-    LocalDateTime graduationYear;
+    LocalDate entranceYear;
+    LocalDate graduationYear;
     LocalDateTime createdDate;
     LocalDateTime lastModifiedDate;
 
