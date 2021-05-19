@@ -33,7 +33,9 @@ public class Blog extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String profileImageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private File profile;
 
     private String content;
 
@@ -41,9 +43,9 @@ public class Blog extends BaseEntity {
     private List<Posts> posts = new ArrayList<>();
 
     @Builder
-    public Blog(User user, String profileImageUrl, String content, List<Posts> posts) {
+    public Blog(User user, File profile, String content, List<Posts> posts) {
         this.user = user;
-        this.profileImageUrl = profileImageUrl;
+        this.profile = profile;
         this.content = content;
         if (posts != null) {
             this.posts = posts;
@@ -52,7 +54,7 @@ public class Blog extends BaseEntity {
 
     public void updateBlog(Blog blog) {
         this.user = blog.user;
-        this.profileImageUrl = blog.profileImageUrl;
+        this.profile = blog.profile;
         this.content = blog.content;
         this.posts = blog.posts;
     }

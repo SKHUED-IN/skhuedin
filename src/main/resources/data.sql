@@ -42,10 +42,10 @@ values (1, 2, 'parent 댓글 1', null, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 1', 2, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 2', 2, now(), now());
 
-insert into blog (user_id, profile_image_url, content, created_date, last_modified_date)
-values (1, '/img', 'admin blog', now(), now()),
-       (2, '/img', '홍길동 blog', now(), now()),
-       (3, '/img', '전우치 blog', now(), now());
+insert into blog (user_id, profile_id, content, created_date, last_modified_date)
+values (1, null, 'admin blog', now(), now()),
+       (2, null, '홍길동 blog', now(), now()),
+       (3, null, '전우치 blog', now(), now());
 
 insert into posts (created_date, last_modified_date, content, title, view, blog_id, category_id)
 values (now(), now(), 'posts content 1', 'posts title 1', 10, 1, null),

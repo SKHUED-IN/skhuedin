@@ -24,7 +24,6 @@ class BlogSaveRequestDtoTest {
                 .builder()
                 .userId(null)
                 .content("책장입니다.")
-                .profileImageUrl("/img")
                 .build();
 
         // when
@@ -49,7 +48,6 @@ class BlogSaveRequestDtoTest {
                 .builder()
                 .userId(1L)
                 .content(stringBuilder.toString())
-                .profileImageUrl("/img")
                 .build();
 
         // when

@@ -1,12 +1,15 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Blog;
+import com.skhuedin.skhuedin.domain.File;
 import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
+import com.skhuedin.skhuedin.dto.file.FileSaveRequestDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
+import com.skhuedin.skhuedin.repository.FileRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +29,15 @@ public class BlogService {
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
     private final PostsRepository postsRepository;
+    private final FileRepository fileRepository;
 
     @Transactional
     public Long save(BlogSaveRequestDto requestDto) {
         User user = getUser(requestDto.getUserId());
+        File file = fileRepository.findById(requestDto.getFileId()).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 file id 입니다."));
 
-        return blogRepository.save(requestDto.toEntity(user)).getId();
+        return blogRepository.save(requestDto.toEntity(user, file)).getId();
     }
 
     @Transactional

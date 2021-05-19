@@ -63,8 +63,7 @@ class BlogServiceTest {
         // then
         assertAll(
                 () -> assertEquals(saveId, responseDto.getId()),
-                () -> assertEquals(requestDto.getContent(), responseDto.getContent()),
-                () -> assertEquals(requestDto.getProfileImageUrl(), responseDto.getProfileImageUrl())
+                () -> assertEquals(requestDto.getContent(), responseDto.getContent())
         );
     }
 
@@ -76,7 +75,6 @@ class BlogServiceTest {
         BlogSaveRequestDto requestDto = BlogSaveRequestDto.builder()
                 .userId(0L)
                 .content("저의 공간에 와주셔서 감사합니다.")
-                .profileImageUrl("/img")
                 .build();
 
         // when & then
@@ -95,7 +93,6 @@ class BlogServiceTest {
         BlogSaveRequestDto updateDto = BlogSaveRequestDto.builder()
                 .userId(user.getId())
                 .content("user의 책장")
-                .profileImageUrl("/img")
                 .build();
 
         // when
@@ -106,8 +103,7 @@ class BlogServiceTest {
         // then
         assertAll(
                 () -> assertEquals(updateId, saveId),
-                () -> assertEquals(responseDto.getContent(), updateDto.getContent()),
-                () -> assertEquals(responseDto.getProfileImageUrl(), updateDto.getProfileImageUrl())
+                () -> assertEquals(responseDto.getContent(), updateDto.getContent())
         );
     }
 
@@ -142,7 +138,6 @@ class BlogServiceTest {
         return BlogSaveRequestDto.builder()
                 .userId(user.getId())
                 .content("저의 공간에 와주셔서 감사합니다.")
-                .profileImageUrl("/img")
                 .build();
     }
 
