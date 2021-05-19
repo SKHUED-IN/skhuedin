@@ -2,27 +2,30 @@ package com.skhuedin.skhuedin.controller;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
+import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
+import com.skhuedin.skhuedin.dto.posts.PostsAdminResponseDto;
+import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
+import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.AdminSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.infra.Role;
-import com.skhuedin.skhuedin.service.UserService;
+import com.skhuedin.skhuedin.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +35,83 @@ import java.util.Map;
 public class AdminController {
 
     private final UserService userService;
+    private final PostsService postsService;
+    private final QuestionService questionService;
+    private final CategoryService categoryService;
+
+
+    @ResponseBody
+    @RequestMapping(value = "/userList", method = RequestMethod.POST)
+    public List<UserMainResponseDto> userList() {
+        List<UserMainResponseDto> list = userService.findAll();
+        return list;
+    }
+
+    @GetMapping("/userList")
+    public String userMainList() {
+        return "contents/userList";
+    }
+
+    @GetMapping("/postList")
+    public String postMainList() {
+        return "contents/postList";
+    }
+
+    @GetMapping("/questionList")
+    public String questionMainList() {
+        return "contents/questionList";
+    }
+
+    @GetMapping("/categoryList")
+    public String categoryMainList() {
+        return "contents/categoryList";
+    }
+
+    @PostMapping("update/category")
+    public String updateCategory(@RequestParam(value = "category", required = false, defaultValue = "0") Long category,
+                                 @RequestParam(value = "post_id", required = false, defaultValue = "0") Long post_id) {
+        postsService.update(post_id, category);
+        return "redirect:/postList";
+    }
+
+    @PostMapping("categoryList/up")
+    public String upCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
+        categoryService.addWeight(id);
+        return "redirect:/categoryList";
+    }
+
+    @PostMapping("categoryList/down")
+    public String downCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
+        categoryService.subtractWeight(id);
+        return "redirect:/categoryList";
+    }
+
+    @PostMapping("delete/category")
+    public String deleteCategory(@RequestParam(value = "name", required = false, defaultValue = "0") Long post_id) {
+        postsService.deleteAdmin(post_id);
+        return "redirect:/";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/postList", method = RequestMethod.POST)
+    public List<PostsAdminResponseDto> postList() {
+        List<PostsAdminResponseDto> list = postsService.findAll();
+        return list;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/questionList", method = RequestMethod.POST)
+    public List<QuestionMainResponseDto> questionList() {
+        List<QuestionMainResponseDto> list = questionService.findAll();
+        return list;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/categoryList", method = RequestMethod.POST)
+    public List<CategoryMainResponseDto> categoryList() {
+        List<CategoryMainResponseDto> list = categoryService.findAll();
+        return list;
+    }
 
     @GetMapping("/")
     public String main() {
@@ -42,7 +122,6 @@ public class AdminController {
     public String admin() {
         return "board/login";
     }
-
 
     @PostMapping("/board/main")
     public String signin(HttpServletResponse response, LoginRequest requestDto, RedirectAttributes redirectAttribute) {
@@ -59,7 +138,6 @@ public class AdminController {
 
         return "redirect:/board/main";
     }
-
 
     @GetMapping("/board/main")
     public String sign(HttpServletRequest request, Model model, HttpServletResponse response) {

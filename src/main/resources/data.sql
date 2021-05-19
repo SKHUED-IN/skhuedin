@@ -50,10 +50,22 @@ values (1, 2, 'parent 댓글 1', null, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 1', 2, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 2', 2, now(), now());
 
+
+insert into blog (user_id, profile_image_url, content, created_date, last_modified_date)
+values (1, '/img', 'admin blog', now(), now()),
+       (2, '/img', '홍길동 blog', now(), now()),
+       (3, '/img', '전우치 blog', now(), now());
+
+insert into category (created_date, last_modified_date, name, weight)
+values (now(), now(), '학창 시절', 1),
+       (now(), now(), '취업 준비', 2),
+       (now(), now(), '하고싶은말', 3);
+
 insert into posts (created_date, last_modified_date, content, title, view, blog_id, category_id)
-values (now(), now(), 'posts content 1', 'posts title 1', 10, 1, null),
-       (now(), now(), 'posts content 2', 'posts title 2', 20, 1, null),
-       (now(), now(), 'posts content 3', 'posts title 3', 20, 2, null),
-       (now(), now(), 'posts content 4', 'posts title 4', 2, 2, null),
-       (now(), now(), 'posts content 5', 'posts title 5', 6, 3, null),
-       (now(), now(), 'posts content 6', 'posts title 6', 10, 3, null);
+values (now(), now(), 'posts content 1', 'posts title 1', 10, 1, 1),
+       (now(), now(), 'posts content 2', 'posts title 2', 20, 1, 2),
+       (now(), now(), 'posts content 3', 'posts title 3', 20, 2, 3),
+       (now(), now(), 'posts content 4', 'posts title 4', 2, 2, 1),
+       (now(), now(), 'posts content 5', 'posts title 5', 6, 3, 1),
+       (now(), now(), 'posts content 6', 'posts title 6', 10, 3, 1);
+

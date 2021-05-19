@@ -56,6 +56,13 @@ public class Posts extends BaseEntity {
         this.category = post.category;
     }
 
+    public void updateCategory(Category category){
+        this.category =category;
+    }
+    public void updateContent(){
+        this.content ="관리자에 의해 삭제되었습니다.";
+    }
+
     public void addView() {
         this.view++;
     }

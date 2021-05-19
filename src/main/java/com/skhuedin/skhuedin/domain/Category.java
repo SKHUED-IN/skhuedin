@@ -35,4 +35,12 @@ public class Category extends BaseEntity {
         this.name = category.name;
         this.weight = category.weight;
     }
+
+    public void addWeight() {
+        this.weight++;
+    }
+
+    public void subtractWeight() {
+        this.weight--;
+    }
 }

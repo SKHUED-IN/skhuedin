@@ -3,6 +3,7 @@ package com.skhuedin.skhuedin.service;
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
+import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -53,6 +55,11 @@ public class QuestionService {
         Question question = getQuestion(id);
         List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
         return new QuestionMainResponseDto(question, comments);
+    }
+
+    public List<QuestionMainResponseDto> findAll() {
+        return questionRepository.findAll().stream()
+                .map(question -> new QuestionMainResponseDto(question)).collect(Collectors.toList());
     }
 
     public Page<QuestionMainResponseDto> findByTargetUserId(Long id, Pageable pageable) {
