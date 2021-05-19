@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,8 +46,8 @@ class CommentRepositoryTest {
                 .password("1234")
                 .name("target")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
@@ -55,8 +56,8 @@ class CommentRepositoryTest {
                 .password("1234")
                 .name("writer")
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
@@ -210,8 +211,8 @@ class CommentRepositoryTest {
                 .password("1234")
                 .name("user" + index)
                 .userImageUrl("/img")
-                .graduationYear(LocalDateTime.now())
-                .entranceYear(LocalDateTime.now())
+                .graduationYear("2016")
+                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
     }

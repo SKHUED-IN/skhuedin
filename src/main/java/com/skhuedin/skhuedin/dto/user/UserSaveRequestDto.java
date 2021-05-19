@@ -6,11 +6,10 @@ import com.skhuedin.skhuedin.infra.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class UserSaveRequestDto {
 
@@ -19,14 +18,14 @@ public class UserSaveRequestDto {
     private String name;
     private Provider provider;
     private String userImageUrl;
-    LocalDate entranceYear;
-    LocalDate graduationYear;
+    private String entranceYear;
+    private String graduationYear;
 
     @Builder
     public UserSaveRequestDto(String email,
                               String password, String name,
                               Provider provider, String userImageUrl,
-                              LocalDate entranceYear, LocalDate graduationYear) {
+                              String entranceYear, String graduationYear) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -37,7 +36,7 @@ public class UserSaveRequestDto {
     }
 
     public User toEntity() {
-        User user = User.builder()
+        return User.builder()
                 .email(this.email)
                 .password(this.password)
                 .name(this.name)
@@ -47,21 +46,10 @@ public class UserSaveRequestDto {
                 .graduationYear(this.graduationYear)
                 .role(Role.USER)
                 .build();
-        return user;
     }
 
-    public User toEntity(User targetUser) {
-        User user = User.builder()
-                .email(targetUser.getEmail())
-                .password(targetUser.getPassword())
-                .name(targetUser.getName())
-                .provider(targetUser.getProvider())
-                .userImageUrl(targetUser.getUserImageUrl())
-                .entranceYear(this.getEntranceYear())
-                .graduationYear(this.getGraduationYear())
-                .role(Role.USER)
-                .build();
-        return user;
+    public void addYear(String entranceYear, String graduationYear) {
+        this.entranceYear = entranceYear;
+        this.graduationYear = graduationYear;
     }
-
 }

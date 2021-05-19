@@ -56,8 +56,7 @@ public class UserService {
     }
 
     public String signUp(UserSaveRequestDto requestDto) { // 회원가입
-        User user = requestDto.toEntity();
-        save(user);
+        save(requestDto.toEntity());
         return signIn(requestDto);
     }
 
@@ -65,6 +64,9 @@ public class UserService {
     public String signIn(UserSaveRequestDto requestDto) { // 로그인
         User findUser = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
+
+        requestDto.addYear(findUser.getEntranceYear(), findUser.getGraduationYear());
+
         // 로그인 전 변경 사항이 있는지 체크 findUser
         findUser.update(requestDto.toEntity());
 

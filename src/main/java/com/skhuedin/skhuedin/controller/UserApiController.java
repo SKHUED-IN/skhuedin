@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,7 +38,7 @@ public class UserApiController {
     @MyRole
     @PostMapping("users/{userId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("userId") Long id,
-                                                          @RequestBody UserUpdateDto updateDto) {
+                                                          @Valid @RequestBody UserUpdateDto updateDto) {
         userService.update(id, updateDto);
         UserMainResponseDto responseDto = userService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));

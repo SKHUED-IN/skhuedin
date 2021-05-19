@@ -7,13 +7,23 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 @Getter
 @NoArgsConstructor
 public class CommentSaveRequestDto {
 
+    @NotNull(message = "question의 id는 null이 될 수 없습니다.")
     private Long questionId;
+
+    @NotNull(message = "writer user의 id는 null이 될 수 없습니다.")
     private Long writerUserId;
+
+    @NotNull
+    @Size(max = 1000, message = "content의 size는 1000을 넘을 수 없습니다.")
     private String content;
+
     private Long parentId;
 
     @Builder

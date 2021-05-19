@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class CommentApiController {
 
     @MyRole
     @PostMapping("comments")
-    public ResponseEntity<? extends BasicResponse> save(@RequestBody CommentSaveRequestDto requestDto) {
+    public ResponseEntity<? extends BasicResponse> save(@Valid @RequestBody CommentSaveRequestDto requestDto) {
         Long saveId = commentService.save(requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -46,7 +47,7 @@ public class CommentApiController {
     @MyRole
     @PutMapping("comments/{commentId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("commentId") Long id,
-                                                          @RequestBody CommentSaveRequestDto updateDto) {
+                                                          @Valid @RequestBody CommentSaveRequestDto updateDto) {
         Long commentId = commentService.update(id, updateDto);
         CommentMainResponseDto responseDto = commentService.findById(commentId);
 
