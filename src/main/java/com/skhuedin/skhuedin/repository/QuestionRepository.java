@@ -18,4 +18,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("select q from Question q where q.writerUser.id = :userId")
     List<Question> findQuestionByUserId(@Param("userId") Long userId);
 
+    @Query("select q from Question q where q.targetUser.id = :userId")
+    List<Question> findQuestionByTargetUserId(@Param("userId") Long userId);
+
 }

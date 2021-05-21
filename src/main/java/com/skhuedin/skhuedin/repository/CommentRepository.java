@@ -20,4 +20,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("select c from Comment c where c.writerUser.id = :userId")
     List<Comment> findCommentsByWriterUserId(@Param("userId") Long userId);
+
 }

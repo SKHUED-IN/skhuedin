@@ -58,14 +58,34 @@ public class UserService {
         // 영속성 컨텍스트에 등록
         Blog blogByUserId = blogRepository.findBlogByUserId(id);
         List<Comment> comments = commentRepository.findCommentsByWriterUserId(id);
+
         List<Question> questions = questionRepository.findQuestionByUserId(id);
+        List<Question> targetQuestions = questionRepository.findQuestionByTargetUserId(id);
         List<Posts> posts;
 
-        for (Comment comment : comments) {
-            commentRepository.delete(comment);
+
+        if (comments != null) {
+            for (Comment comment : comments) {
+                commentRepository.delete(comment);
+            }
         }
-        for (Question question : questions) {
-            questionRepository.delete(question);
+
+        if (questions != null) {
+            for (Question question : questions) {
+                List<Comment> innerComment = commentRepository.findByQuestionId(question.getId());
+                if (comments != null) {
+                    for (Comment comment : innerComment) {
+                        commentRepository.delete(comment);
+                    }
+                }
+                questionRepository.delete(question);
+            }
+        }
+
+        if (targetQuestions != null) {
+            for (Question question : targetQuestions) {
+                questionRepository.delete(question);
+            }
         }
 
         if (blogByUserId != null) {
@@ -109,7 +129,6 @@ public class UserService {
 
         return createToken(findUser.getEmail());
     }
-
 
 
     public User findByEmail(String email) {

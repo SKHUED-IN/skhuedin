@@ -3,17 +3,7 @@
 <head th:replace="fragments/header :: header">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
 <body onload="postList();">
-
-<div class="contents" th:fragment="userList">
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" th:inline="javascript"
-            th:src="@{js/get.js}"></script>
-
-    <div class="mainContent">
-        <span id="result"></span>
-    </div>
-</div>
-
+<div th:replace="contents/common :: common"/>
 <div th:replace="fragments/footer :: footer"/>
 </body>
 </html>

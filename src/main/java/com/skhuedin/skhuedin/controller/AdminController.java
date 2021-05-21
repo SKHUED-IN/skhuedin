@@ -52,6 +52,12 @@ public class AdminController {
         return "contents/userList";
     }
 
+    @PostMapping("/userDelete")
+    public String userDelete(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
+        userService.delete(id);
+        return "redirect:/userList";
+    }
+
     @GetMapping("/postList")
     public String postMainList() {
         return "contents/postList";
@@ -86,10 +92,10 @@ public class AdminController {
         return "redirect:/categoryList";
     }
 
-    @PostMapping("delete/category")
-    public String deleteCategory(@RequestParam(value = "name", required = false, defaultValue = "0") Long post_id) {
-        postsService.deleteAdmin(post_id);
-        return "redirect:/";
+    @PostMapping("postDelete")
+    public String deleteCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
+        postsService.deleteAdmin(id);
+        return "redirect:/postList";
     }
 
     @ResponseBody
@@ -172,9 +178,5 @@ public class AdminController {
         return "board/userDetail";
     }
 
-    @PostMapping("/board/delete/{userId}")
-    public String userDelete(@PathVariable("userId") Long id) {
-        userService.delete(id);
-        return "redirect:/board/userList";
-    }
+
 }

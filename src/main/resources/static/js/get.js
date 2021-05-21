@@ -9,13 +9,14 @@ function userList() {
         , success :function output(resp){
                        var result = '';
                        result +='<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
-                       result +='<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>입학 년도</th><th>졸업 년도</th><th>이메일</th><th>이름</th></tr>'
+                       result +='<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>입학 년도</th><th>졸업 년도</th><th>이메일</th><th>이름</th><th>삭제</th></tr>'
                        $.each(resp,function(index,item){
                           result +='<tr><td style ="width : 300px;">'+item["id"]+'</td>'
                           result +='<td style ="width : 300px;">'+item["entranceYear"]+'</td>'
                           result +='<td style ="width : 300px;">'+item["graduationYear"]+'</td>'
                           result +='<td style ="width : 300px;">'+item["email"]+'</td>'
-                          result +='<td style ="width : 300px;">'+item["name"]+'</td></tr>'
+                          result +='<td style ="width : 300px;">'+item["name"]+'</td>'
+                          result +='<td style ="width : 300px;"><button type="button" onclick=userDelete('+item["id"]+')>삭제</button></td></tr>'
                        })
                        result +='</table>'
                        $('#result').html(result)
@@ -34,7 +35,7 @@ function postList() {
         , success :function output(resp){
                        var result = '';
                        result +='<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
-                       result +='<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>글쓴이</th><th>제목</th><th>내용</th><th>조회수</th><th>카테고리</th><th>설정</th></tr>'
+                       result +='<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>글쓴이</th><th>제목</th><th>내용</th><th>조회수</th><th>카테고리</th><th>설정</th><th>삭제</th></tr>'
                        $.each(resp,function(index,item){
                           result +='<tr><td style ="width : 300px;">'+item["id"]+'</td>'
                           result +='<td style ="width : 300px;">'+item["name"]+'</td>'
@@ -53,7 +54,8 @@ function postList() {
                                                                                        '<option value="'+item["id"]+'"></option>'+
                                                                                        '</select>'+
                                                                                        '<input type="submit" value ="카테고리 변경"></form>'+
-                                                                                       '</td></tr>'
+                                                                                       '</td>'
+                          result +='<td style ="width : 300px;"><button type="button" onclick=postDelete('+item["id"]+')>삭제</button></td></tr>'
                        })
                        result +='</table>'
                        $('#result').html(result)
@@ -108,6 +110,34 @@ function categoryList() {
                    }
     })
 }
+function userDelete(id) {
+    var sendData = "id="+id;
+    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
+    $.ajax({
+        url:'userDelete'
+        , method : 'POST'
+        , data: sendData
+        , success :function(resp){
+         return userList();
+         }
+       })
+}
+
+
+function postDelete(id) {
+    var sendData = "id="+id;
+    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
+    $.ajax({
+        url:'postDelete'
+        , method : 'POST'
+        , data: sendData
+        , success :function(resp){
+         return postList();
+         }
+       })
+}
+
+
 
 function categoryUp(id) {
     var sendData = "id="+id;
