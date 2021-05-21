@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BlogRepository extends JpaRepository<Blog, Long> {
 
-    @EntityGraph(attributePaths = {"user"})
     @Query("select distinct b from Blog b join b.user u")
     Page<Blog> findAll(Pageable pageable);
 
@@ -20,4 +19,6 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
             "group by b " +
             "order by sum(p.view) desc")
     Page<Blog> findAllOrderByPostsView(Pageable pageable);
+
+    Boolean existsByUserId(Long id);
 }

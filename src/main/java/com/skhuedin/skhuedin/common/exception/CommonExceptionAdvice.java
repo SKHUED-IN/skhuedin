@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,8 +19,8 @@ import java.util.List;
 @Slf4j
 public class CommonExceptionAdvice {
 
-    @ExceptionHandler({MethodArgumentNotValidException.class}) // 유효성 검사 실패 시 발생하는 예외를 처리
-    public ResponseEntity<ErrorResponse<List<String>>> processValidationError(MethodArgumentNotValidException exception) {
+    @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class}) // 유효성 검사 실패 시 발생하는 예외를 처리
+    public ResponseEntity<ErrorResponse<List<String>>> processValidationError(BindException exception) {
         BindingResult bindingResult = exception.getBindingResult();
 
         List<String> errorMessages = new ArrayList<>();

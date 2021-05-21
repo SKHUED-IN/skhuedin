@@ -21,12 +21,18 @@ public class FileService {
     }
 
     public FileMainResponseDto findById(Long id) {
-        File file = getById(id);
+        File file = getFile(id);
 
         return new FileMainResponseDto(file);
     }
 
-    private File getById(Long id) {
+    @Transactional
+    public void delete(Long id) {
+        File file = getFile(id);
+        fileRepository.delete(file);
+    }
+
+    private File getFile(Long id) {
         return fileRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 file id 입니다."));
     }

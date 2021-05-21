@@ -3,7 +3,6 @@ package com.skhuedin.skhuedin.dto.blog;
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.File;
 import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.dto.file.FileSaveRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,22 +19,18 @@ public class BlogSaveRequestDto {
     @NotNull(message = "user id는 null이 될 수 없습니다.")
     private Long userId;
 
-    private Long fileId;
-
     @Size(max = 1000, message = "content의 size는 1000을 넘을 수 없습니다.")
     private String content;
 
     @Builder
     public BlogSaveRequestDto(Long userId, Long fileId, String content) {
         this.userId = userId;
-        this.fileId = fileId;
         this.content = content;
     }
 
     public Blog toEntity(User user) {
         return Blog.builder()
                 .user(user)
-                .profile(null)
                 .content(this.content)
                 .build();
     }

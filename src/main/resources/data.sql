@@ -6,6 +6,14 @@ values (now(), now(), 'admin@email.com', '1234', 'admin', 'KAKAO', '/img', now()
        (now(), now(), 'dev.hyeonic@gmail.com', null, 'hyeonic', 'KAKAO', '/img', '2016', null, 'ADMIN'),
        (now(), now(), 'evan3566@naver.com', null, '최기현', 'KAKAO', '/img', '2016', null, 'USER');
 
+insert into file (created_date, last_modified_date, original_name, name, path)
+values (now(), now(), 'user.png', null, 'C:\201633035\project\skhuedin/src/main/resources/static/profile');
+
+insert into blog (user_id, profile_id, content, created_date, last_modified_date)
+values (1, 1, 'admin blog', now(), now()),
+       (2, 1, '홍길동 blog', now(), now()),
+       (3, 1, '전우치 blog', now(), now());
+
 insert into question (target_user_id, writer_user_id, title, content, status, fix, view, created_date,
                       last_modified_date)
 values (1, 2, 'spring 1', 'spring 공부 루트', false, false, 0, now(), now()),
@@ -41,11 +49,6 @@ values (1, 2, 'parent 댓글 1', null, now(), now()),
        (1, 2, 'parent 댓글 1 대댓글 2', 1, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 1', 2, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 2', 2, now(), now());
-
-insert into blog (user_id, profile_id, content, created_date, last_modified_date)
-values (1, null, 'admin blog', now(), now()),
-       (2, null, '홍길동 blog', now(), now()),
-       (3, null, '전우치 blog', now(), now());
 
 insert into posts (created_date, last_modified_date, content, title, view, blog_id, category_id)
 values (now(), now(), 'posts content 1', 'posts title 1', 10, 1, null),

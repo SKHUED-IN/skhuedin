@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.controller;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
+import com.skhuedin.skhuedin.controller.response.ErrorResponse;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
 import com.skhuedin.skhuedin.dto.file.FileSaveRequestDto;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,15 +38,23 @@ public class BlogApiController {
     private final BlogService blogService;
     private final FileService fileService;
 
+    @MyRole
     @PostMapping("blogs")
     public ResponseEntity<? extends BasicResponse> save(
-            @RequestParam("file") MultipartFile files, BlogSaveRequestDto requestDto)
-            throws NoSuchAlgorithmException, IOException {
+            @RequestParam(name = "file", required = false) MultipartFile files,
+            @Valid BlogSaveRequestDto requestDto) throws NoSuchAlgorithmException, IOException {
 
-        if (!files.isEmpty()) {
+        if (blogService.existsByUserId(requestDto.getUserId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse<>("이미 책장이 존재합니다.", "400"));
+        }
+
+        Long saveId;
+        if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
             String fileName = new MD5Generator(originalFileName).toString();
-            String savePath = "c:/201633035/images";
+//            String savePath = "c:/201633035/images";
+            String savePath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
             if (!new File(savePath).exists()) {
                 new File(savePath).mkdir();
             }
@@ -61,12 +69,11 @@ public class BlogApiController {
                     .build();
 
             Long fileId = fileService.save(profile);
-            requestDto.setFileId(fileId);
+            saveId = blogService.save(requestDto, fileId);
         } else {
             // default image 처리
+            saveId = blogService.save(requestDto, 1L);
         }
-
-        Long saveId = blogService.save(requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new CommonResponse<>(blogService.findById(saveId)));
     }
@@ -93,9 +100,36 @@ public class BlogApiController {
 
     @MyRole
     @PutMapping("blogs/{blogId}")
-    public ResponseEntity<? extends BasicResponse> update(@PathVariable("blogId") Long id,
-                                                          @Valid @RequestBody BlogSaveRequestDto updateDto) {
-        Long blogId = blogService.update(id, updateDto);
+    public ResponseEntity<? extends BasicResponse> update(
+            @PathVariable("blogId") Long id,
+            @RequestParam(name = "file", required = false) MultipartFile files,
+            BlogSaveRequestDto updateDto) throws NoSuchAlgorithmException, IOException {
+
+        Long blogId;
+        if (files != null && !files.isEmpty()) {
+            String originalFileName = files.getOriginalFilename();
+            String fileName = new MD5Generator(originalFileName).toString();
+//            String savePath = "c:/201633035/images";
+            String savePath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
+            if (!new File(savePath).exists()) {
+                new File(savePath).mkdir();
+            }
+            String filePath = savePath + "/" + fileName;
+            files.transferTo(new File(filePath));
+
+            FileSaveRequestDto profile = FileSaveRequestDto
+                    .builder()
+                    .originalName(originalFileName)
+                    .name(fileName)
+                    .path(savePath)
+                    .build();
+
+            Long fileId = fileService.save(profile);
+            blogId = blogService.update(id, updateDto, fileId);
+        } else {
+            // default image 처리
+            blogId = blogService.update(id, updateDto, 1L);
+        }
         BlogMainResponseDto responseDto = blogService.findById(blogId);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
