@@ -37,6 +37,7 @@ public class BlogApiController {
 
     private final BlogService blogService;
     private final FileService fileService;
+    private final MD5Generator md5Generator;
 
     @MyRole
     @PostMapping("blogs")
@@ -52,7 +53,7 @@ public class BlogApiController {
         Long saveId;
         if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
-            String fileName = new MD5Generator(originalFileName).toString();
+            String fileName = md5Generator.generate(originalFileName);
 //            String savePath = "c:/201633035/images";
             String savePath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
             if (!new File(savePath).exists()) {
@@ -108,7 +109,7 @@ public class BlogApiController {
         Long blogId;
         if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
-            String fileName = new MD5Generator(originalFileName).toString();
+            String fileName = md5Generator.generate(originalFileName);
 //            String savePath = "c:/201633035/images";
             String savePath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
             if (!new File(savePath).exists()) {
