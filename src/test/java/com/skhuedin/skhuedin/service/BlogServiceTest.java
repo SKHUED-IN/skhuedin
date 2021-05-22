@@ -14,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -57,7 +54,7 @@ class BlogServiceTest {
         BlogSaveRequestDto requestDto = generateBlog();
 
         // when
-        Long saveId = blogService.save(requestDto);
+        Long saveId = blogService.save(requestDto, 1L);
         BlogMainResponseDto responseDto = blogService.findById(saveId);
 
         // then
@@ -79,7 +76,7 @@ class BlogServiceTest {
 
         // when & then
         assertThrows(IllegalArgumentException.class, () ->
-                blogService.save(requestDto)
+                blogService.save(requestDto, 1L)
         );
     }
 
@@ -96,8 +93,8 @@ class BlogServiceTest {
                 .build();
 
         // when
-        Long saveId = blogService.save(requestDto);
-        Long updateId = blogService.update(saveId, updateDto);
+        Long saveId = blogService.save(requestDto, 1L);
+        Long updateId = blogService.update(saveId, updateDto, 1L);
         BlogMainResponseDto responseDto = blogService.findById(updateId);
 
         // then
@@ -113,7 +110,7 @@ class BlogServiceTest {
 
         // given
         BlogSaveRequestDto requestDto = generateBlog();
-        Long saveId = blogService.save(requestDto);
+        Long saveId = blogService.save(requestDto, 1L);
 
         // when
         blogService.delete(saveId);

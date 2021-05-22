@@ -9,7 +9,6 @@ import com.skhuedin.skhuedin.dto.file.FileSaveRequestDto;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.BlogService;
 import com.skhuedin.skhuedin.service.FileService;
-import com.skhuedin.skhuedin.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +28,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -37,7 +37,6 @@ public class BlogApiController {
 
     private final BlogService blogService;
     private final FileService fileService;
-    private final MD5Generator md5Generator;
 
     @MyRole
     @PostMapping("blogs")
@@ -53,7 +52,7 @@ public class BlogApiController {
         Long saveId;
         if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
-            String fileName = md5Generator.generate(originalFileName);
+            String fileName = UUID.randomUUID().toString();
 //            String savePath = "c:/201633035/images";
             String savePath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
             if (!new File(savePath).exists()) {
@@ -109,7 +108,7 @@ public class BlogApiController {
         Long blogId;
         if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
-            String fileName = md5Generator.generate(originalFileName);
+            String fileName = UUID.randomUUID().toString();
 //            String savePath = "c:/201633035/images";
             String savePath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
             if (!new File(savePath).exists()) {

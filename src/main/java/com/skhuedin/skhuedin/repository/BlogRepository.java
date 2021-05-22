@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BlogRepository extends JpaRepository<Blog, Long> {
 
-    @Query("select distinct b from Blog b join b.user u")
+    @Query("select b from Blog b join b.user u")
     Page<Blog> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = {"user"})
