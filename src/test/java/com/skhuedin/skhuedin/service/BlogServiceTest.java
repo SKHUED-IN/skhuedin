@@ -14,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -57,14 +54,13 @@ class BlogServiceTest {
         BlogSaveRequestDto requestDto = generateBlog();
 
         // when
-        Long saveId = blogService.save(requestDto);
+        Long saveId = blogService.save(requestDto, 1L);
         BlogMainResponseDto responseDto = blogService.findById(saveId);
 
         // then
         assertAll(
                 () -> assertEquals(saveId, responseDto.getId()),
-                () -> assertEquals(requestDto.getContent(), responseDto.getContent()),
-                () -> assertEquals(requestDto.getProfileImageUrl(), responseDto.getProfileImageUrl())
+                () -> assertEquals(requestDto.getContent(), responseDto.getContent())
         );
     }
 
@@ -76,12 +72,11 @@ class BlogServiceTest {
         BlogSaveRequestDto requestDto = BlogSaveRequestDto.builder()
                 .userId(0L)
                 .content("저의 공간에 와주셔서 감사합니다.")
-                .profileImageUrl("/img")
                 .build();
 
         // when & then
         assertThrows(IllegalArgumentException.class, () ->
-                blogService.save(requestDto)
+                blogService.save(requestDto, 1L)
         );
     }
 
@@ -95,19 +90,17 @@ class BlogServiceTest {
         BlogSaveRequestDto updateDto = BlogSaveRequestDto.builder()
                 .userId(user.getId())
                 .content("user의 책장")
-                .profileImageUrl("/img")
                 .build();
 
         // when
-        Long saveId = blogService.save(requestDto);
-        Long updateId = blogService.update(saveId, updateDto);
+        Long saveId = blogService.save(requestDto, 1L);
+        Long updateId = blogService.update(saveId, updateDto, 1L);
         BlogMainResponseDto responseDto = blogService.findById(updateId);
 
         // then
         assertAll(
                 () -> assertEquals(updateId, saveId),
-                () -> assertEquals(responseDto.getContent(), updateDto.getContent()),
-                () -> assertEquals(responseDto.getProfileImageUrl(), updateDto.getProfileImageUrl())
+                () -> assertEquals(responseDto.getContent(), updateDto.getContent())
         );
     }
 
@@ -117,7 +110,7 @@ class BlogServiceTest {
 
         // given
         BlogSaveRequestDto requestDto = generateBlog();
-        Long saveId = blogService.save(requestDto);
+        Long saveId = blogService.save(requestDto, 1L);
 
         // when
         blogService.delete(saveId);
@@ -142,7 +135,6 @@ class BlogServiceTest {
         return BlogSaveRequestDto.builder()
                 .userId(user.getId())
                 .content("저의 공간에 와주셔서 감사합니다.")
-                .profileImageUrl("/img")
                 .build();
     }
 

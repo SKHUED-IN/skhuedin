@@ -27,7 +27,7 @@ class PostsTest {
         Blog blog = Blog.builder()
                 .user(user)
                 .content("테스트 블로그 컨텐츠")
-                .profileImageUrl("/img")
+                .profile(null)
                 .build();
 
         posts = Posts.builder()
