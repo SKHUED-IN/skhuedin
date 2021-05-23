@@ -51,6 +51,23 @@
         text-align:center;
     }
 
+    .kakao {
+       width : 100%;
+       height :  100%;
+       top: 0px;
+       left: 0px;
+       right: 0px;
+       padding: 0px 20px 0px 20px;
+       margin : 0, auto;
+       background: #1d84df;
+       color: #ffffff;
+       text-align:center;
+       border-radius: 40px 80px;
+       padding-bottom: 20px;
+    }
+
+
+
     .fixed-navbar div {
     padding-top : 15px;
     width : 18%;

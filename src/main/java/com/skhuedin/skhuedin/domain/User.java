@@ -63,7 +63,6 @@ public class User extends BaseEntity {
         this.userImageUrl = user.userImageUrl;
         this.entranceYear = user.entranceYear;
         this.graduationYear = user.graduationYear;
-        this.role = user.role;
     }
 
     public void addYear(String entranceYear, String graduationYear) {

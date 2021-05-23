@@ -15,6 +15,4 @@ public class CategoryMainResponseDto {
         this.name = category.getName();
         this.weight = category.getWeight();
     }
-
-
 }

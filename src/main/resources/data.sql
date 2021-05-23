@@ -4,7 +4,8 @@ values (now(), now(), 'admin@email.com', '1234', 'admin', 'KAKAO', '/img', now()
        (now(), now(), 'user1@email.com', '1234', '홍길동', 'KAKAO', '/img', now(), now(), null),
        (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now(), null),
        (now(), now(), 'dev.hyeonic@gmail.com', null, 'hyeonic', 'KAKAO', '/img', '2016', null, 'ADMIN'),
-       (now(), now(), 'evan3566@naver.com', null, '최기현', 'KAKAO', '/img', '2016', null, 'USER');
+       (now(), now(), 'evan3566@naver.com', null, '최기현', 'KAKAO', '/img', '2016', null, 'USER'),
+         (now(), now(), 'her0807@naver.com', '1234', 'her0807', 'KAKAO', '/img', now(), now(), 'ADMIN');
 
 insert into file (created_date, last_modified_date, original_name, name, path)
 values (now(), now(), 'user.png', null, 'C:\201633035\project\skhuedin/src/main/resources/static/profile');
@@ -49,12 +50,6 @@ values (1, 2, 'parent 댓글 1', null, now(), now()),
        (1, 2, 'parent 댓글 1 대댓글 2', 1, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 1', 2, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 2', 2, now(), now());
-
-
-insert into blog (user_id, profile_image_url, content, created_date, last_modified_date)
-values (1, '/img', 'admin blog', now(), now()),
-       (2, '/img', '홍길동 blog', now(), now()),
-       (3, '/img', '전우치 blog', now(), now());
 
 insert into category (created_date, last_modified_date, name, weight)
 values (now(), now(), '학창 시절', 1),

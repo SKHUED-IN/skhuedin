@@ -21,10 +21,10 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
             "order by sum(p.view) desc")
     Page<Blog> findAllOrderByPostsView(Pageable pageable);
 
-<<<<<<< HEAD
+
     Boolean existsByUserId(Long id);
-=======
+
     @Query("select b from Blog b where b.user.id = :userId")
     Blog findBlogByUserId(@Param("userId") Long userId);
->>>>>>> b83251a (feat: 불필요한 파일 삭제 + 어드민 페이지 로직 수정)
+
 }

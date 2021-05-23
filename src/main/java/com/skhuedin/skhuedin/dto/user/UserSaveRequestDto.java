@@ -21,16 +21,20 @@ public class UserSaveRequestDto {
     private String entranceYear;
     private String graduationYear;
 
+    private Role role;
+
+
     @Builder
     public UserSaveRequestDto(String email,
                               String password, String name,
                               Provider provider, String userImageUrl,
-                              String entranceYear, String graduationYear) {
+                              String entranceYear, String graduationYear, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.provider = provider;
         this.userImageUrl = userImageUrl;
+        this.role = role;
         this.entranceYear = entranceYear;
         this.graduationYear = graduationYear;
     }
@@ -47,7 +51,12 @@ public class UserSaveRequestDto {
     }
 
     public User toEntity() {
-        return User.builder()
+
+        if(this.role ==null){
+            this.role = Role.USER;
+        }
+        User user = User.builder()
+
                 .email(this.email)
                 .password(this.password)
                 .name(this.name)
@@ -55,12 +64,30 @@ public class UserSaveRequestDto {
                 .userImageUrl(this.userImageUrl)
                 .entranceYear(this.entranceYear)
                 .graduationYear(this.graduationYear)
-                .role(Role.USER)
+                .role(this.role)
                 .build();
+        return user;
     }
 
     public void addYear(String entranceYear, String graduationYear) {
         this.entranceYear = entranceYear;
         this.graduationYear = graduationYear;
+    }
+
+    public User toEntity(User targetUser) {
+        if(this.role ==null){
+            this.role = Role.USER;
+        }
+        User user = User.builder()
+                .email(targetUser.getEmail())
+                .password(targetUser.getPassword())
+                .name(targetUser.getName())
+                .provider(targetUser.getProvider())
+                .userImageUrl(targetUser.getUserImageUrl())
+                .entranceYear(this.getEntranceYear())
+                .graduationYear(this.getGraduationYear())
+                .role(this.role)
+                .build();
+        return user;
     }
 }

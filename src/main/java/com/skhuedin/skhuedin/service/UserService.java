@@ -6,13 +6,12 @@ import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 
-import com.skhuedin.skhuedin.dto.user.AdminSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
-import com.skhuedin.skhuedin.infra.Role;
+
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CommentRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
@@ -62,7 +61,6 @@ public class UserService {
         List<Question> questions = questionRepository.findQuestionByUserId(id);
         List<Question> targetQuestions = questionRepository.findQuestionByTargetUserId(id);
         List<Posts> posts;
-
 
         if (comments != null) {
             for (Comment comment : comments) {
