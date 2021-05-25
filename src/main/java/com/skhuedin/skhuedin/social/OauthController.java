@@ -1,6 +1,7 @@
 package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
+import com.skhuedin.skhuedin.controller.response.CheckTokenWithCommonResponse;
 import com.skhuedin.skhuedin.controller.response.TokenWithCommonResponse;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
@@ -51,15 +52,17 @@ public class OauthController {
         String token = Strings.EMPTY;
 
         Long id = null;
+        Boolean check = false;
         // 사용자가 현재 회원인지 아닌지 확인 작업. 회원이 아니면 회원 가입을 시키고
         if (userService.findByEmail(user.getEmail()) == null) {
             userService.signUp(user);
+            check = true;
         }
         //회원이면 로그인을 시킴
         token = userService.signIn(user);
 
         UserMainResponseDto responseDto = new UserMainResponseDto(userService.findByEmail(user.getEmail()));
         // user 인증을 위한 자체 토큰을 발급받아  저장,데이터에 user 값도 저장 해서 보냄
-        return ResponseEntity.status(HttpStatus.OK).body((new TokenWithCommonResponse<>(responseDto, token)));
+        return ResponseEntity.status(HttpStatus.OK).body((new CheckTokenWithCommonResponse<>(responseDto, token, check)));
     }
 }
