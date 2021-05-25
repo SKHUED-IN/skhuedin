@@ -1,23 +1,26 @@
 package com.skhuedin.skhuedin.social.google;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GoogleOauth implements SocialOauth {
 
     private final RestTemplate restTemplate;
@@ -33,29 +36,26 @@ public class GoogleOauth implements SocialOauth {
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        //ID Token만 추출 (사용자의 정보는 jwt로 인코딩 되어있다)
-        String requestUrl = UriComponentsBuilder.fromHttpUrl("https://oauth2.googleapis.com/tokeninfo").queryParam("id_token", oAuthToken.getAccessToken()).toUriString();
-        String resultJson = restTemplate.getForObject(requestUrl, String.class);
-        GoogleInnerProfile profile = null;
+        String reqURL = "https://www.googleapis.com/userinfo/v2/me?access_token=" + oAuthToken.getAccessToken();
+        String resultJson = restTemplate.getForObject(reqURL, String.class);
+        GoogleProfile profile = null;
 
         try {
-            profile = mapper.readValue(resultJson, new TypeReference<GoogleInnerProfile>() {
+            profile = mapper.readValue(resultJson, new TypeReference<GoogleProfile>() {
             });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
         // 사용자 유저로 저장.
         user = saveGoogleUser(profile);
-
         return user;
     }
 
-    public UserSaveRequestDto saveGoogleUser(GoogleInnerProfile googleProfile) {
+    public UserSaveRequestDto saveGoogleUser(GoogleProfile googleProfile) {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
         UserSaveRequestDto user = UserSaveRequestDto.builder()
-                .email(googleProfile.getEmail())// google 에서 이메일을 주지 않아 든 Google 계정에서 고유하며 재사용되지 않는 사용자의 식별자를 저장
+                .email(googleProfile.getId())// google 에서 이메일을 주지 않아 든 Google 계정에서 고유하며 재사용되지 않는 사용자의 식별자를 저장
                 .name(googleProfile.getName())
                 .provider(Provider.GOOGLE)
                 .userImageUrl(googleProfile.getPicture())

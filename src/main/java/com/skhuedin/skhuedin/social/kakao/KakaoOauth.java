@@ -6,7 +6,6 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class KakaoOauth implements SocialOauth {
 
