@@ -2,9 +2,11 @@ package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CheckTokenWithCommonResponse;
+import com.skhuedin.skhuedin.controller.response.TokenWithCommonResponse;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
+import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.TokenResponse;
 import com.skhuedin.skhuedin.service.UserService;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
@@ -30,13 +32,6 @@ public class OauthController {
     private final OauthService oauthService;
     private final UserService userService;
 
-    /**
-     * Social Login API Server 요청에 의한 callback 을 처리
-     *
-     * @param socialLoginType (GOOGLE, FACEBOOK, NAVER, KAKAO)
-     * @return SNS Login 요청 결과로 받은 Json 형태의 String 문자열 (access_token, refresh_token 등)
-     */
-
     @PostMapping("/{socialLoginType}/callback")
     public ResponseEntity<? extends BasicResponse> callback(
             @PathVariable("socialLoginType") String socialLoginType,
@@ -44,18 +39,17 @@ public class OauthController {
 
         OAuthToken oAuthToken = new OAuthToken();
         oAuthToken.setAccessToken(response.getAccessToken());
-        // 소셜 로그인을 통해서 사용자의 값을 반환받
+
         UserSaveRequestDto user = oauthService.requestAccessToken(socialLoginType, oAuthToken);
         String token = Strings.EMPTY;
-        User findUser = userService.findByEmail(user.getEmail());
+
         Long id = null;
         Boolean isFirstVisit = false;
-
         // 사용자가 현재 회원인지 아닌지 확인 작업. 회원이 아니면 회원 가입을 시키고
-        if (findUser.getEmail()== null) {
+        if (userService.findByEmail(user.getEmail()) == null) {
             userService.signUp(user);
             isFirstVisit = true;
-        }else if(findUser.getEntranceYear() == null){
+        } else if (userService.findByEmail(user.getEmail()).getEntranceYear() == null) {
             isFirstVisit = true;
         }
         //회원이면 로그인을 시킴
