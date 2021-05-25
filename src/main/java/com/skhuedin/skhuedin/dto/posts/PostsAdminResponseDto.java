@@ -15,6 +15,7 @@ public class PostsAdminResponseDto {
     private String title;
     private String content;
     private Integer view;
+    private Boolean deleteStatus;
     private Long category;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
@@ -26,6 +27,7 @@ public class PostsAdminResponseDto {
         this.title = posts.getTitle();
         this.content = posts.getContent();
         this.view = posts.getView();
+        this.deleteStatus = posts.getDeleteStatus();
         this.category =posts.getCategory().getId();
         this.createdDate = posts.getCreatedDate();
         this.lastModifiedDate = posts.getLastModifiedDate();

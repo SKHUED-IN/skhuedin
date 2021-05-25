@@ -65,7 +65,7 @@ public class PostsService {
     @Transactional
     public void deleteAdmin(Long id) {
         Posts posts = getPosts(id);
-        posts.updateContent();
+        posts.setDeleteStatus();
     }
 
     public PostsMainResponseDto findById(Long id) {

@@ -32,11 +32,7 @@ dependencies {
     implementation 'io.swagger:swagger-annotations:1.5.21'
     implementation 'io.swagger:swagger-models:1.5.21'
 
-
-
-
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
-
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -44,13 +40,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-
-
     compile 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtime 'io.jsonwebtoken:jjwt-impl:0.11.2',
             'io.jsonwebtoken:jjwt-jackson:0.11.2'
 }
-
 
 test {
     useJUnitPlatform()

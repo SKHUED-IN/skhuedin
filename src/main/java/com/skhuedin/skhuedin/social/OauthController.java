@@ -45,9 +45,7 @@ public class OauthController {
         String token = Strings.EMPTY;
         Boolean isFirstVisit = false;
         // 사용자가 현재 회원인지 아닌지 확인 작업. 회원이 아니면 회원 가입을 시키고
-        log.info(user.getEmail());
         if (userService.findByEmail(user.getEmail()) == null) {
-            log.info(user.getEmail()+ "여기 들어오는지?");
             userService.signUp(user);
             isFirstVisit = true;
         } else if (userService.findByEmail(user.getEmail()).getEntranceYear() == null) {

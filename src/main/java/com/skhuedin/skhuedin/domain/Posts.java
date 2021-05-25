@@ -32,6 +32,8 @@ public class Posts extends BaseEntity {
     private String title;
 
     private String content;
+    @JoinColumn(name = "delete_status")
+    private Boolean deleteStatus;
 
     private Integer view;
 
@@ -46,6 +48,7 @@ public class Posts extends BaseEntity {
         this.content = content;
         this.view = 0;
         this.category = category;
+        this.deleteStatus = false;
     }
 
     public void updatePost(Posts post) {
@@ -56,11 +59,12 @@ public class Posts extends BaseEntity {
         this.category = post.category;
     }
 
-    public void updateCategory(Category category){
-        this.category =category;
+    public void updateCategory(Category category) {
+        this.category = category;
     }
-    public void updateContent(){
-        this.content ="관리자에 의해 삭제되었습니다.";
+
+    public void updateContent() {
+        this.content = "관리자에 의해 삭제되었습니다.";
     }
 
     public void addView() {
@@ -69,5 +73,9 @@ public class Posts extends BaseEntity {
 
     public void addBlog(Blog blog) {
         this.blog = blog;
+    }
+
+    public void setDeleteStatus() {
+        this.deleteStatus = true;
     }
 }

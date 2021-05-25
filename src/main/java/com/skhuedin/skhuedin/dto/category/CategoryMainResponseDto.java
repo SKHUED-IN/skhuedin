@@ -4,11 +4,12 @@ import com.skhuedin.skhuedin.domain.Category;
 import lombok.Getter;
 
 @Getter
+
 public class CategoryMainResponseDto {
 
     private Long id;
     private String name;
-    private Integer weight;
+    private Long weight;
 
     public CategoryMainResponseDto(Category category) {
         this.id = category.getId();

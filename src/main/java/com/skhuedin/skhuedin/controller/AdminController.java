@@ -1,6 +1,7 @@
 package com.skhuedin.skhuedin.controller;
 
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
+import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
@@ -69,11 +70,17 @@ AdminController {
         return "contents/categoryList";
     }
 
+    @GetMapping("/create/category")
+    public String createCatetory() {
+        return "contents/createCategory";
+    }
+
     @ResponseBody
     @PostMapping("/questionDetail")
     public List<CommentMainResponseDto> commentMainList(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
-        return  commentService.findByQuestionId(id);
+        return commentService.findByQuestionId(id);
     }
+
     @PostMapping("update/category")
     public String updateCategory(@RequestParam(value = "category", required = false, defaultValue = "0") Long category,
                                  @RequestParam(value = "post_id", required = false, defaultValue = "0") Long post_id) {
@@ -93,14 +100,21 @@ AdminController {
         return "redirect:/categoryList";
     }
 
+    @PostMapping("create/category")
+    public String createCategory( @RequestBody CategoryRequestDto categoryRequestDto) {
+        categoryService.save(categoryRequestDto);
+        return "redirect:/categoryList";
+    }
+
     @PostMapping("postDelete")
     public String deleteCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
         postsService.deleteAdmin(id);
         return "redirect:/postList";
     }
+
     @MyRole(role = Role.ADMIN)
     @ResponseBody
-    @RequestMapping(value = "/postList", method = RequestMethod.POST)
+    @PostMapping("/postList")
     public List<PostsAdminResponseDto> postList() {
         List<PostsAdminResponseDto> list = postsService.findAll();
         return list;
@@ -108,7 +122,7 @@ AdminController {
 
     @MyRole(role = Role.ADMIN)
     @ResponseBody
-    @RequestMapping(value = "/questionList", method = RequestMethod.POST)
+    @PostMapping("/questionList")
     public List<QuestionMainResponseDto> questionList() {
         List<QuestionMainResponseDto> list = questionService.findAll();
         return list;
@@ -116,7 +130,7 @@ AdminController {
 
     @MyRole(role = Role.ADMIN)
     @ResponseBody
-    @RequestMapping(value = "/categoryList", method = RequestMethod.POST)
+    @PostMapping("/categoryList")
     public List<CategoryMainResponseDto> categoryList() {
         List<CategoryMainResponseDto> list = categoryService.findAll();
         return list;

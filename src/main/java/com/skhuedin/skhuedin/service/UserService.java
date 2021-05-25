@@ -57,18 +57,17 @@ public class UserService {
         // 영속성 컨텍스트에 등록
         Blog blogByUserId = blogRepository.findBlogByUserId(id);
         List<Comment> comments = commentRepository.findCommentsByWriterUserId(id);
-
         List<Question> questions = questionRepository.findQuestionByUserId(id);
         List<Question> targetQuestions = questionRepository.findQuestionByTargetUserId(id);
         List<Posts> posts;
 
-        if (comments != null) {
+        if (!comments.isEmpty()) {
             for (Comment comment : comments) {
                 commentRepository.delete(comment);
             }
         }
 
-        if (questions != null) {
+        if (!questions.isEmpty()) {
             for (Question question : questions) {
                 List<Comment> innerComment = commentRepository.findByQuestionId(question.getId());
                 if (comments != null) {
@@ -80,7 +79,7 @@ public class UserService {
             }
         }
 
-        if (targetQuestions != null) {
+        if (!targetQuestions.isEmpty()) {
             for (Question question : targetQuestions) {
                 questionRepository.delete(question);
             }
@@ -124,10 +123,8 @@ public class UserService {
         requestDto.addYear(findUser.getEntranceYear(), findUser.getGraduationYear());
         // 로그인 전 변경 사항이 있는지 체크 findUser
         findUser.update(requestDto.toEntity());
-
         return createToken(findUser.getEmail());
     }
-
 
     public User findByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
@@ -144,7 +141,6 @@ public class UserService {
     public String adminSignIn(LoginRequest loginRequest) {
         User user = userRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPwd()).orElseThrow(() ->
                 new IllegalArgumentException("email과 password가 일치하지 않습니다. "));
-
         return createToken(user.getEmail());
     }
 

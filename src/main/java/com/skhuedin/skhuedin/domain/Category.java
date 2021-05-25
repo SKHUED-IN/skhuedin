@@ -23,10 +23,10 @@ public class Category extends BaseEntity {
 
     private String name;
 
-    private Integer weight;
+    private Long weight;
 
     @Builder
-    public Category(String name, Integer weight) {
+    public Category(String name, Long weight) {
         this.name = name;
         this.weight = weight;
     }
