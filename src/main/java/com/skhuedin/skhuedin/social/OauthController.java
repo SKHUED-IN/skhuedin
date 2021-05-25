@@ -52,17 +52,17 @@ public class OauthController {
         String token = Strings.EMPTY;
 
         Long id = null;
-        Boolean check = false;
+        Boolean isFirstVisit = false;
         // 사용자가 현재 회원인지 아닌지 확인 작업. 회원이 아니면 회원 가입을 시키고
-        if (userService.findByEmail(user.getEmail()) == null) {
+        if (userService.findByEmail(user.getEmail()) == null&& user.getEntranceYear()== null) {
             userService.signUp(user);
-            check = true;
+            isFirstVisit = true;
         }
         //회원이면 로그인을 시킴
         token = userService.signIn(user);
 
         UserMainResponseDto responseDto = new UserMainResponseDto(userService.findByEmail(user.getEmail()));
         // user 인증을 위한 자체 토큰을 발급받아  저장,데이터에 user 값도 저장 해서 보냄
-        return ResponseEntity.status(HttpStatus.OK).body((new CheckTokenWithCommonResponse<>(responseDto, token, check)));
+        return ResponseEntity.status(HttpStatus.OK).body((new CheckTokenWithCommonResponse<>(responseDto, token, isFirstVisit)));
     }
 }

@@ -35,6 +35,18 @@ public class UserSaveRequestDto {
         this.graduationYear = graduationYear;
     }
 
+
+    @Builder
+    public UserSaveRequestDto(User user) {
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.name = user.getName();
+        this.provider = user.getProvider();
+        this.userImageUrl = user.getUserImageUrl();
+        this.entranceYear = user.getEntranceYear();
+        this.graduationYear = user.getGraduationYear();
+    }
+
     public User toEntity() {
         return User.builder()
                 .email(this.email)
