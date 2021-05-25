@@ -37,7 +37,6 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @MyRole
     @PostMapping("users/{userId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("userId") Long id,
                                                           @Valid @RequestBody UserUpdateDto updateDto) {
