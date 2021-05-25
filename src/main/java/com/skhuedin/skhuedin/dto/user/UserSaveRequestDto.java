@@ -35,7 +35,6 @@ public class UserSaveRequestDto {
         this.graduationYear = graduationYear;
     }
 
-
     @Builder
     public UserSaveRequestDto(User user) {
         this.email = user.getEmail();

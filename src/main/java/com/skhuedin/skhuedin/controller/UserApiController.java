@@ -32,6 +32,7 @@ public class UserApiController {
 
     @GetMapping("users/{userId}")
     public ResponseEntity<? extends BasicResponse> findById(@PathVariable("userId") Long id) {
+
         UserMainResponseDto responseDto = userService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
@@ -45,23 +46,22 @@ public class UserApiController {
         UserSaveRequestDto requestDto = new UserSaveRequestDto(user);
         String token = userService.signIn(requestDto);
         UserMainResponseDto responseDto = new UserMainResponseDto(user);
-
         return ResponseEntity.status(HttpStatus.OK).body((new TokenWithCommonResponse<>(responseDto, token)));
-
     }
 
     @GetMapping("users")
     public ResponseEntity<? extends BasicResponse> findAll() {
+
         List<UserMainResponseDto> users = userService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(users));
     }
 
     @PostMapping("token")
     public ResponseEntity<? extends BasicResponse> token(@RequestBody LoginRequest loginRequest) {
+
         String token = userService.adminSignIn(loginRequest);
         User user = userService.findByEmail(loginRequest.getName());
         UserMainResponseDto responseDto = new UserMainResponseDto(user);
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new TokenWithCommonResponse<>(responseDto, "Bearer " + token));
     }
