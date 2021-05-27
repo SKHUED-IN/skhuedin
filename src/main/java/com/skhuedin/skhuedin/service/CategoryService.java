@@ -20,7 +20,6 @@ public class CategoryService {
 
     @Transactional
     public void save(CategoryRequestDto requestDto) {
-
         categoryRepository.save(requestDto.toEntity());
     }
 
@@ -28,19 +27,23 @@ public class CategoryService {
         return categoryRepository.findAll().stream()
                 .map(category -> new CategoryMainResponseDto(category)).collect(Collectors.toList());
     }
+
+    @Transactional
+    public void delete(Long categoryId) {
+        categoryRepository.deleteById(categoryId);
+    }
+
     @Transactional
     public void addWeight(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
                 new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + categoryId));
         category.addWeight();
-
     }
+
     @Transactional
     public void subtractWeight(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
                 new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + categoryId));
         category.subtractWeight();
-        ;
-
     }
 }

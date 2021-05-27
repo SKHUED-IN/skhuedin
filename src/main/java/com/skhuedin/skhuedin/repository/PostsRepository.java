@@ -12,5 +12,8 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     List<Posts> findByBlogIdOrderByLastModifiedDateDesc(Long blogId);
 
     @Query("select p from Posts p where p.blog.id = :blogId")
-    List<Posts> findPostsByBlogId (@Param("blogId") Long blogId);
+    List<Posts> findPostsByBlogId(@Param("blogId") Long blogId);
+
+    @Query("select p from Posts p where p.category.id = :categoryId")
+    List<Posts> findPostsByCategoryId(@Param("categoryId") Long categoryId);
 }

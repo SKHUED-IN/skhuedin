@@ -183,12 +183,13 @@ function categoryList() {
         , success: function output(resp) {
             var result = '';
             result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
-            result += '<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>name</th><th>weight</th><th>weight 변경</th><th><a href="/create/category"><button type="button">생성</button></a></th></tr>'
+            result += '<tr style="background: #1d84df; color: #ffffff;"><th style ="width :180px;"> ID </th><th>name</th><th>글 수 </th><th>가중치 / 변경</th><th><a href="/create/category"><button type="button">생성</button></a></th></tr>'
             $.each(resp, function (index, item) {
-                result += '<tr><td style ="width : 300px;">' + item["id"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["name"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["weight"] + '</td>'
-                result += '<td style ="width : 300px;"><button type="button" onclick=categoryUp(' + item["id"] + ')>↑</button><button type="button" onclick=categoryDown(' + item["id"] + ')>↓</button></td></tr>'
+                result += '<tr><td style ="width : 250px;">' + item["id"] + '</td>'
+                result += '<td style ="width : 250px;">' + item["name"] + '</td>'
+                result += '<td style ="width : 250px;">' + item["referPostCount"] + '</td>'
+                result += '<td style ="width : 250px;">' + item["weight"] + ' / ' + '<button type="button" onclick=categoryUp(' + item["id"] + ')>↑</button><button type="button" onclick=categoryDown(' + item["id"] + ')>↓</button></td>'
+                result += '<td style ="width : 250px;"><button type="button" onclick=categoryDelete(' + item["id"] +','+ item["referPostCount"] + ')>삭제</button></td></tr>'
             })
             result += '</table>'
             $('#result').html(result)
@@ -196,11 +197,11 @@ function categoryList() {
     })
 }
 
-
 function postDelete(id) {
 
     var sendData = "id=" + id;
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
+
     if (confirm("삭제하시겠습니까?")) {
         $.ajax({
             url: 'postDelete'
@@ -211,6 +212,30 @@ function postDelete(id) {
                 return postList();
             }
         })
+    }
+}
+
+
+function categoryDelete(id, referPostCount) {
+
+    var sendData = "id=" + id;
+    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
+
+    if (referPostCount == 0) {
+        if (confirm("삭제하시겠습니까?")) {
+            $.ajax({
+                url: 'categoryDelete'
+                , method: 'POST'
+                , data: sendData
+                , success: function (resp) {
+                    return categoryList();
+                }
+            })
+        }
+    } else {
+        alert("현재 참조하고 있는 글이 " + referPostCount + "개 가 있기 때문에 삭제하지 못합니다.");
+
+        return categoryList();
     }
 }
 

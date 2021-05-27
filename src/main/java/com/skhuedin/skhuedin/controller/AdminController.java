@@ -6,23 +6,15 @@ import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
-import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -101,14 +93,20 @@ AdminController {
     }
 
     @PostMapping("create/category")
-    public String createCategory( @RequestBody CategoryRequestDto categoryRequestDto) {
+    public String createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
         categoryService.save(categoryRequestDto);
         return "redirect:/categoryList";
     }
 
-    @PostMapping("postDelete")
+    @PostMapping("categoryDelete")
     public String deleteCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
-        postsService.deleteAdmin(id);
+        categoryService.delete(id);
+        return "redirect:/categoryList";
+    }
+
+    @PostMapping("postDelete")
+    public String deletePost(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
+        postsService.deletePostAdmin(id);
         return "redirect:/postList";
     }
 
@@ -133,6 +131,9 @@ AdminController {
     @PostMapping("/categoryList")
     public List<CategoryMainResponseDto> categoryList() {
         List<CategoryMainResponseDto> list = categoryService.findAll();
+        for(CategoryMainResponseDto category :list){
+            category.add(postsService.findByCategoryId(category.getId()));
+        }
         return list;
     }
 

@@ -63,7 +63,7 @@ public class PostsService {
 
 
     @Transactional
-    public void deleteAdmin(Long id) {
+    public void deletePostAdmin(Long id) {
         Posts posts = getPosts(id);
         posts.setDeleteStatus();
     }
@@ -76,6 +76,12 @@ public class PostsService {
     public List<PostsAdminResponseDto> findAll() {
         return postsRepository.findAll().stream()
                 .map(post -> new PostsAdminResponseDto(post)).collect(Collectors.toList());
+    }
+
+    public Long findByCategoryId(Long id) {
+        List<Posts> posts = postsRepository.findPostsByCategoryId(id);
+        Long count = Long.valueOf(posts.size());
+        return count;
     }
 
 
@@ -97,6 +103,7 @@ public class PostsService {
                 new IllegalArgumentException("존재하지 않는 blog 입니다. id=" + id)
         );
     }
+
     private Posts getPosts(Long id) {
         return postsRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 posts 입니다. id=" + id)
