@@ -69,4 +69,8 @@ public class User extends BaseEntity {
         this.entranceYear = entranceYear;
         this.graduationYear = graduationYear;
     }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
 }

@@ -15,6 +15,24 @@ function userDelete(id) {
     }
 }
 
+function userRoleChange(id) {
+
+    var sendData = "id=" + id;
+
+    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
+    if (confirm("변경하시겠습니까?")) {
+        $.ajax({
+            url: 'user/role'
+            , method: 'POST'
+            , data: sendData
+
+            , success: function (resp) {
+                return userList();
+            }
+        })
+    }
+}
+
 
 function kakao(token) {
     var sendData = {accessToken: token}
@@ -50,15 +68,14 @@ function userList() {
         }
         , success: function output(resp) {
             var result = '';
-            result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
-            result += '<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>입학 년도</th><th>졸업 년도</th><th>이메일</th><th>이름</th><th>삭제</th></tr>'
+            result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;">'
+            result += '<tr><th> ID </th><th>이메일</th><th>이름</th><th>역할</th><th>삭제</th></tr>'
             $.each(resp, function (index, item) {
-                result += '<tr><td style ="width : 300px;">' + item["id"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["entranceYear"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["graduationYear"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["email"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["name"] + '</td>'
-                result += '<td style ="width : 300px;"><button type="button" onclick=userDelete(' + item["id"] + ')>삭제</button></td></tr>'
+                result += '<tr><td>' + item["id"] + '</td>'
+                result += '<td>' + item["email"] + '</td>'
+                result += '<td  style ="width : 200px;">' + item["name"] + '</td>'
+                result += '<td style ="width : 250px;">' + item["role"] + '/ <button type="button" onclick=userRoleChange(' + item["id"] + ')>변경</button></td>'
+                result += '<td><button type="button" onclick=userDelete(' + item["id"] + ')>삭제</button></td></tr>'
             })
             result += '</table>'
             $('#result').html(result)
@@ -66,51 +83,6 @@ function userList() {
     })
 }
 
-function postList() {
-    var xhr = http();
-    var token = localStorage.getItem("token");
-    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
-    $.ajax({
-        url: 'postList'
-        , method: 'POST'
-        , data: JSON.stringify()
-        , contentType: 'application/json; charset=UTF-8'
-        , dataType: 'json'
-        , beforeSend: function (xhr) {
-            xhr.setRequestHeader("Content-type", "application/json");
-            xhr.setRequestHeader("Authorization", "Bearer " + token);
-        }
-        , success: function output(resp) {
-            var result = '';
-            result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
-            result += '<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>글쓴이</th><th>제목</th><th>내용</th><th>조회수</th><th>카테고리</th><th>설정</th><th>상태</th><th>삭제</th></tr>'
-            $.each(resp, function (index, item) {
-                result += '<tr><td style ="width : 300px;">' + item["id"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["name"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["title"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["content"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["view"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["category"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["deleteStatus"] + '</td>'
-                result += '<td style ="width : 300px;"><form action="update/category" method="post">' +
-                    '<select name="category">' +
-                    '<option value="">카테고리선택</option>' +
-                    '<option value="1">학창시절</option>' +
-                    '<option value="2">취업준비</option>' +
-                    '<option value="3">하고싶은말</option>' +
-                    '</select>' +
-                    '<select name="post_id">' +
-                    '<option value="' + item["id"] + '"></option>' +
-                    '</select>' +
-                    '<input type="submit" value ="카테고리 변경"></form>' +
-                    '</td>'
-                result += '<td style ="width : 300px;"><button type="button" onclick=postDelete(' + item["id"] + ')>삭제</button></td></tr>'
-            })
-            result += '</table>'
-            $('#result').html(result)
-        }
-    })
-}
 
 function questionList() {
     var xhr = http();
@@ -129,7 +101,7 @@ function questionList() {
         , success: function output(resp) {
             var result = '';
             result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
-            result += '<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>title</th><th>content</th><th>디테일</th></tr>'
+            result += '<tr style="background: #1d84df; color: #ffffff;"><th style ="width :220px;"> ID </th><th>title</th><th>content</th><th>디테일</th></tr>'
             $.each(resp, function (index, item) {
                 result += '<tr><td style ="width : 300px;">' + item["id"] + '</td>'
                 result += '<td style ="width : 300px;">' + item["title"] + '</td>'
@@ -153,7 +125,7 @@ function commentList(id) {
         , success: function (resp) {
             var result = '';
             result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
-            result += '<tr style="background: #1d84df; color: #ffffff;><th style ="width :220px;"> ID </th><th>parentId</th><th>content</th><th><button type="button" onclick=questionList()>뒤로가기</button></th></tr>'
+            result += '<tr style="background: #1d84df; color: #ffffff;"><th style ="width :220px;"> ID </th><th>parentId</th><th>content</th><th><button type="button" onclick=questionList()>뒤로가기</button></th></tr>'
             $.each(resp, function (index, item) {
                 result += '<tr><td style ="width : 300px;">' + item["id"] + '</td>'
                 result += '<td style ="width : 300px;">' + item["parentId"] + '</td>'
@@ -163,6 +135,74 @@ function commentList(id) {
             $('#result').html(result)
         }
     })
+}
+
+function postList() {
+    var xhr = http();
+    var token = localStorage.getItem("token");
+    $.ajax({
+        url: 'postList'
+        , method: 'POST'
+        , data: JSON.stringify()
+        , contentType: 'application/json; charset=UTF-8'
+        , dataType: 'json'
+        , beforeSend: function (xhr) {
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+        }
+        , success: function output(resp) {
+            var result = '';
+            result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;">'
+            result += '<tr><th>글쓴이</th><th>제목</th><th>조회수</th><th>카테고리</th><th>설정</th><th>상태 / 삭제</th></tr>'
+            $.each(resp, function (index, item) {
+                result += '<tr><td style ="width : 100px;">' + item["name"] + '</td>'
+                result += '<td style ="width : 300px;">' + item["title"] + '</td>'
+                result += '<td style ="width : 150px;">' + item["view"] + '</td>'
+                result += '<td style ="width : 200px;">' + item["category"] + '</td>'
+                result += '<td style ="width : 300px;"><form action="update/category" method="post">' +
+                    '<select name="category">' +
+                    '<option value="" selected="">카테고리선택</option>' +
+                    innerCategoryList() +
+                    '</select>' +
+                    '<select name="post_id">' +
+                    '<option value="' + item["id"] + '"></option>' +
+                    '</select>' +
+                    '<input type="submit" value ="변경"></form>' +
+                    '</td>'
+                result += '<td style ="width : 300px;">' + item["deleteStatus"] + ' <button type="button" onclick=postDelete(' + item["id"] + ')>삭제</button></td></tr>'
+            })
+            result += '</table>'
+            $('#result').html(result)
+        }
+    })
+}
+
+function innerCategoryList() {
+    var xhr = http();
+    var token = localStorage.getItem("token");
+    var result = '';
+    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
+    $.ajax({
+        url: 'categoryList'
+        , method: 'POST'
+        , async: false // 동기 방식을 위한 설정
+        , data: JSON.stringify()
+        , contentType: 'application/json; charset=UTF-8'
+        , dataType: 'json'
+        , beforeSend: function (xhr) {
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+        }
+        , success: function output(resp) {
+            var count = 1;
+            $.each(resp, function (index, item) {
+                result += '<option value= "' + (count) + '">' + item["name"] + '</option>'
+                count += 1;
+            })
+        }
+    });
+    return result;
+
 }
 
 
@@ -189,7 +229,7 @@ function categoryList() {
                 result += '<td style ="width : 250px;">' + item["name"] + '</td>'
                 result += '<td style ="width : 250px;">' + item["referPostCount"] + '</td>'
                 result += '<td style ="width : 250px;">' + item["weight"] + ' / ' + '<button type="button" onclick=categoryUp(' + item["id"] + ')>↑</button><button type="button" onclick=categoryDown(' + item["id"] + ')>↓</button></td>'
-                result += '<td style ="width : 250px;"><button type="button" onclick=categoryDelete(' + item["id"] +','+ item["referPostCount"] + ')>삭제</button></td></tr>'
+                result += '<td style ="width : 250px;"><button type="button" onclick=categoryDelete(' + item["id"] + ',' + item["referPostCount"] + ')>삭제</button></td></tr>'
             })
             result += '</table>'
             $('#result').html(result)

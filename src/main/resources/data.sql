@@ -1,8 +1,8 @@
 insert into user (created_date, last_modified_date, email, password, name, provider, user_image_url, entrance_year,
                   graduation_year, role)
 values (now(), now(), 'admin@email.com', '1234', 'admin', 'KAKAO', '/img', now(), now(), 'ADMIN'),
-       (now(), now(), 'user1@email.com', '1234', '홍길동', 'KAKAO', '/img', now(), now(), null),
-       (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now(), null),
+       (now(), now(), 'user1@email.com', '1234', '홍길동', 'KAKAO', '/img', now(), now(), 'USER'),
+       (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now(), 'USER'),
        (now(), now(), 'dev.hyeonic@gmail.com', null, 'hyeonic', 'KAKAO', '/img', '2016', null, 'ADMIN'),
        (now(), now(), 'evan3566@naver.com', null, '최기현', 'KAKAO', '/img', '2016', null, 'USER'),
        (now(), now(), 'her0807@naver.com', '1234', 'her0807', 'KAKAO', '/img', now(), now(), 'ADMIN');

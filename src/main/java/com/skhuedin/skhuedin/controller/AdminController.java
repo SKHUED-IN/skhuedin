@@ -1,5 +1,6 @@
 package com.skhuedin.skhuedin.controller;
 
+import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
@@ -96,6 +97,12 @@ AdminController {
     public String createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
         categoryService.save(categoryRequestDto);
         return "redirect:/categoryList";
+    }
+
+    @PostMapping("user/role")
+    public String userRoleChange(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
+        userService.updateRole(id);
+        return "redirect:/userList";
     }
 
     @PostMapping("categoryDelete")

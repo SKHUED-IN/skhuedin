@@ -12,6 +12,7 @@ import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
 
+import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CommentRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
@@ -48,6 +49,16 @@ public class UserService {
     public void update(Long id, UserUpdateDto updateDto) {
         User user = getUser(id);
         user.addYear(updateDto.getEntranceYear(), updateDto.getGraduationYear());
+    }
+
+    @Transactional
+    public void updateRole(Long id) {
+        User user = getUser(id);
+        if (user.getRole() == Role.ADMIN) {
+            user.updateRole(Role.USER);
+        } else if (user.getRole() == Role.USER) {
+            user.updateRole(Role.ADMIN);
+        }
     }
 
     @Transactional
