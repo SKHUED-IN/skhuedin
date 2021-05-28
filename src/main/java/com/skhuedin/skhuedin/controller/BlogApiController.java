@@ -42,7 +42,7 @@ public class BlogApiController {
     @Value("${resources.storage_location}")
     private String resourcesLocation;
 
-    @MyRole
+//    @MyRole
     @PostMapping("blogs")
     public ResponseEntity<? extends BasicResponse> save(
             @RequestParam(name = "file", required = false) MultipartFile files,
