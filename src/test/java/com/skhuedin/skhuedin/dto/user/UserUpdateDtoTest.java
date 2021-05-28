@@ -28,7 +28,6 @@ class UserUpdateDtoTest {
                 .build();
 
         ArrayList<String> errorMessages = new ArrayList<>();
-        errorMessages.add("user의 id는 null이 될 수 없습니다.");
         errorMessages.add("entranceYear는 4자리여야 합니다.");
 
         // when
@@ -37,8 +36,7 @@ class UserUpdateDtoTest {
 
         // then
         assertAll(
-                () -> assertEquals(constraintViolations.size(), 2),
-                () -> assertTrue(errorMessages.contains(iterator.next().getMessage())),
+                () -> assertEquals(constraintViolations.size(), 1),
                 () -> assertTrue(errorMessages.contains(iterator.next().getMessage()))
         );
     }

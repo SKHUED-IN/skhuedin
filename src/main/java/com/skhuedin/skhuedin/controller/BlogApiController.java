@@ -39,7 +39,7 @@ public class BlogApiController {
     private final BlogService blogService;
     private final FileService fileService;
 
-    @Value("${resources.window_location}")
+    @Value("${resources.storage_location}")
     private String resourcesLocation;
 
     @MyRole
