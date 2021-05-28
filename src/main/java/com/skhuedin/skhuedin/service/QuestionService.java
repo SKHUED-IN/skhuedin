@@ -6,6 +6,7 @@ import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
+import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,17 @@ public class QuestionService {
         question.updateQuestion(requestDto.toEntity(targetUser, writerUser));
 
         return question.getId();
+    }
+
+    @Transactional
+    public void updateStatus(Long id) {
+        Question question = getQuestion(id);
+
+        if (question.getStatus() == false) {
+            question.updateStatus(true);
+        } else if (question.getStatus() == true) {
+            question.updateStatus(false);
+        }
     }
 
     @Transactional

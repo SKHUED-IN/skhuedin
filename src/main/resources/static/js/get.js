@@ -33,6 +33,23 @@ function userRoleChange(id) {
     }
 }
 
+function questionStatusChange(id) {
+
+    var sendData = "id=" + id;
+
+    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
+    if (confirm("변경하시겠습니까?")) {
+        $.ajax({
+            url: 'question/status'
+            , method: 'POST'
+            , data: sendData
+            , success: function (resp) {
+                return questionList();
+            }
+        })
+    }
+}
+
 
 function kakao(token) {
     var sendData = {accessToken: token}
@@ -81,12 +98,13 @@ function userList() {
             $('#result').html(result)
         }
     })
+    $('#result').html(defaultText())
 }
 
 
 function questionList() {
     var xhr = http();
-    var token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
         url: 'questionList'
@@ -101,17 +119,18 @@ function questionList() {
         , success: function output(resp) {
             var result = '';
             result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
-            result += '<tr style="background: #1d84df; color: #ffffff;"><th style ="width :220px;"> ID </th><th>title</th><th>content</th><th>디테일</th></tr>'
+            result += '<tr style="background: #1d84df; color: #ffffff;"><th>제목</th><th>조회수</th><th>비공개여부</th><th>디테일</th></tr>'
             $.each(resp, function (index, item) {
-                result += '<tr><td style ="width : 300px;">' + item["id"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["title"] + '</td>'
-                result += '<td style ="width : 300px;">' + item["content"] + '</td>'
+                result += '<tr><td style ="width : 300px;">' + item["title"] + '</td>'
+                result += '<td style ="width : 300px;">' + item["view"] + '</td>'
+                result += '<td style ="width : 250px;">' + item["status"] + '/ <button type="button" onclick=questionStatusChange(' + item["id"] + ')>변경</button></td>'
                 result += '<td style ="width : 300px;"><button type="button" onclick=commentList(' + item["id"] + ')>댓글 보기</button></td></tr>'
             })
             result += '</table>'
             $('#result').html(result)
         }
     })
+    $('#result').html(defaultText())
 }
 
 function commentList(id) {
@@ -175,6 +194,7 @@ function postList() {
             $('#result').html(result)
         }
     })
+    $('#result').html(defaultText())
 }
 
 function innerCategoryList() {
@@ -202,7 +222,6 @@ function innerCategoryList() {
         }
     });
     return result;
-
 }
 
 
@@ -232,9 +251,10 @@ function categoryList() {
                 result += '<td style ="width : 250px;"><button type="button" onclick=categoryDelete(' + item["id"] + ',' + item["referPostCount"] + ')>삭제</button></td></tr>'
             })
             result += '</table>'
-            $('#result').html(result)
+            return $('#result').html(result)
         }
     })
+   return $('#result').html(defaultText())
 }
 
 function postDelete(id) {
@@ -274,7 +294,6 @@ function categoryDelete(id, referPostCount) {
         }
     } else {
         alert("현재 참조하고 있는 글이 " + referPostCount + "개 가 있기 때문에 삭제하지 못합니다.");
-
         return categoryList();
     }
 }
@@ -334,11 +353,13 @@ function http() {
             document.getElementById("text").innerHTML = xhr.responseText;
         }
     };
-
     return xhr;
 }
 
-
+function defaultText() {
+    var result = '<br><br><h1 style ="color : black; font-family: \'BMEULJIRO\'";> 관리자가 아니신 분들은 접근 불가입니다람쥐</h1>';
+    return result;
+}
 
 
 

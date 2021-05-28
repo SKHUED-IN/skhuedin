@@ -2,25 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
 
-  </head>
+</head>
 <body>
 <div class="contents" th:fragment="kakaoLogin">
-  <a id="kakao-login-btn"></a>
-  <a href="http://developers.kakao.com/logout"></a>
+    <div class="category">
+        <div class="container">
+            <br/>
+            <h2>[관리자 페이지 로그인]</h2>
+            <br/>
+            <h4>SKHUED-IN 페이지를 위한 공간! </h4>
+            <h4>관리자 아닌 분들은 접근이 불가능합니다 :)</h4>
+            <br/>
+            <a id="kakao-login-btn"></a>
+            <a href="http://developers.kakao.com/logout"></a>
+            <script type="text/javascript">
 
-  <script type="text/javascript">
-
-      Kakao.init('b9de844ef665dda98917b7ec7b9d9a8b');
-      Kakao.Auth.createLoginButton({
-        container: '#kakao-login-btn',
-        success: function(authObj) {
-          kakao(authObj["access_token"]);
-        },
-        fail: function(err) {
-           alert(JSON.stringify(err));
-        }
-      });
-  </script>
+                Kakao.init('b9de844ef665dda98917b7ec7b9d9a8b');
+                Kakao.Auth.createLoginButton({
+                    container: '#kakao-login-btn',
+                    success: function (authObj) {
+                        kakao(authObj["access_token"]);
+                    },
+                    fail: function (err) {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            </script>
+        </div>
+    </div>
 </div>
 </body>
 </html>

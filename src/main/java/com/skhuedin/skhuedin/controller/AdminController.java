@@ -105,6 +105,12 @@ AdminController {
         return "redirect:/userList";
     }
 
+    @PostMapping("question/status")
+    public String questionStatus(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
+        questionService.updateStatus(id);
+        return "redirect:/questionList";
+    }
+
     @PostMapping("categoryDelete")
     public String deleteCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
         categoryService.delete(id);
