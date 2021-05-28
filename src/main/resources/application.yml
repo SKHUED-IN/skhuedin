@@ -19,3 +19,8 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace
+
+resources:
+  location: /201633035/profile/
+  uri_path: /profile
+  window_location: c:/201633035/profile/

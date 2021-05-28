@@ -10,6 +10,7 @@ import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.BlogService;
 import com.skhuedin.skhuedin.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,9 @@ public class BlogApiController {
     private final BlogService blogService;
     private final FileService fileService;
 
+    @Value("${resources.window_location}")
+    private String resourcesLocation;
+
     @MyRole
     @PostMapping("blogs")
     public ResponseEntity<? extends BasicResponse> save(
@@ -52,9 +56,9 @@ public class BlogApiController {
         Long saveId;
         if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
-            String fileName = UUID.randomUUID().toString();
-//            String savePath = "c:/201633035/images";
-            String savePath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
+            String extension = originalFileName.split("\\.")[1];
+            String fileName = UUID.randomUUID().toString() + "." + extension;
+            String savePath = resourcesLocation;
             if (!new File(savePath).exists()) {
                 new File(savePath).mkdir();
             }
@@ -65,7 +69,7 @@ public class BlogApiController {
                     .builder()
                     .originalName(originalFileName)
                     .name(fileName)
-                    .path(savePath)
+                    .path("/profile/" + fileName)
                     .build();
 
             Long fileId = fileService.save(profile);
@@ -98,7 +102,7 @@ public class BlogApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(blogs));
     }
 
-    @MyRole
+//    @MyRole
     @PutMapping("blogs/{blogId}")
     public ResponseEntity<? extends BasicResponse> update(
             @PathVariable("blogId") Long id,
@@ -108,9 +112,9 @@ public class BlogApiController {
         Long blogId;
         if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
-            String fileName = UUID.randomUUID().toString();
-//            String savePath = "c:/201633035/images";
-            String savePath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
+            String extension = originalFileName.split("\\.")[1];
+            String fileName = UUID.randomUUID().toString() + "." + extension;
+            String savePath = resourcesLocation;
             if (!new File(savePath).exists()) {
                 new File(savePath).mkdir();
             }
@@ -121,7 +125,7 @@ public class BlogApiController {
                     .builder()
                     .originalName(originalFileName)
                     .name(fileName)
-                    .path(savePath)
+                    .path("/profile/" + fileName)
                     .build();
 
             Long fileId = fileService.save(profile);
