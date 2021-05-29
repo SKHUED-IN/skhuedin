@@ -1,10 +1,11 @@
 insert into user (created_date, last_modified_date, email, password, name, provider, user_image_url, entrance_year,
                   graduation_year, role)
 values (now(), now(), 'admin@email.com', '1234', 'admin', 'KAKAO', '/img', now(), now(), 'ADMIN'),
-       (now(), now(), 'user1@email.com', '1234', '홍길동', 'KAKAO', '/img', now(), now(), null),
-       (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now(), null),
+       (now(), now(), 'user1@email.com', '1234', '홍길동', 'KAKAO', '/img', now(), now(), 'USER'),
+       (now(), now(), 'user2@email.com', '1234', '전우치', 'KAKAO', '/img', now(), now(), 'USER'),
        (now(), now(), 'dev.hyeonic@gmail.com', null, 'hyeonic', 'KAKAO', '/img', '2016', null, 'ADMIN'),
-       (now(), now(), 'evan3566@naver.com', null, '최기현', 'KAKAO', '/img', '2016', null, 'USER');
+       (now(), now(), 'evan3566@naver.com', null, '최기현', 'KAKAO', '/img', '2016', null, 'USER'),
+       (now(), now(), 'her0807@naver.com', '1234', 'her0807', 'KAKAO', '/img', now(), now(), 'ADMIN');
 
 insert into file (created_date, last_modified_date, original_name, name, path)
 values (now(), now(), 'user.png', null, 'C:\201633035\project\skhuedin/src/main/resources/static/profile');
@@ -50,10 +51,16 @@ values (1, 2, 'parent 댓글 1', null, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 1', 2, now(), now()),
        (1, 2, 'parent 댓글 2 대댓글 2', 2, now(), now());
 
-insert into posts (created_date, last_modified_date, content, title, view, blog_id, category_id)
-values (now(), now(), 'posts content 1', 'posts title 1', 10, 1, null),
-       (now(), now(), 'posts content 2', 'posts title 2', 20, 1, null),
-       (now(), now(), 'posts content 3', 'posts title 3', 20, 2, null),
-       (now(), now(), 'posts content 4', 'posts title 4', 2, 2, null),
-       (now(), now(), 'posts content 5', 'posts title 5', 6, 3, null),
-       (now(), now(), 'posts content 6', 'posts title 6', 10, 3, null);
+insert into category (created_date, last_modified_date, name, weight)
+values (now(), now(), '학창 시절', 1),
+       (now(), now(), '취업 준비', 2),
+       (now(), now(), '하고싶은말', 3);
+
+insert into posts (created_date, last_modified_date, content, title, delete_status ,view,  blog_id, category_id)
+values (now(), now(), 'posts content 1', 'posts title 1', false, 10, 1, 1),
+       (now(), now(), 'posts content 2', 'posts title 2', false, 20, 1, 2),
+       (now(), now(), 'posts content 3', 'posts title 3', false, 20, 2, 3),
+       (now(), now(), 'posts content 4', 'posts title 4', true, 2, 2, 1),
+       (now(), now(), 'posts content 5', 'posts title 5', false, 6, 3, 1),
+       (now(), now(), 'posts content 6', 'posts title 6', false, 10, 3, 1);
+

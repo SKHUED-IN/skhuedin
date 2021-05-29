@@ -5,6 +5,7 @@ import com.skhuedin.skhuedin.controller.response.CheckTokenWithCommonResponse;
 
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
+import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.TokenResponse;
 import com.skhuedin.skhuedin.service.UserService;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
@@ -38,6 +39,8 @@ public class OauthController {
         OAuthToken oAuthToken = new OAuthToken();
         oAuthToken.setAccessToken(response.getAccessToken());
 
+        log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", oAuthToken.getAccessToken());
+        // 소셜 로그인을 통해서 사용자의 값을 반환받
         UserSaveRequestDto user = oauthService.requestAccessToken(socialLoginType, oAuthToken);
         String token = Strings.EMPTY;
         Boolean isFirstVisit = false;
@@ -48,7 +51,10 @@ public class OauthController {
         } else if (userService.findByEmail(user.getEmail()).getEntranceYear() == null) {
             isFirstVisit = true;
         }
+        //회원이면 로그인을 시킴
         token = userService.signIn(user);
+        log.info(token);
+
         UserMainResponseDto responseDto = new UserMainResponseDto(userService.findByEmail(user.getEmail()));
         return ResponseEntity.status(HttpStatus.OK).body((new CheckTokenWithCommonResponse<>(responseDto, token, isFirstVisit)));
     }

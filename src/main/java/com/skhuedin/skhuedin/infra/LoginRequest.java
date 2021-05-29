@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginRequest {
 
-    private String name;
+    private String email;
     private String pwd;
 
-    public LoginRequest(String name, String pwd) {
-        this.name = name;
+    public LoginRequest(String email, String pwd) {
+        this.email = email;
         this.pwd = pwd;
     }
 }

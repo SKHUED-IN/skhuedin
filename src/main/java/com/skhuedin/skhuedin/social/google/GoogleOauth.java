@@ -1,26 +1,23 @@
 package com.skhuedin.skhuedin.social.google;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class GoogleOauth implements SocialOauth {
 
     private final RestTemplate restTemplate;
@@ -46,8 +43,10 @@ public class GoogleOauth implements SocialOauth {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         // 사용자 유저로 저장.
         user = saveGoogleUser(profile);
+
         return user;
     }
 

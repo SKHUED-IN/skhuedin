@@ -3,8 +3,10 @@ package com.skhuedin.skhuedin.service;
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
+import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
+import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,6 +47,17 @@ public class QuestionService {
     }
 
     @Transactional
+    public void updateStatus(Long id) {
+        Question question = getQuestion(id);
+
+        if (question.getStatus() == false) {
+            question.updateStatus(true);
+        } else if (question.getStatus() == true) {
+            question.updateStatus(false);
+        }
+    }
+
+    @Transactional
     public void delete(Long id) {
         Question question = getQuestion(id);
         questionRepository.delete(question);
@@ -53,6 +67,11 @@ public class QuestionService {
         Question question = getQuestion(id);
         List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
         return new QuestionMainResponseDto(question, comments);
+    }
+
+    public List<QuestionMainResponseDto> findAll() {
+        return questionRepository.findAll().stream()
+                .map(question -> new QuestionMainResponseDto(question)).collect(Collectors.toList());
     }
 
     public Page<QuestionMainResponseDto> findByTargetUserId(Long id, Pageable pageable) {

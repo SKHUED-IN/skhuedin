@@ -24,13 +24,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    implementation ('io.springfox:springfox-swagger2:2.9.2') {
+    implementation('io.springfox:springfox-swagger2:2.9.2') {
         exclude module: 'swagger-annotations'
         exclude module: 'swagger-models'
     }
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     implementation 'io.swagger:swagger-annotations:1.5.21'
     implementation 'io.swagger:swagger-models:1.5.21'
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

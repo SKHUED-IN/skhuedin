@@ -10,13 +10,18 @@ import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.UserService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,7 +64,7 @@ public class UserApiController {
     public ResponseEntity<? extends BasicResponse> token(@RequestBody LoginRequest loginRequest) {
 
         String token = userService.adminSignIn(loginRequest);
-        User user = userService.findByEmail(loginRequest.getName());
+        User user = userService.findByEmail(loginRequest.getEmail());
         UserMainResponseDto responseDto = new UserMainResponseDto(user);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new TokenWithCommonResponse<>(responseDto, "Bearer " + token));

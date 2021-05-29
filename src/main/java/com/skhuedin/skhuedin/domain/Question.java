@@ -66,4 +66,8 @@ public class Question extends BaseEntity {
     public void addView() {
         this.view++;
     }
+
+    public void updateStatus(Boolean status) {
+        this.status = status;
+    }
 }

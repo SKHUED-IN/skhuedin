@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.dto.user;
 
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.infra.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ public class UserMainResponseDto {
     private String name;
     private String userImageUrl;
     private Provider provider;
+    private Role role;
     private String entranceYear;
     private String graduationYear;
     private LocalDateTime createdDate;
@@ -27,6 +29,7 @@ public class UserMainResponseDto {
         this.email = user.getEmail();
         this.name = user.getName();
         this.provider = user.getProvider();
+        this.role = user.getRole();
         this.userImageUrl = user.getUserImageUrl();
         this.entranceYear = user.getEntranceYear();
         this.graduationYear = user.getGraduationYear();

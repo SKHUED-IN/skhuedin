@@ -17,4 +17,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @EntityGraph(attributePaths = {"question", "question.targetUser", "question.writerUser", "writerUser"})
     List<Comment> findByParentId(Long parentId);
+
+    @Query("select c from Comment c where c.writerUser.id = :userId")
+    List<Comment> findCommentsByWriterUserId(@Param("userId") Long userId);
+
 }

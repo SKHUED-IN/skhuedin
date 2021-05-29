@@ -7,6 +7,7 @@ import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
+import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.FileRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
