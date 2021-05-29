@@ -1,6 +1,5 @@
 package com.skhuedin.skhuedin.controller;
 
-import com.skhuedin.skhuedin.common.exception.EmptyTokenException;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.controller.response.TokenWithCommonResponse;
@@ -11,10 +10,8 @@ import com.skhuedin.skhuedin.dto.user.UserTokenValidationDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
-import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +30,7 @@ import java.util.List;
 public class UserApiController {
 
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("users/{userId}")
     public ResponseEntity<? extends BasicResponse> findById(@PathVariable("userId") Long id) {
