@@ -23,7 +23,6 @@ class UserUpdateDtoTest {
 
         // given
         UserUpdateDto updateDto = UserUpdateDto.builder()
-                .id(null)
                 .entranceYear("201")
                 .graduationYear("2021")
                 .build();
