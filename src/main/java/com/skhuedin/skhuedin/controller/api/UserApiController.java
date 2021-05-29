@@ -1,4 +1,4 @@
-package com.skhuedin.skhuedin.controller;
+package com.skhuedin.skhuedin.controller.api;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
