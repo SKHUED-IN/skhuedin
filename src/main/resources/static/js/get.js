@@ -1,5 +1,4 @@
 function userDelete(id) {
-
     var sendData = "id=" + id;
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     if (confirm("삭제하시겠습니까?")) {
@@ -16,16 +15,13 @@ function userDelete(id) {
 }
 
 function userRoleChange(id) {
-
     var sendData = "id=" + id;
-
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     if (confirm("변경하시겠습니까?")) {
         $.ajax({
             url: 'user/role'
             , method: 'POST'
             , data: sendData
-
             , success: function (resp) {
                 return userList();
             }
@@ -36,7 +32,6 @@ function userRoleChange(id) {
 function questionStatusChange(id) {
 
     var sendData = "id=" + id;
-
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     if (confirm("변경하시겠습니까?")) {
         $.ajax({
@@ -64,7 +59,6 @@ function kakao(token) {
         , dataType: 'json'
         , success: function (resp) {
             localStorage.setItem("token", resp.token);
-
         }
     })
 }
@@ -140,7 +134,6 @@ function commentList(id) {
         url: 'questionDetail'
         , method: 'POST'
         , data: sendData
-
         , success: function (resp) {
             var result = '';
             result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;>'
@@ -172,16 +165,15 @@ function postList() {
         , success: function output(resp) {
             var result = '';
             result += '<table border="1" style="margin-left: auto; margin-right: auto; width: 1300px;">'
-            result += '<tr><th>글쓴이</th><th>제목</th><th>조회수</th><th>카테고리</th><th>설정</th><th>상태 / 삭제</th></tr>'
+            result += '<tr><th>글쓴이</th><th>제목</th><th>조회수</th><th>설정</th><th>상태 / 삭제</th></tr>'
             $.each(resp, function (index, item) {
                 result += '<tr><td style ="width : 100px;">' + item["name"] + '</td>'
                 result += '<td style ="width : 300px;">' + item["title"] + '</td>'
                 result += '<td style ="width : 150px;">' + item["view"] + '</td>'
-                result += '<td style ="width : 200px;">' + item["category"] + '</td>'
                 result += '<td style ="width : 300px;"><form action="update/category" method="post">' +
                     '<select name="category">' +
                     '<option value="" selected="">카테고리선택</option>' +
-                    innerCategoryList() +
+                    innerCategoryList(item["category"]) +
                     '</select>' +
                     '<select name="post_id">' +
                     '<option value="' + item["id"] + '"></option>' +
@@ -197,7 +189,7 @@ function postList() {
     $('#result').html(defaultText())
 }
 
-function innerCategoryList() {
+function innerCategoryList(id) {
     var xhr = http();
     var token = localStorage.getItem("token");
     var result = '';
@@ -216,14 +208,18 @@ function innerCategoryList() {
         , success: function output(resp) {
             var count = 1;
             $.each(resp, function (index, item) {
-                result += '<option value= "' + (count) + '">' + item["name"] + '</option>'
-                count += 1;
+                if (count == id){
+                    result += '<option value= "' + (count) + '" selected>' + item["name"] + '</option>'
+                    count += 1;
+                }else {
+                    result += '<option value= "' + (count) + '">' + item["name"] + '</option>'
+                    count += 1;
+                }
             })
         }
     });
     return result;
 }
-
 
 function categoryList() {
     var xhr = http();
@@ -267,7 +263,6 @@ function postDelete(id) {
             url: 'postDelete'
             , method: 'POST'
             , data: sendData
-
             , success: function (resp) {
                 return postList();
             }
@@ -298,23 +293,6 @@ function categoryDelete(id, referPostCount) {
     }
 }
 
-
-function questionDetail(id) {
-
-    var sendData = "id=" + id;
-    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
-    $.ajax({
-        url: 'questionDetail'
-        , method: 'POST'
-        , data: sendData
-
-        , success: function (resp) {
-            return categoryList(resp);
-        }
-    })
-}
-
-
 function categoryUp(id) {
 
     var sendData = "id=" + id;
@@ -323,7 +301,6 @@ function categoryUp(id) {
         url: 'categoryList/up'
         , method: 'POST'
         , data: sendData
-
         , success: function (resp) {
             return categoryList();
         }
@@ -338,7 +315,6 @@ function categoryDown(id) {
         url: 'categoryList/down'
         , method: 'POST'
         , data: sendData
-
         , success: function (resp) {
             return categoryList();
         }
