@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.skhuedin'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1-SNAPSHOT-' + new Date().format("yyyMMddHHmmss")
 sourceCompatibility = '11'
 
 configurations {

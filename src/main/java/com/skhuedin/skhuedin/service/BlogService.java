@@ -14,6 +14,7 @@ import com.skhuedin.skhuedin.repository.PostsRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class BlogService {
     private final PostsRepository postsRepository;
     private final FileRepository fileRepository;
 
+    @Value("${resources.storage_location}")
+    private String resourcesLocation;
+
     @Transactional
     public Long save(BlogSaveRequestDto requestDto, Long fileId) {
         User user = getUser(requestDto.getUserId());
@@ -48,11 +52,11 @@ public class BlogService {
 
         if (blog.getProfile().getId() != 1L) { // default image를 제외한 나머지 이미지는 update가 이뤄지면 삭제
             File removeFile = getFile(blog.getProfile().getId());
-            java.io.File file = new java.io.File(removeFile.getPath() + "/" + removeFile.getName());
+            java.io.File file = new java.io.File(resourcesLocation + removeFile.getName());
             if (file.delete()) {
                 log.info(blog.getId() + " 기존 profile 삭제 성공");
             } else {
-                log.info(blog.getId() +  "기존 profile 삭제 실패");
+                log.info(blog.getId() + " 기존 profile 삭제 실패");
             }
             fileRepository.deleteById(blog.getProfile().getId()); // DB에서 삭제
         }

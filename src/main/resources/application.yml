@@ -1,26 +1,19 @@
 spring:
-  console:
-    enabled: true
+  profiles:
+    active: local
 
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        show_sql: false
-        format_sql: true
-
-logging.level:
-  org.hibernate.SQL: debug
-#  org.hibernate.type: trace
-
-resources:
-  location: /201633035/profile/
-  uri_path: /profile
-  window_location: c:/201633035/profile/
+    group:
+      local:
+        - local
+        - local-resources
+        - real-oauth
+      real1:
+        - real1
+        - real-db
+        - real-resources
+        - real-oauth
+      real2:
+        - real2
+        - real-db
+        - real-resources
+        - real-oauth

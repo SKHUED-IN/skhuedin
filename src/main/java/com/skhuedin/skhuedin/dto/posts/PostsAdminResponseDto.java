@@ -28,7 +28,7 @@ public class PostsAdminResponseDto {
         this.content = posts.getContent();
         this.view = posts.getView();
         this.deleteStatus = posts.getDeleteStatus();
-        this.category =posts.getCategory().getId();
+        this.category = posts.getCategory().getId();
         this.createdDate = posts.getCreatedDate();
         this.lastModifiedDate = posts.getLastModifiedDate();
     }

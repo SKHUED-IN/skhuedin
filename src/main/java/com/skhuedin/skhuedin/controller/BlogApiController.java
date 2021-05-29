@@ -39,10 +39,10 @@ public class BlogApiController {
     private final BlogService blogService;
     private final FileService fileService;
 
-    @Value("${resources.window_location}")
+    @Value("${resources.storage_location}")
     private String resourcesLocation;
 
-    @MyRole
+    //    @MyRole
     @PostMapping("blogs")
     public ResponseEntity<? extends BasicResponse> save(
             @RequestParam(name = "file", required = false) MultipartFile files,
@@ -102,7 +102,7 @@ public class BlogApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(blogs));
     }
 
-//    @MyRole
+    //    @MyRole
     @PutMapping("blogs/{blogId}")
     public ResponseEntity<? extends BasicResponse> update(
             @PathVariable("blogId") Long id,

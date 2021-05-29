@@ -52,7 +52,7 @@ public class UserSaveRequestDto {
 
     public User toEntity() {
 
-        if(this.role ==null){
+        if (this.role == null) {
             this.role = Role.USER;
         }
         User user = User.builder()
@@ -75,7 +75,7 @@ public class UserSaveRequestDto {
     }
 
     public User toEntity(User targetUser) {
-        if(this.role ==null){
+        if (this.role == null) {
             this.role = Role.USER;
         }
         User user = User.builder()
