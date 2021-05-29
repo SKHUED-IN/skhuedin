@@ -24,8 +24,17 @@ public class CategoryService {
     }
 
     public List<CategoryMainResponseDto> findAll() {
-        return categoryRepository.findAll().stream()
-                .map(category -> new CategoryMainResponseDto(category)).collect(Collectors.toList());
+        return categoryRepository.findAll()
+                .stream()
+                .map(category -> new CategoryMainResponseDto(category))
+                .collect(Collectors.toList());
+    }
+
+    public List<CategoryMainResponseDto> findByWight() {
+        return categoryRepository.findByWeight()
+                .stream()
+                .map(category -> new CategoryMainResponseDto(category))
+                .collect(Collectors.toList());
     }
 
     @Transactional
