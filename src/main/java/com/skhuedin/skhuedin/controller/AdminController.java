@@ -44,7 +44,7 @@ public class AdminController {
         return "contents/userList";
     }
 
-    @PostMapping("/userDelete")
+    @PostMapping("/user/delete")
     public String userDelete(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
         userService.delete(id);
         return "redirect:/userList";
@@ -71,7 +71,7 @@ public class AdminController {
     }
 
     @ResponseBody
-    @PostMapping("/questionDetail")
+    @PostMapping("/question/detail")
     public List<CommentMainResponseDto> commentMainList(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
         return commentService.findByQuestionId(id);
     }
@@ -83,13 +83,13 @@ public class AdminController {
         return "redirect:/postList";
     }
 
-    @PostMapping("categoryList/up")
+    @PostMapping("category/up")
     public String upCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
         categoryService.addWeight(id);
         return "redirect:/categoryList";
     }
 
-    @PostMapping("categoryList/down")
+    @PostMapping("category/down")
     public String downCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
         categoryService.subtractWeight(id);
         return "redirect:/categoryList";
@@ -113,13 +113,13 @@ public class AdminController {
         return "redirect:/questionList";
     }
 
-    @PostMapping("categoryDelete")
+    @PostMapping("category/delete")
     public String deleteCategory(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
         categoryService.delete(id);
         return "redirect:/categoryList";
     }
 
-    @PostMapping("postDelete")
+    @PostMapping("post/delete")
     public String deletePost(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
         postsService.deletePostAdmin(id);
         return "redirect:/postList";

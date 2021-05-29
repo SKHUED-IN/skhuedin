@@ -3,7 +3,7 @@ function userDelete(id) {
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     if (confirm("삭제하시겠습니까?")) {
         $.ajax({
-            url: 'userDelete'
+            url: 'user/delete'
             , method: 'POST'
             , data: sendData
 
@@ -131,7 +131,7 @@ function commentList(id) {
     var sendData = "id=" + id;
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
-        url: 'questionDetail'
+        url: 'question/detail'
         , method: 'POST'
         , data: sendData
         , success: function (resp) {
@@ -260,7 +260,7 @@ function postDelete(id) {
 
     if (confirm("삭제하시겠습니까?")) {
         $.ajax({
-            url: 'postDelete'
+            url: 'post/delete'
             , method: 'POST'
             , data: sendData
             , success: function (resp) {
@@ -279,7 +279,7 @@ function categoryDelete(id, referPostCount) {
     if (referPostCount == 0) {
         if (confirm("삭제하시겠습니까?")) {
             $.ajax({
-                url: 'categoryDelete'
+                url: 'category/delete'
                 , method: 'POST'
                 , data: sendData
                 , success: function (resp) {
@@ -298,7 +298,7 @@ function categoryUp(id) {
     var sendData = "id=" + id;
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
-        url: 'categoryList/up'
+        url: 'category/up'
         , method: 'POST'
         , data: sendData
         , success: function (resp) {
@@ -312,7 +312,7 @@ function categoryDown(id) {
     var sendData = "id=" + id;
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
-        url: 'categoryList/down'
+        url: 'category/down'
         , method: 'POST'
         , data: sendData
         , success: function (resp) {

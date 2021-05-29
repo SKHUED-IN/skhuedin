@@ -43,4 +43,5 @@ public class Category extends BaseEntity {
     public void subtractWeight() {
         this.weight--;
     }
+
 }
