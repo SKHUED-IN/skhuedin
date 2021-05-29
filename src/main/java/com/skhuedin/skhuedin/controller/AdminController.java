@@ -144,7 +144,7 @@ AdminController {
     @PostMapping("/categoryList")
     public List<CategoryMainResponseDto> categoryList() {
         List<CategoryMainResponseDto> list = categoryService.findAll();
-        for(CategoryMainResponseDto category :list){
+        for (CategoryMainResponseDto category : list) {
             category.add(postsService.findByCategoryId(category.getId()));
         }
         return list;
