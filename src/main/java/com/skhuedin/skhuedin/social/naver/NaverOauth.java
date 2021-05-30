@@ -6,6 +6,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
+import com.skhuedin.skhuedin.yml.DataYamlRead;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class NaverOauth implements SocialOauth {
 
     private final RestTemplate restTemplate;
+    private final DataYamlRead dataYamlRead;
 
     @Override
     public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
@@ -38,7 +40,7 @@ public class NaverOauth implements SocialOauth {
 
         // Http 요청하기 - post 방식으로 ㅡ 그리고 응답받음.
         ResponseEntity<String> response = restTemplate.exchange(
-                "https://openapi.naver.com/v1/nid/me",
+                dataYamlRead.getNaver(),
                 HttpMethod.POST,
                 naverProfileRequest,
                 String.class

@@ -1,0 +1,6 @@
+my:
+  age: 300
+  kakao: 'b9de844ef665dda98917b7ec7b9d9a8b'
+  googleReqURL : "https://www.googleapis.com/userinfo/v2/me?access_token="
+  kakaoUrl : "https://kapi.kakao.com/v2/user/me"
+  naver : "https://openapi.naver.com/v1/nid/me"

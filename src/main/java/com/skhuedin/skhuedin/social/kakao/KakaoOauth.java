@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
+import com.skhuedin.skhuedin.yml.DataYamlRead;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,9 +20,11 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoOauth implements SocialOauth {
 
     private final RestTemplate restTemplate;
+    private final DataYamlRead dataYamlRead;
 
     public UserSaveRequestDto requestAccessToken(OAuthToken oauthToken) {
         UserSaveRequestDto user = null;
@@ -36,7 +40,7 @@ public class KakaoOauth implements SocialOauth {
 
         // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
         ResponseEntity<String> response2 = restTemplate.exchange(
-                "https://kapi.kakao.com/v2/user/me",
+                dataYamlRead.getKakaoUrl(),
                 HttpMethod.POST,
                 kakaoProfileRequest2,
                 String.class

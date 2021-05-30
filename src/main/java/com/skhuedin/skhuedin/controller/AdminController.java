@@ -1,5 +1,6 @@
 package com.skhuedin.skhuedin.controller;
 
+import com.skhuedin.skhuedin.controller.response.KakaoResponse;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
@@ -10,6 +11,7 @@ import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.*;
+import com.skhuedin.skhuedin.yml.DataYamlRead;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,7 @@ AdminController {
     private final QuestionService questionService;
     private final CategoryService categoryService;
     private final CommentService commentService;
+    private final DataYamlRead dataYamlRead;
 
     @MyRole(role = Role.ADMIN)
     @ResponseBody
@@ -137,6 +140,14 @@ AdminController {
     public List<QuestionMainResponseDto> questionList() {
         List<QuestionMainResponseDto> list = questionService.findAll();
         return list;
+    }
+
+
+    @ResponseBody
+    @GetMapping("/kakao")
+    public KakaoResponse kakao() {
+        KakaoResponse kakaoResponse = new KakaoResponse(dataYamlRead.getKakao());
+        return kakaoResponse;
     }
 
     @MyRole(role = Role.ADMIN)

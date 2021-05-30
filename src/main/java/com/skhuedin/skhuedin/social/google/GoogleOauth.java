@@ -9,6 +9,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
+import com.skhuedin.skhuedin.yml.DataYamlRead;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class GoogleOauth implements SocialOauth {
 
     private final RestTemplate restTemplate;
+    private final DataYamlRead dataYamlRead;
 
     @Override
     public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
@@ -33,7 +35,7 @@ public class GoogleOauth implements SocialOauth {
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        String reqURL = "https://www.googleapis.com/userinfo/v2/me?access_token=" + oAuthToken.getAccessToken();
+        String reqURL =  dataYamlRead.getGoogleReqURL()+ oAuthToken.getAccessToken();
         String resultJson = restTemplate.getForObject(reqURL, String.class);
         GoogleProfile profile = null;
 

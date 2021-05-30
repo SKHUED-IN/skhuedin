@@ -337,6 +337,20 @@ function defaultText() {
     return result;
 }
 
+function kakao2(){
+    var a ="";
 
+    //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
+    $.ajax({
+        url: 'kakao'
+        , method: 'GET'
+        , async: false // 동기 방식을 위한 설정
+        , success: function (resp) {
+            a = resp["kakaoId"]
+
+        }
+    })
+    return a;
+}
 
 
