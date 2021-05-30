@@ -1,5 +1,8 @@
 package com.skhuedin.skhuedin.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
@@ -17,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Controller
@@ -136,8 +138,8 @@ public class AdminController {
     @MyRole(role = Role.ADMIN)
     @ResponseBody
     @PostMapping("/questionList")
-    public List<QuestionMainResponseDto> questionList() {
-        List<QuestionMainResponseDto> list = questionService.findAll();
+    public List<QuestionMainResponseDto> questionList(Pageable pageable) {
+        List<QuestionMainResponseDto> list = questionService.findAll(pageable);
         return list;
     }
 

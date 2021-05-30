@@ -74,6 +74,11 @@ public class QuestionService {
                 .map(question -> new QuestionMainResponseDto(question)).collect(Collectors.toList());
     }
 
+    public List<QuestionMainResponseDto> findAll(Pageable pageable) {
+        return questionRepository.findAll(pageable).stream()
+                .map(question -> new QuestionMainResponseDto(question)).collect(Collectors.toList());
+    }
+
     public Page<QuestionMainResponseDto> findByTargetUserId(Long id, Pageable pageable) {
         Page<Question> questions = questionRepository.findByTargetUserId(id, pageable);
         return questions

@@ -101,7 +101,7 @@ function questionList() {
     const token = localStorage.getItem("token");
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
-        url: 'questionList'
+        url: 'questionList?page=1&size=10&sort=lastModifiedDate,asc'
         , method: 'POST'
         , data: JSON.stringify()
         , contentType: 'application/json; charset=UTF-8'
