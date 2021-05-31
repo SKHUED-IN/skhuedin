@@ -7,6 +7,8 @@ import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.PostsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -63,8 +65,8 @@ public class PostsApiController {
     }
 
     @GetMapping("blogs/{blogId}/posts")
-    public ResponseEntity<? extends BasicResponse> findByBlogId(@PathVariable("blogId") Long id) {
-        List<PostsMainResponseDto> posts = postsService.findByBlogId(id);
+    public ResponseEntity<? extends BasicResponse> findByBlogId(@PathVariable("blogId") Long id, Pageable pageable) {
+        Page<PostsMainResponseDto> posts = postsService.findByBlogId(id, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(posts));
     }

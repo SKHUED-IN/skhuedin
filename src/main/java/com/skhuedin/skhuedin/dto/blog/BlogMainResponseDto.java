@@ -5,6 +5,7 @@ import com.skhuedin.skhuedin.dto.file.FileMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class BlogMainResponseDto {
     private UserMainResponseDto user;
     private FileMainResponseDto profile;
     private String content;
-    private List<PostsMainResponseDto> posts = new ArrayList<>();
+    private Page<PostsMainResponseDto> posts;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 
@@ -30,7 +31,7 @@ public class BlogMainResponseDto {
         this.lastModifiedDate = blog.getLastModifiedDate();
     }
 
-    public BlogMainResponseDto(Blog blog, List<PostsMainResponseDto> posts) {
+    public BlogMainResponseDto(Blog blog, Page<PostsMainResponseDto> posts) {
         this.id = blog.getId();
         this.user = new UserMainResponseDto(blog.getUser());
         this.profile = blog.getProfile() != null ? new FileMainResponseDto(blog.getProfile()) : null;

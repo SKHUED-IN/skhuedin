@@ -12,6 +12,7 @@ import com.skhuedin.skhuedin.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,12 +80,14 @@ public class BlogApiController {
             saveId = blogService.save(requestDto, 1L);
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new CommonResponse<>(blogService.findById(saveId)));
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(blogService.findById(saveId, pageRequest)));
     }
 
     @GetMapping("blogs/{blogId}")
-    public ResponseEntity<? extends BasicResponse> findById(@PathVariable("blogId") Long id) {
-        BlogMainResponseDto responseDto = blogService.findById(id);
+    public ResponseEntity<? extends BasicResponse> findById(@PathVariable("blogId") Long id, Pageable pageable) {
+        BlogMainResponseDto responseDto = blogService.findById(id, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
@@ -134,7 +137,8 @@ public class BlogApiController {
             // default image 처리
             blogId = blogService.update(id, updateDto, 1L);
         }
-        BlogMainResponseDto responseDto = blogService.findById(blogId);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        BlogMainResponseDto responseDto = blogService.findById(blogId, pageRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
