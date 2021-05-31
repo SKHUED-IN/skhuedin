@@ -15,10 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -216,14 +213,6 @@ class PostsServiceTest {
         assertEquals(posts.size(), 3);
     }
 
-    private PostsSaveRequestDto generateDto() {
-        return PostsSaveRequestDto.builder()
-                .blogId(blog.getId())
-                .title("책장의 첫 게시글")
-                .content("저는 이렇게 저렇게 공부했어요!")
-                .build();
-    }
-
     @Test
     @DisplayName("posts 의 조회수를 3 증가 시키는 테스트")
     void addView() {
@@ -241,6 +230,14 @@ class PostsServiceTest {
 
         // then
         assertEquals(responseDto.getView(), 3);
+    }
+
+    private PostsSaveRequestDto generateDto() {
+        return PostsSaveRequestDto.builder()
+                .blogId(blog.getId())
+                .title("책장의 첫 게시글")
+                .content("저는 이렇게 저렇게 공부했어요!")
+                .build();
     }
 
     @AfterEach

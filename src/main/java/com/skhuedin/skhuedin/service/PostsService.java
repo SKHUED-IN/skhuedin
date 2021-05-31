@@ -3,7 +3,6 @@ package com.skhuedin.skhuedin.service;
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Category;
 import com.skhuedin.skhuedin.domain.Posts;
-import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
@@ -11,6 +10,8 @@ import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CategoryRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,12 +45,11 @@ public class PostsService {
     }
 
     @Transactional
-    public Long update(Long id, Long category_id) {
+    public Long update(Long id, Long categoryId) {
 
         Posts posts = getPosts(id);
-        Category category = categoryRepository.findById(category_id).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 category 입니다. id=" + id)
-        );
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 category 입니다. id=" + id));
         posts.updateCategory(category);
 
         return posts.getId();
@@ -60,7 +60,6 @@ public class PostsService {
         Posts posts = getPosts(id);
         postsRepository.delete(posts);
     }
-
 
     @Transactional
     public void deletePostAdmin(Long id) {
@@ -73,9 +72,17 @@ public class PostsService {
         return new PostsMainResponseDto(posts);
     }
 
+    public List<PostsMainResponseDto> findByCategoryId(Long categoryId, Pageable pageable) {
+        List<Posts> posts = postsRepository.findByCategoryIdOrderByView(categoryId, pageable);
+        return posts.stream()
+                .map(posts1 -> new PostsMainResponseDto(posts1))
+                .collect(Collectors.toList());
+    }
+
     public List<PostsAdminResponseDto> findAll() {
         return postsRepository.findAll().stream()
-                .map(post -> new PostsAdminResponseDto(post)).collect(Collectors.toList());
+                .map(post -> new PostsAdminResponseDto(post))
+                .collect(Collectors.toList());
     }
 
     public Long findByCategoryId(Long id) {
@@ -83,7 +90,6 @@ public class PostsService {
         Long count = Long.valueOf(posts.size());
         return count;
     }
-
 
     public List<PostsMainResponseDto> findByBlogId(Long blogId) {
         List<Posts> posts = postsRepository.findByBlogIdOrderByLastModifiedDateDesc(blogId);

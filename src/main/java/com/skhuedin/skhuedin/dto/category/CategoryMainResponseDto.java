@@ -1,15 +1,10 @@
 package com.skhuedin.skhuedin.dto.category;
 
 import com.skhuedin.skhuedin.domain.Category;
-import com.skhuedin.skhuedin.service.CategoryService;
-import com.skhuedin.skhuedin.service.PostsService;
 import lombok.Getter;
 
 @Getter
-
 public class CategoryMainResponseDto {
-
-    PostsService postsService;
 
     private Long id;
     private String name;
