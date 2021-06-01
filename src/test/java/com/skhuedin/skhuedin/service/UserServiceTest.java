@@ -124,7 +124,6 @@ class UserServiceTest {
         assertThrows(IllegalArgumentException.class, () -> userService.findById(0L));
     }
 
-
     @AfterEach
     void afterEach() {
         userRepository.deleteAll();
