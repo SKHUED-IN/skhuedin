@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,7 +56,8 @@ class BlogServiceTest {
 
         // when
         Long saveId = blogService.save(requestDto, 1L);
-        BlogMainResponseDto responseDto = blogService.findById(saveId);
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        BlogMainResponseDto responseDto = blogService.findById(saveId, pageRequest);
 
         // then
         assertAll(
@@ -95,7 +97,8 @@ class BlogServiceTest {
         // when
         Long saveId = blogService.save(requestDto, 1L);
         Long updateId = blogService.update(saveId, updateDto, 1L);
-        BlogMainResponseDto responseDto = blogService.findById(updateId);
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        BlogMainResponseDto responseDto = blogService.findById(updateId, pageRequest);
 
         // then
         assertAll(

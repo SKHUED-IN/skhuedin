@@ -34,7 +34,7 @@ public class Posts extends BaseEntity {
     private String title;
 
     private String content;
-    @JoinColumn(name = "delete_status")
+
     private Boolean deleteStatus;
 
     private Integer view;

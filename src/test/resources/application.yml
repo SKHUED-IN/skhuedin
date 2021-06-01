@@ -1,0 +1,30 @@
+spring:
+  console:
+    enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+
+logging.level:
+  org.hibernate.SQL: debug
+#  org.hibernate.type: trace
+
+resources:
+  # file:// 로 탐색되는 location
+  location: /profile/
+  # uri에서 handling 하기 위한 path
+  uri_path: /profile
+
+  # 각각 local 운영 체제에 맞추어 실제로 저장되는 저장소 위치를 설정
+  storage_location: c:/profile/
