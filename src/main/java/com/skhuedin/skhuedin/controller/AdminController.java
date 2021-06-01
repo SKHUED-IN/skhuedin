@@ -1,6 +1,5 @@
 package com.skhuedin.skhuedin.controller;
 
-import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
@@ -9,7 +8,11 @@ import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.infra.Role;
-import com.skhuedin.skhuedin.service.*;
+import com.skhuedin.skhuedin.service.CategoryService;
+import com.skhuedin.skhuedin.service.CommentService;
+import com.skhuedin.skhuedin.service.PostsService;
+import com.skhuedin.skhuedin.service.QuestionService;
+import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -20,8 +23,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class
-AdminController {
+public class AdminController {
 
     private final UserService userService;
     private final PostsService postsService;
