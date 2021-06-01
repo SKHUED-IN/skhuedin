@@ -1,17 +1,19 @@
 spring:
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/skhuedin
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+  profiles:
+    active: local
 
-  jpa:
-    hibernate:
-      ddl-auto: create #-drop
-    properties:
-      hibernate:
-        format_sql: true
-
-logging.level:
-  org.hibernate.SQL: debug
-  org.hibernate.type: trace
+    group:
+      local:
+        - local
+        - local-resources
+        - real-oauth
+      real1:
+        - real1
+        - real-db
+        - real-resources
+        - real-oauth
+      real2:
+        - real2
+        - real-db
+        - real-resources
+        - real-oauth

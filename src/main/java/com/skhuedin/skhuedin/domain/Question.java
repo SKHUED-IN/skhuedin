@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,7 +20,7 @@ import javax.persistence.ManyToOne;
 public class Question extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Long id;
 
@@ -42,13 +43,13 @@ public class Question extends BaseEntity {
     private Integer view;
 
     @Builder
-    public Question(User targetUser, User writerUser, String title, String content) {
+    public Question(User targetUser, User writerUser, String title, String content, Boolean status, Boolean fix) {
         this.targetUser = targetUser;
         this.writerUser = writerUser;
         this.title = title;
         this.content = content;
-        this.status = true;
-        this.fix = true;
+        this.status = status;
+        this.fix = fix;
         this.view = 0;
     }
 
@@ -64,5 +65,9 @@ public class Question extends BaseEntity {
 
     public void addView() {
         this.view++;
+    }
+
+    public void updateStatus(Boolean status) {
+        this.status = status;
     }
 }

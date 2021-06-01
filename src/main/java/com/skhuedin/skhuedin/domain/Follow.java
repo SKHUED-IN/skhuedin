@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,16 +20,26 @@ import javax.persistence.ManyToOne;
 public class Follow extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "follow_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "toUser_id")
+    private User toUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fromUser_id")
+    private User fromUser;
 
     @Builder
-    public Follow(User user) {
-        this.user = user;
+    public Follow(User toUser, User fromUser) {
+        this.toUser = toUser;
+        this.fromUser = fromUser;
+    }
+
+    public void UpdateFollow(Follow follow) {
+        this.toUser = follow.getToUser();
+        this.fromUser = follow.getFromUser();
     }
 }

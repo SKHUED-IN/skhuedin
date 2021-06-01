@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -16,16 +17,16 @@ import javax.persistence.Id;
 public class Category extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "skill_category_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
     private Long id;
 
     private String name;
 
-    private Integer weight;
+    private Long weight;
 
     @Builder
-    public Category(String name, Integer weight) {
+    public Category(String name, Long weight) {
         this.name = name;
         this.weight = weight;
     }
@@ -33,5 +34,13 @@ public class Category extends BaseEntity {
     public void updateCategory(Category category) {
         this.name = category.name;
         this.weight = category.weight;
+    }
+
+    public void addWeight() {
+        this.weight++;
+    }
+
+    public void subtractWeight() {
+        this.weight--;
     }
 }

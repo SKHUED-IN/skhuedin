@@ -25,6 +25,9 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+src/main/resources/application-real-db.yml
+src/main/resources/application-real-resources.yml
+src/main/resources/application-real-oauth.yml
 
 ### NetBeans ###
 /nbproject/private/
@@ -156,7 +159,7 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.nar
 *.ear

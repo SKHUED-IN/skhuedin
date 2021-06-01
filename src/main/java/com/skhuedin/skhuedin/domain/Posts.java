@@ -4,11 +4,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,11 +19,12 @@ import javax.persistence.OneToOne;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseEntity {
+@ToString
+public class Posts extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "post_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "posts_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,6 +34,8 @@ public class Post extends BaseEntity {
     private String title;
 
     private String content;
+    @JoinColumn(name = "delete_status")
+    private Boolean deleteStatus;
 
     private Integer view;
 
@@ -39,15 +44,16 @@ public class Post extends BaseEntity {
     private Category category;
 
     @Builder
-    public Post(Blog blog, String title, String content, Category category) {
+    public Posts(Blog blog, String title, String content, Category category) {
         this.blog = blog;
         this.title = title;
         this.content = content;
         this.view = 0;
         this.category = category;
+        this.deleteStatus = false;
     }
 
-    public void updatePost(Post post) {
+    public void updatePost(Posts post) {
         this.blog = post.blog;
         this.title = post.title;
         this.content = post.content;
@@ -55,7 +61,23 @@ public class Post extends BaseEntity {
         this.category = post.category;
     }
 
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
+
+    public void updateContent() {
+        this.content = "관리자에 의해 삭제되었습니다.";
+    }
+
     public void addView() {
         this.view++;
+    }
+
+    public void addBlog(Blog blog) {
+        this.blog = blog;
+    }
+
+    public void setDeleteStatus() {
+        this.deleteStatus = true;
     }
 }
