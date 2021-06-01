@@ -12,7 +12,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -138,6 +140,31 @@ class PostsRepositoryTest {
         assertEquals(posts.size(), 3);
     }
 
+    @Test
+    @DisplayName("blog id로 paging 처리하여 조회하는 테스트")
+    void findByBlogIdPaging() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<Posts> page = postsRepository.findByBlogId(blog.getId(), false, pageRequest);
+
+        // then
+        assertAll(
+                () -> assertEquals(page.getContent().size(), 5), // 조회된 데이터 수
+                () -> assertEquals(page.getTotalElements(), 10), // 전체 데이터 수
+                () -> assertEquals(page.getNumber(), 0), // 페이지 번호
+                () -> assertEquals(page.getTotalPages(), 2), // 전체 페이지 번호
+                () -> assertTrue(page.isFirst()), // 첫 번째 페이지 t/f
+                () -> assertTrue(page.hasNext()) // 다음 페이지 t/f
+        );
+    }
+
     Posts generatePosts(int index, Category category) {
         return Posts.builder()
                 .blog(blog)
@@ -146,6 +173,16 @@ class PostsRepositoryTest {
                 .category(category)
                 .build();
     }
+
+    Posts generatePosts(int index) {
+        return Posts.builder()
+                .blog(blog)
+                .title("책장의 게시글 " + index)
+                .content("저는 이렇게 저렇게 공부했어요!")
+                .category(null)
+                .build();
+    }
+
 
     @AfterEach
     void afterEach() {

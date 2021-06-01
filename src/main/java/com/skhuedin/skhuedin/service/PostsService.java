@@ -10,6 +10,7 @@ import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CategoryRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -91,11 +92,10 @@ public class PostsService {
         return count;
     }
 
-    public List<PostsMainResponseDto> findByBlogId(Long blogId) {
-        List<Posts> posts = postsRepository.findByBlogIdOrderByLastModifiedDateDesc(blogId);
-        return posts.stream()
-                .map(posts1 -> new PostsMainResponseDto(posts1))
-                .collect(Collectors.toList());
+    public Page<PostsMainResponseDto> findByBlogId(Long blogId, Pageable pageable) {
+        // 삭제 상태 default status가 false인 것만 조회한다. -> 일반적인 user 입장
+        return postsRepository.findByBlogId(blogId, false, pageable)
+                .map(posts -> new PostsMainResponseDto(posts));
     }
 
     @Transactional

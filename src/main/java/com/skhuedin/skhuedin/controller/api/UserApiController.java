@@ -1,5 +1,6 @@
 package com.skhuedin.skhuedin.controller.api;
 
+import com.skhuedin.skhuedin.common.exception.EmptyTokenException;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.controller.response.TokenWithCommonResponse;
@@ -12,6 +13,7 @@ import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Slf4j
 public class UserApiController {
 
     private final UserService userService;

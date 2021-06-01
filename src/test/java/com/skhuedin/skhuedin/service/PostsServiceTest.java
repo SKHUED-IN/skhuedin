@@ -14,6 +14,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -198,19 +200,24 @@ class PostsServiceTest {
     void findByBlogId() {
 
         // given
-        PostsSaveRequestDto requestDto1 = generateDto();
-        PostsSaveRequestDto requestDto2 = generateDto();
-        PostsSaveRequestDto requestDto3 = generateDto();
-
-        postsService.save(requestDto1);
-        postsService.save(requestDto2);
-        postsService.save(requestDto3);
+        for (int i = 0; i < 10; i++) {
+            PostsSaveRequestDto requestDto = generateDto();
+            postsService.save(requestDto);
+        }
 
         // when
-        List<PostsMainResponseDto> posts = postsService.findByBlogId(blog.getId());
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<PostsMainResponseDto> posts = postsService.findByBlogId(blog.getId(), pageRequest);
 
         // then
-        assertEquals(posts.size(), 3);
+        assertAll(
+                () -> assertEquals(posts.getContent().size(), 5), // 조회된 데이터 수
+                () -> assertEquals(posts.getTotalElements(), 10), // 전체 데이터 수
+                () -> assertEquals(posts.getNumber(), 0), // 페이지 번호
+                () -> assertEquals(posts.getTotalPages(), 2), // 전체 페이지 번호
+                () -> assertTrue(posts.isFirst()), // 첫 번째 페이지 t/f
+                () -> assertTrue(posts.hasNext()) // 다음 페이지 t/f
+        );
     }
 
     @Test

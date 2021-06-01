@@ -73,14 +73,12 @@ public class BlogService {
         blogRepository.delete(blog);
     }
 
-    public BlogMainResponseDto findById(Long id) {
+    public BlogMainResponseDto findById(Long id, Pageable pageable) {
         Blog blog = getBlog(id);
-        List<Posts> posts = postsRepository.findByBlogIdOrderByLastModifiedDateDesc(blog.getId());
-        List<PostsMainResponseDto> collect = posts.stream()
-                .map(PostsMainResponseDto::new)
-                .collect(Collectors.toList());
+        Page<Posts> posts = postsRepository.findByBlogId(blog.getId(), false, pageable);
+        Page<PostsMainResponseDto> postsMainResponseDtos = posts.map(posts1 -> new PostsMainResponseDto(posts1));
 
-        return new BlogMainResponseDto(blog, collect);
+        return new BlogMainResponseDto(blog, postsMainResponseDtos);
     }
 
     public Page<BlogMainResponseDto> findAll(Pageable pageable) {
