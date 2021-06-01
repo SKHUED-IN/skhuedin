@@ -5,7 +5,9 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
-    username: sa
+    hikari:
+      jdbc-url: jdbc:h2:mem:testdb;MODE=MYSQL
+      username: sa
     password:
 
   jpa:
@@ -15,6 +17,7 @@ spring:
       hibernate:
         show_sql: false
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 logging.level:
   org.hibernate.SQL: debug
