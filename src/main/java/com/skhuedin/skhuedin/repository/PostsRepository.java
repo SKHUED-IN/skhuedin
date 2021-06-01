@@ -31,4 +31,8 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
             "where p.blog.id = :blogId and p.deleteStatus = :deleteStatus " +
             "order by p.lastModifiedDate")
     Page<Posts> findByBlogId(@Param("blogId") Long blogId, boolean deleteStatus, Pageable pageable);
+
+    /* admin 전용 */
+    @EntityGraph(attributePaths = {"blog", "blog.profile", "category"})
+    Page<Posts> findAll(Pageable pageable);
 }
