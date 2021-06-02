@@ -14,11 +14,13 @@
                 <form class="row align-items-center" onsubmit="search(); return false">
                     <div class="col-6 p-0">
                         <div class="input-group">
-                            <input id="keyword" type="text" class="form-control" placeholder="검색어를 입력하세요." aria-label="">
+                            <input id="keyword" type="text" class="form-control" placeholder="검색어를 입력하세요."
+                                   aria-label="">
                         </div>
                     </div>
                     <div class="col-3 p-0">
-                        <select id="select-condition" class="form-select" name="inputCondition" aria-label="Default select example">
+                        <select id="select-condition" class="form-select" name="inputCondition"
+                                aria-label="Default select example">
                             <option value="" selected>조건</option>
                             <option value="category">카테고리</option>
                             <option value="username">이름</option>
@@ -65,7 +67,7 @@
 
 <footer th:replace="fragments/admin-body-footer.html :: admin-body-footer"></footer>
 <script>
-    const host = window.location.host;
+    const host = window.location.protocol + '//' + window.location.host;
 
     let pageable = {
         page: 0,
@@ -106,7 +108,7 @@
     }
 
     async function fetchPosts(pageable, condition) {
-        let url = 'http://' + host + '/api/admin/posts?page=' + pageable.page + '&size=' + pageable.size;
+        let url = host + '/api/admin/posts?page=' + pageable.page + '&size=' + pageable.size;
 
         if (condition !== undefined) {
             url += '&' + condition.selectCondition + '=' + condition.keyword;
@@ -126,8 +128,9 @@
 
         let posts = data.content;
         for (let key in posts) {
+            let url = '\'' + '/admin/posts/detail?id=' + posts[key].id + '\'';
             let row =
-                '<tr id="tr-' + key + '">' +
+                '<tr id="tr-' + key + '" onclick="location.href=' + url + '">' +
                 '   <th class="pb-3 pt-3">' + posts[key].id + '</th>' +
                 '   <td class="pb-3 pt-3">' + posts[key].blog.user.name + '</td>' +
                 '   <td class="pb-3 pt-3">' + posts[key].title + '</td>' +

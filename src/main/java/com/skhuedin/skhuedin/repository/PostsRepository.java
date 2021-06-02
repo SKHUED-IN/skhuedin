@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostsRepository extends JpaRepository<Posts, Long> {
 
@@ -36,7 +37,7 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
     @Query("select p " +
             "from Posts p " +
-            "order by p.lastModifiedDate ")
+            "order by p.lastModifiedDate DESC")
     Page<Posts> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
@@ -52,4 +53,10 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
             "where p.category.name like %:categoryName% " +
             "order by p.lastModifiedDate ")
     Page<Posts> findByCategoryName(Pageable pageable, @Param("categoryName") String categoryName);
+
+    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @Query("select p " +
+            "from Posts p " +
+            "where p.id = :postsId ")
+    Optional<Posts> findById(@Param("postsId") Long id);
 }
