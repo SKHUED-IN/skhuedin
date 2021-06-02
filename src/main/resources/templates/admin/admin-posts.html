@@ -5,10 +5,29 @@
 <header th:replace="fragments/admin-body-header.html :: admin-body-header"></header>
 
 <section>
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col-sm fs-3 fw-bold">게시글 목록</div>
-            <div class="col-sm">
+    <div class="container-fluid">
+        <div class="row mb-3 align-items-center">
+            <div class="col">
+                <div class="fs-3 fw-bold">게시글 목록</div>
+            </div>
+            <div class="col">
+                <form class="row align-items-center" onsubmit="search(); return false">
+                    <div class="col-6 p-0">
+                        <div class="input-group">
+                            <input id="keyword" type="text" class="form-control" placeholder="검색어를 입력하세요." aria-label="">
+                        </div>
+                    </div>
+                    <div class="col-3 p-0">
+                        <select id="select-condition" class="form-select" name="inputCondition" aria-label="Default select example">
+                            <option value="" selected>조건</option>
+                            <option value="category">카테고리</option>
+                            <option value="username">이름</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-secondary">검색</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -56,6 +75,18 @@
 
     fetchPosts(pageable);
 
+    function search() {
+        let keyword = document.getElementById('keyword').value;
+        let selectCondition = document.getElementById('select-condition').value;
+
+        let condition = {
+            keyword: keyword,
+            selectCondition: selectCondition
+        }
+
+        fetchPosts(pageable, condition);
+    }
+
     function prevPage() {
         if (pageable.page > 0) {
             pageable.page -= 1;
@@ -74,8 +105,14 @@
         }
     }
 
-    async function fetchPosts(pageable) {
-        let fetchData = await fetch('http://' + host + '/api/admin/posts?page=' + pageable.page + "&size=" + pageable.size)
+    async function fetchPosts(pageable, condition) {
+        let url = 'http://' + host + '/api/admin/posts?page=' + pageable.page + '&size=' + pageable.size;
+
+        if (condition !== undefined) {
+            url += '&' + condition.selectCondition + '=' + condition.keyword;
+        }
+
+        let fetchData = await fetch(url)
             .then((response) => response.json());
 
         pageable.totalPage = fetchData.data.totalPages;
@@ -91,14 +128,14 @@
         for (let key in posts) {
             let row =
                 '<tr id="tr-' + key + '">' +
-                '   <th>' + posts[key].id + '</th>' +
-                '   <td>' + posts[key].blog.user.name + '</td>' +
-                '   <td>' + posts[key].title + '</td>' +
-                '   <td>' + posts[key].deleteStatus + '</td>' +
-                '   <td>' + posts[key].view + '</td>' +
-                '   <td>' + posts[key].category.name + '</td>' +
-                '   <td>' + posts[key].createDate + '</td>' +
-                '   <td>' + posts[key].lastModifiedDate + '</td>' +
+                '   <th class="pb-3 pt-3">' + posts[key].id + '</th>' +
+                '   <td class="pb-3 pt-3">' + posts[key].blog.user.name + '</td>' +
+                '   <td class="pb-3 pt-3">' + posts[key].title + '</td>' +
+                '   <td class="pb-3 pt-3">' + posts[key].deleteStatus + '</td>' +
+                '   <td class="pb-3 pt-3">' + posts[key].view + '</td>' +
+                '   <td class="pb-3 pt-3">' + posts[key].category.name + '</td>' +
+                '   <td class="pb-3 pt-3">' + posts[key].createDate + '</td>' +
+                '   <td class="pb-3 pt-3">' + posts[key].lastModifiedDate + '</td>' +
                 '</tr>'
             tbody.innerHTML += row;
         }
