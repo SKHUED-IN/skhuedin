@@ -1,0 +1,30 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+header {
+
+}
+
+section {
+    flex: 1;
+    padding: 5%;
+}
+
+footer {
+    text-align: center;
+    padding:10px 0;
+    background: #5e5c5c;
+    color: #f8f9fa;
+}
+
+a {
+    color: #f8f9fa;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #055160;
+}

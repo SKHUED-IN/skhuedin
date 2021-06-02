@@ -3,6 +3,7 @@ package com.skhuedin.skhuedin.service;
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Category;
 import com.skhuedin.skhuedin.domain.Posts;
+import com.skhuedin.skhuedin.dto.posts.PostsAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
@@ -11,7 +12,6 @@ import com.skhuedin.skhuedin.repository.CategoryRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,6 +104,23 @@ public class PostsService {
         posts.addView();
     }
 
+    /* admin 전용 */
+    public Page<PostsAdminMainResponseDto> findAll(Pageable pageable) {
+        return postsRepository.findAll(pageable)
+                .map(posts -> new PostsAdminMainResponseDto(posts));
+    }
+
+    public Page<PostsAdminMainResponseDto> findByUserName(Pageable pageable, String username) {
+        return postsRepository.findByUserName(pageable, username)
+                .map(posts -> new PostsAdminMainResponseDto(posts));
+    }
+
+    public Page<PostsAdminMainResponseDto> findByCategoryName(Pageable pageable, String CategoryName) {
+        return postsRepository.findByCategoryName(pageable, CategoryName)
+                .map(posts -> new PostsAdminMainResponseDto(posts));
+    }
+
+    /* private 메소드 */
     private Blog getBlog(Long id) {
         return blogRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 blog 입니다. id=" + id)
