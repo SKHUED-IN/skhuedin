@@ -25,7 +25,7 @@ public class UserAdminApiController {
 
     @MyRole(role = Role.ADMIN)
     @ResponseBody
-    @RequestMapping(value = "/userList", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public List<UserMainResponseDto> userList() {
         List<UserMainResponseDto> list = userService.findAll();
@@ -39,7 +39,7 @@ public class UserAdminApiController {
         return "redirect:/userList";
     }
 
-    @GetMapping("/userList")
+    @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public String userMainList() {
         return "contents/userList";

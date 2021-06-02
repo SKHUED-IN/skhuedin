@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommentSaveRequestDtoTest {
 
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-    
+
     @Test
     @DisplayName("CommentSaveRequestDto를 검증하는 테스트")
     void testValidation() {
-        
+
         // given
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < 1001; i++) {

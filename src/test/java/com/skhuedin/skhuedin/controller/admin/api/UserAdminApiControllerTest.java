@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
+@Sql("/truncate.sql")
 class UserAdminApiControllerTest {
     private MockMvc mockMvc;
 
@@ -37,16 +39,16 @@ class UserAdminApiControllerTest {
                 .build();
     }
 
-    @DisplayName("Get으로 userList 호출")
+    @DisplayName("Get으로 user 호출")
     @Test
     void postList_page() throws Exception {
-        this.mockMvc.perform(get("/userList"))
+        this.mockMvc.perform(get("/user"))
                 .andDo(print())
                 .andExpect(view().name("contents/userList"))
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'/userList'로 post요청")
+    @DisplayName("'/user'로 post요청")
     @Test
     void userList() throws Exception {
 
@@ -54,7 +56,7 @@ class UserAdminApiControllerTest {
         String token = getUser();
 
         //when 무엇을 했을 때
-        MockHttpServletRequestBuilder requestBuilder = post("/userList")
+        MockHttpServletRequestBuilder requestBuilder = post("/user")
                 .header("Authorization", "Bearer " + token);
 
         //then 어떤 값을 원한다.

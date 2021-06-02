@@ -21,7 +21,7 @@ public class PostAdminApiController {
 
     private final PostsService postsService;
 
-    @GetMapping("/postList")
+    @GetMapping("/post")
     @ResponseStatus(HttpStatus.OK)
     public String postMainList() {
         return "contents/postList";
@@ -36,7 +36,7 @@ public class PostAdminApiController {
 
     @MyRole(role = Role.ADMIN)
     @ResponseBody
-    @PostMapping("/postList")
+    @PostMapping("/post")
     @ResponseStatus(HttpStatus.OK)
     public List<PostsAdminResponseDto> postList() {
         List<PostsAdminResponseDto> list = postsService.findAll();

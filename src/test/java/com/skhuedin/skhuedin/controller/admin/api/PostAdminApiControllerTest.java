@@ -1,14 +1,24 @@
 package com.skhuedin.skhuedin.controller.admin.api;
 
+import com.skhuedin.skhuedin.domain.Blog;
+import com.skhuedin.skhuedin.domain.Category;
+import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
 import com.skhuedin.skhuedin.infra.Role;
+import com.skhuedin.skhuedin.repository.BlogRepository;
+import com.skhuedin.skhuedin.repository.CategoryRepository;
+import com.skhuedin.skhuedin.repository.PostsRepository;
+import com.skhuedin.skhuedin.service.CategoryService;
+import com.skhuedin.skhuedin.service.PostsService;
 import com.skhuedin.skhuedin.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -22,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@Sql("/truncate.sql")
 @SpringBootTest
 class PostAdminApiControllerTest {
     private MockMvc mockMvc;
@@ -29,22 +40,61 @@ class PostAdminApiControllerTest {
     @Autowired
     UserService userService;
 
+    @Autowired
+    BlogRepository blogRepository;
+
+    @Autowired
+    PostsRepository postsRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .build();
+
+        User user = User.builder()
+                .email("user@email.com")
+                .password("1234")
+                .name("user")
+                .userImageUrl("/img")
+                .graduationYear("2016")
+                .entranceYear("2022")
+                .provider(Provider.SELF)
+                .build();
+        userService.save(user);
+
+        Blog blog = blogRepository.save(Blog.builder()
+                .user(user)
+                .content("테스트 블로그 컨텐츠")
+                .profile(null)
+                .build());
+
+        Category category = Category.builder()
+                .name("연봉")
+                .weight(4L)
+                .build();
+        categoryRepository.save(category);
+
+        postsRepository.save(Posts.builder()
+                .blog(blog)
+                .title("책장의 첫 게시글")
+                .content("저는 이렇게 저렇게 공부했어요!")
+                .category(category)
+                .build());
     }
 
-    @DisplayName("'/postList'로 get요청")
+    @DisplayName("'/post'로 get요청")
     @Test
     void postList_page() throws Exception {
-        this.mockMvc.perform(get("/postList"))
+        this.mockMvc.perform(get("/post"))
                 .andDo(print())
                 .andExpect(view().name("contents/postList"))
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'/postList'로 post요청")
+    @DisplayName("'/post'로 post요청")
     @Test
     void postList() throws Exception {
 
@@ -63,7 +113,7 @@ class PostAdminApiControllerTest {
         String token = userService.createToken("her08072@naver.com");
 
         //when 무엇을 했을 때
-        MockHttpServletRequestBuilder requestBuilder = post("/postList")
+        MockHttpServletRequestBuilder requestBuilder = post("/post")
                 .header("Authorization", "Bearer " + token);
 
         //then 어떤 값을 원한다.

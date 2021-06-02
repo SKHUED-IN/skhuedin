@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@Sql("/truncate.sql")
 @SpringBootTest
 class CategoryAdminApiControllerTest {
 
@@ -35,10 +37,10 @@ class CategoryAdminApiControllerTest {
                 .build();
     }
 
-    @DisplayName("Get으로 /categoryList 호출")
+    @DisplayName("Get으로 /category 호출")
     @Test
     void categoryList_page() throws Exception {
-        this.mockMvc.perform(get("/categoryList"))
+        this.mockMvc.perform(get("/category"))
                 .andDo(print())
                 .andExpect(view().name("contents/categoryList"))
                 .andExpect(status().isOk());
@@ -54,7 +56,7 @@ class CategoryAdminApiControllerTest {
         String token = userService.createToken("her08072@naver.com");
 
         //when 무엇을 했을 때
-        MockHttpServletRequestBuilder requestBuilder = post("/categoryList")
+        MockHttpServletRequestBuilder requestBuilder = post("/category")
                 .param("id", String.valueOf(id))
                 .header("Authorization", "Bearer " + token);
 

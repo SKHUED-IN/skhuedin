@@ -68,7 +68,7 @@ function userList() {
     var token = localStorage.getItem("token");
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
-        url: 'userList'
+        url: 'user'
         , method: 'POST'
         , data: JSON.stringify()
         , contentType: 'application/json; charset=UTF-8'
@@ -101,7 +101,7 @@ function questionList() {
     const token = localStorage.getItem("token");
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
-        url: 'questionList?page=1&size=10&sort=lastModifiedDate,asc'
+        url: 'question?page=1&size=10&sort=lastModifiedDate,asc'
         , method: 'POST'
         , data: JSON.stringify()
         , contentType: 'application/json; charset=UTF-8'
@@ -153,7 +153,7 @@ function postList() {
     var xhr = http();
     var token = localStorage.getItem("token");
     $.ajax({
-        url: 'postList'
+        url: 'post'
         , method: 'POST'
         , data: JSON.stringify()
         , contentType: 'application/json; charset=UTF-8'
@@ -195,7 +195,7 @@ function innerCategoryList(id) {
     var result = '';
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
-        url: 'categoryList'
+        url: 'category'
         , method: 'POST'
         , async: false // 동기 방식을 위한 설정
         , data: JSON.stringify()
@@ -226,7 +226,7 @@ function categoryList() {
     var token = localStorage.getItem("token");
     //서버로 보낼 데이터 준비 : 파라미터로 만들기 . json 으로 만들기
     $.ajax({
-        url: 'categoryList'
+        url: 'category'
         , method: 'POST'
         , data: JSON.stringify()
         , contentType: 'application/json; charset=UTF-8'

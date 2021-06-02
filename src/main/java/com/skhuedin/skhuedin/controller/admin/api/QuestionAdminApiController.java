@@ -21,7 +21,7 @@ import java.util.List;
 public class QuestionAdminApiController {
     private final QuestionService questionService;
 
-    @GetMapping("/questionList")
+    @GetMapping("/question")
     @ResponseStatus(HttpStatus.OK)
     public String questionMainList() {
         return "contents/questionList";
@@ -36,7 +36,7 @@ public class QuestionAdminApiController {
 
     @MyRole(role = Role.ADMIN)
     @ResponseBody
-    @PostMapping("/questionList")
+    @PostMapping("/question")
     @ResponseStatus(HttpStatus.OK)
     public List<QuestionMainResponseDto> questionList(Pageable pageable) {
         List<QuestionMainResponseDto> list = questionService.findAll(pageable);

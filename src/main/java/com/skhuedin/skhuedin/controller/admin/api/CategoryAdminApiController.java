@@ -25,7 +25,7 @@ public class CategoryAdminApiController {
     private final PostsService postsService;
     private final CategoryService categoryService;
 
-    @GetMapping("/categoryList")
+    @GetMapping("/category")
     @ResponseStatus(HttpStatus.OK)
     public String categoryMainList() {
         return "contents/categoryList";
@@ -75,7 +75,7 @@ public class CategoryAdminApiController {
 
     @MyRole(role = Role.ADMIN)
     @ResponseBody
-    @PostMapping("/categoryList")
+    @PostMapping("/category")
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryMainResponseDto> categoryList() {
         List<CategoryMainResponseDto> list = categoryService.findAll();

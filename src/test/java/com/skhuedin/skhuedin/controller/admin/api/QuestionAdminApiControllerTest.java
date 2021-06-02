@@ -13,11 +13,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+@Sql("/truncate.sql")
 @SpringBootTest
 class QuestionAdminApiControllerTest {
     private MockMvc mockMvc;
@@ -44,16 +48,16 @@ class QuestionAdminApiControllerTest {
                 .build();
     }
 
-    @DisplayName("'/questionList'로 get요청")
+    @DisplayName("'/question'로 get요청")
     @Test
     void postList_page_true() throws Exception {
-        this.mockMvc.perform(get("/questionList"))
+        this.mockMvc.perform(get("/question"))
                 .andDo(print())
                 .andExpect(view().name("contents/questionList"))
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'/questionList'로 post요청")
+    @DisplayName("'/question'로 post요청")
     @Test
     void questionList() throws Exception {
 
@@ -61,14 +65,13 @@ class QuestionAdminApiControllerTest {
         String token = getUser();
 
         //when 무엇을 했을 때
-        MockHttpServletRequestBuilder requestBuilder = post("/questionList")
+        MockHttpServletRequestBuilder requestBuilder = post("/question")
                 .header("Authorization", "Bearer " + token);
 
         //then 어떤 값을 원한다.
         MvcResult result = this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$..['targetUser']").exists())
                 .andReturn();
     }
 
@@ -91,13 +94,13 @@ class QuestionAdminApiControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Question findQuestion =  questionRepository.findById(saveId).orElseThrow(() ->
+        Question findQuestion = questionRepository.findById(saveId).orElseThrow(() ->
                 new IllegalArgumentException("해당 question 이 존재하지 않습니다. id="));
 
-        assertNotEquals(false,findQuestion.getStatus());
+        assertNotEquals(false, findQuestion.getStatus());
     }
 
-    String getUser(){
+    String getUser() {
         User user = User.builder()
                 .name("홍길동")
                 .email("her08072@naver.com")
@@ -112,7 +115,7 @@ class QuestionAdminApiControllerTest {
         return userService.createToken("her08072@naver.com");
     }
 
-     QuestionSaveRequestDto generateRequestDto() {
+    QuestionSaveRequestDto generateRequestDto() {
 
         User user = User.builder()
                 .name("홍길동")
