@@ -5,6 +5,8 @@ import com.skhuedin.skhuedin.domain.Category;
 import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminResponseDto;
+import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateRequestDto;
+import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
@@ -120,6 +122,18 @@ public class PostsService {
                 .map(posts -> new PostsAdminMainResponseDto(posts));
     }
 
+    public PostsAdminUpdateResponseDto findByIdByAdmin(Long id) {
+        return new PostsAdminUpdateResponseDto(getPosts(id));
+    }
+
+    @Transactional
+    public void update(PostsAdminUpdateRequestDto requestDto) {
+        Posts posts = getPosts(requestDto.getId());
+        Category category = getCategory(requestDto.getCategoryId());
+
+        posts.updateCategoryAndStatus(category, requestDto.getDeleteStatus());
+    }
+
     /* private 메소드 */
     private Blog getBlog(Long id) {
         return blogRepository.findById(id).orElseThrow(() ->
@@ -131,5 +145,10 @@ public class PostsService {
         return postsRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 posts 입니다. id=" + id)
         );
+    }
+
+    private Category getCategory(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 category 입니다. id=" + id));
     }
 }
