@@ -33,6 +33,23 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     Page<Posts> findByBlogId(@Param("blogId") Long blogId, boolean deleteStatus, Pageable pageable);
 
     /* admin 전용 */
-    @EntityGraph(attributePaths = {"blog", "blog.profile", "category"})
+    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @Query("select p " +
+            "from Posts p " +
+            "order by p.lastModifiedDate ")
     Page<Posts> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @Query("select p " +
+            "from Posts p " +
+            "where p.blog.user.name like %:username% " +
+            "order by p.lastModifiedDate ")
+    Page<Posts> findByUserName(Pageable pageable, @Param("username") String username);
+
+    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @Query("select p " +
+            "from Posts p " +
+            "where p.category.name like %:categoryName% " +
+            "order by p.lastModifiedDate ")
+    Page<Posts> findByCategoryName(Pageable pageable, @Param("categoryName") String categoryName);
 }

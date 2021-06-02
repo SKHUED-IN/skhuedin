@@ -110,6 +110,17 @@ public class PostsService {
                 .map(posts -> new PostsAdminMainResponseDto(posts));
     }
 
+    public Page<PostsAdminMainResponseDto> findByUserName(Pageable pageable, String username) {
+        return postsRepository.findByUserName(pageable, username)
+                .map(posts -> new PostsAdminMainResponseDto(posts));
+    }
+
+    public Page<PostsAdminMainResponseDto> findByCategoryName(Pageable pageable, String CategoryName) {
+        return postsRepository.findByCategoryName(pageable, CategoryName)
+                .map(posts -> new PostsAdminMainResponseDto(posts));
+    }
+
+    /* private 메소드 */
     private Blog getBlog(Long id) {
         return blogRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 blog 입니다. id=" + id)
