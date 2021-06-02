@@ -57,6 +57,29 @@ public class KakaoOauth implements SocialOauth {
         return user;
     }
 
+    /*
+     * 로그아웃 구현
+     */
+    @Override
+    public void logout(OAuthToken oauthToken) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + oauthToken.getAccessToken());
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
+                new HttpEntity<>(headers);
+
+        // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
+        ResponseEntity<String> response2 = restTemplate.exchange(
+                "http://kapi.kakao.com/v1/user/logout",
+                HttpMethod.POST,
+                kakaoProfileRequest2,
+                String.class
+        );
+    }
+
     /**
      * 카카오에서 받은 프로필로
      * User 정보를 채운 후, 디비에 저장

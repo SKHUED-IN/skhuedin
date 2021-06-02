@@ -34,6 +34,11 @@ public class OauthService {
         return user;
     }
 
+    public void logout(String socialLoginType, OAuthToken oAuthToken) {
+        SocialOauth socialOauth = findSocialOauthByType(socialLoginType);
+        socialOauth.logout(oAuthToken);
+    }
+
     private SocialOauth findSocialOauthByType(String socialLoginType) {
 
         Provider provider = null;
