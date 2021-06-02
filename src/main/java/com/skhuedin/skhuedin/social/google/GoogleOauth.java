@@ -10,7 +10,12 @@ import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -48,6 +53,26 @@ public class GoogleOauth implements SocialOauth {
         user = saveGoogleUser(profile);
 
         return user;
+    }
+
+    @Override
+    public void logout(OAuthToken oauthToken) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + oauthToken.getAccessToken());
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
+                new HttpEntity<>(headers);
+
+        // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
+        ResponseEntity<String> response2 = restTemplate.exchange(
+                "https://oauth2.googleapis.com/revoke?token=" + oauthToken.getAccessToken(),
+                HttpMethod.POST,
+                kakaoProfileRequest2,
+                String.class
+        );
     }
 
     public UserSaveRequestDto saveGoogleUser(GoogleProfile googleProfile) {
