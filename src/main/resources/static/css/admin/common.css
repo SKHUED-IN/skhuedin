@@ -28,3 +28,19 @@ a {
 a:hover {
     color: #055160;
 }
+
+.sm{
+    flex: 1;
+    padding: 5% 30%;
+}
+
+.contents {
+    width: 40%;
+    height: 80%;
+    padding: 5%;
+    margin: 0 auto;
+    background:  #f8f9fa!important;
+    text-align: center;
+    border: 1px solid #f8f9fa!important;
+    border-radius: 40px 40px 40px 40px;
+}

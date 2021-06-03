@@ -29,7 +29,7 @@ public class AdminApiController {
     private final PostsService postsService;
     private final CategoryService categoryService;
 
-//    @MyRole(role = Role.ADMIN)
+    @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ResponseEntity<? extends BasicResponse> getPosts(
             Pageable pageable,

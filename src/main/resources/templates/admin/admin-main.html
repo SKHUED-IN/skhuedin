@@ -5,9 +5,49 @@
 <header th:replace="/fragments/admin-body-header.html :: admin-body-header"></header>
 
 <section>
-    main page
+    <div class="contents">
+        <h3 style="font-weight: bold">[ SKHUED-IN Admin page ]</h3>
+        <br>
+        <h4>
+            Available only to administrators.</h4>
+        <h4>If you are not an administrator, please leave.</h4>
+        <br>
+        <br>
+        <a id="kakao-login-btn"></a>
+    </div>
 </section>
 
 <footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
 </body>
 </html>
+
+<script>
+    Kakao.init('b9de844ef665dda98917b7ec7b9d9a8b');
+    Kakao.Auth.createLoginButton({
+        container: '#kakao-login-btn',
+        success: function (authObj) {
+            kakao(authObj["access_token"]);
+        },
+        fail: function (err) {
+            alert(JSON.stringify(err));
+        }
+    });
+
+    function kakao(token) {
+        let url = '/auth/kakao/callback';
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                accessToken: token
+            })
+        }).then((res) => {
+            return res.json(); //Promise 반환
+        })
+            .then((json) => {
+                localStorage.setItem("token", json.token);
+            });
+    }
+</script>
