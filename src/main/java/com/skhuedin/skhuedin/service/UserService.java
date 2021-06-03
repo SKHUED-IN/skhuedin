@@ -6,6 +6,7 @@ import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 
+import com.skhuedin.skhuedin.dto.posts.PostsAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
@@ -20,10 +21,13 @@ import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -157,5 +161,27 @@ public class UserService {
 
     public User getUser(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    /* admin 전용 */
+    public Page<UserMainResponseDto> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(users -> new UserMainResponseDto(users));
+    }
+
+    public Page<UserMainResponseDto> findByUserName(Pageable pageable, String username) {
+        return userRepository.findByUserName(pageable, username)
+                .map(user -> new UserMainResponseDto(user));
+    }
+
+    public Page<UserMainResponseDto> findByUserRole(Pageable pageable, String role) {
+        String findRole = role.toUpperCase(Locale.ROOT);
+        if (findRole.equals("ADMIN")) {
+            return userRepository.findByRoleAdmin(pageable)
+                    .map(users -> new UserMainResponseDto(users));
+        } else if (findRole.equals("USER")) {
+            return userRepository.findByRoleUser(pageable)
+                    .map(users -> new UserMainResponseDto(users));
+        } else throw new IllegalArgumentException("일치하는 권한이 없습니다. ");
     }
 }

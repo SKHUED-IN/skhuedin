@@ -33,4 +33,11 @@ public class AdminMainController {
         modelAndView.setViewName("admin/admin-posts-detail");
         return modelAndView;
     }
+
+    @GetMapping("users")
+    public ModelAndView users() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/admin-users");
+        return modelAndView;
+    }
 }
