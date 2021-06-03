@@ -80,4 +80,10 @@ public class Posts extends BaseEntity {
     public void setDeleteStatus() {
         this.deleteStatus = true;
     }
+
+    /* admin 전용 */
+    public void updateCategoryAndStatus(Category category, Boolean deleteStatus) {
+        this.category = category;
+        this.deleteStatus = deleteStatus;
+    }
 }

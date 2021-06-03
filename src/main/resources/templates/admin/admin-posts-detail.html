@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/admin-header.html :: admin-header"></head>
+<body>
+<header th:replace="/fragments/admin-body-header.html :: admin-body-header"></header>
+
+<section>
+    <div class="container-fluid">
+        <div class="card fs-3 fw-bold mb-3 p-3 text-center">게시글 수정</div>
+        <div class="card">
+            <div class="card-header">
+                <div id="title"></div>
+            </div>
+            <div class="card-body">
+                <div id="content"></div>
+            </div>
+            <div class="card-body fw-bold">
+                <div id="writer"></div>
+            </div>
+        </div>
+        <form onsubmit="updatePosts(); return false">
+            <div class="row my-3">
+                <div class="col">
+                    <div class="card p-0">
+                        <div class="card-header">
+                            카테고리
+                        </div>
+                        <div class="card-body">
+                            <select id="category-select" class="form-select" aria-label="category">
+                                <option id="selected-category" selected disabled></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card p-0">
+                        <div class="card-header">
+                            삭제 상태
+                        </div>
+                        <div class="card-body">
+                            <select id="delete-status-select" class="form-select" aria-label="delete-status">
+                                <option id="selected-status" selected disabled></option>
+                                <option value="true">true</option>
+                                <option value="false">false</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-secondary">수정</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
+<script>
+    const host = window.location.protocol + '//' + window.location.host;
+
+    let id = window.location.search.split('id=')[1];
+
+    setData();
+
+    async function setData() {
+        let posts = await fetchPosts(id);
+        document.getElementById('title').innerText = posts.title;
+        document.getElementById('content').innerHTML = marked(posts.content);
+        document.getElementById('writer').innerText = posts.blog.user.name;
+
+        let categories = await fetchCategories();
+        let categorySelect = document.getElementById('category-select');
+        document.getElementById('selected-category').text = posts.category.name;
+        document.getElementById('selected-category').value = posts.category.id;
+        for (let key in categories) {
+            let option =
+                '<option value="' + categories[key].id + '">' + categories[key].name + '</option>'
+            categorySelect.innerHTML += option;
+        }
+
+        document.getElementById('selected-status').text = posts.deleteStatus;
+        document.getElementById('selected-status').value = posts.deleteStatus;
+    }
+
+    function updatePosts() {
+        let url = host + '/api/admin/posts/' + id;
+
+        let categoryId = document.getElementById('category-select').value;
+        let deleteStatus = document.getElementById('delete-status-select').value;
+        fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: id,
+                categoryId: categoryId,
+                deleteStatus: deleteStatus
+            })
+        }).then(() => {
+            history.back();
+        }).catch((error) => {
+            alert('수정에 실패하였습니다.');
+        });
+    }
+
+    async function fetchPosts(id) {
+        let url = host + '/api/admin/posts/' + id;
+
+        let fetchData = await fetch(url)
+            .then((response) => response.json());
+
+        return fetchData.data;
+    }
+
+    async function fetchCategories() {
+        let url = host + '/api/admin/categories';
+
+        let fetchData = await fetch(url)
+            .then((response) => response.json());
+
+        return fetchData.data;
+    }
+</script>
+</body>
+</html>
