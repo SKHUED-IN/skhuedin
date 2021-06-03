@@ -108,14 +108,20 @@
     }
 
     async function fetchPosts(pageable, condition) {
+        let token = localStorage.getItem("token");
         let url = host + '/api/admin/posts?page=' + pageable.page + '&size=' + pageable.size;
 
         if (condition !== undefined) {
             url += '&' + condition.selectCondition + '=' + condition.keyword;
         }
 
-        let fetchData = await fetch(url)
-            .then((response) => response.json());
+        let fetchData = await fetch(url, {
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            }
+        ).then((response) => response.json());
 
         pageable.totalPage = fetchData.data.totalPages;
 
