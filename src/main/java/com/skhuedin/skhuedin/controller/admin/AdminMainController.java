@@ -22,7 +22,7 @@ public class AdminMainController {
     @GetMapping
     public ModelAndView main() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/admin-main");
+        modelAndView.setViewName("admin/main");
         return modelAndView;
     }
 
@@ -30,7 +30,7 @@ public class AdminMainController {
     @GetMapping("posts")
     public ModelAndView posts() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/admin-posts");
+        modelAndView.setViewName("admin/posts");
         return modelAndView;
     }
 
@@ -38,7 +38,15 @@ public class AdminMainController {
     @GetMapping("posts/detail")
     public ModelAndView postsDetail() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/admin-posts-detail");
+        modelAndView.setViewName("admin/posts-detail");
+        return modelAndView;
+    }
+
+//    @MyRole(role = Role.ADMIN)
+    @GetMapping("question")
+    public ModelAndView question() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/question");
         return modelAndView;
     }
 
