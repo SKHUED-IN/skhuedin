@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/admin-header.html :: admin-header"></head>
+<body>
+<header th:replace="/fragments/admin-body-header.html :: admin-body-header"></header>
+
+<section class="sm">
+    <div class="container-sm">
+        <div class="card fs-3 fw-bold mb-3 p-3 text-center">회원 수정</div>
+        <form onsubmit="updateUsers(); return false">
+            <div class="row my-3">
+                <div class="col">
+                    <div class="card p-0">
+                        <div class="card-header">
+                            권한 설정
+                        </div>
+                        <div class="card-body">
+                            <select id="role-select" class="form-select" aria-label="role">
+                                <option id="selected-role" selected disabled></option>
+                                <option value="USER">USER</option>
+                                <option value="ADMIN">ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-secondary btn-lg"> -- 수정 --</button>
+                <button type="button" onclick="deleteUsers()" class="btn btn-primary btn-lg">회원 삭제</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
+<script>
+    const host = window.location.protocol + '//' + window.location.host;
+
+    let id = window.location.search.split('id=')[1];
+    let url2 = host + '/admin/users';
+
+    async function fetchUsers(id) {
+        let url = host + '/api/admin/users/' + id;
+
+        let fetchData = await fetch(url)
+            .then((response) => response.json());
+
+        return fetchData.data;
+    }
+
+    setData();
+
+    async function setData() {
+
+        let user = await fetchUsers(id);
+        let roleSelect = document.getElementById('role');
+
+        document.getElementById('selected-role').text = user.role;
+        document.getElementById('selected-role').value = user.role;
+    }
+
+    function updateUsers() {
+        let url = host + '/api/admin/users/' + id;
+
+        let role = document.getElementById('role-select').value;
+        fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: id,
+                role: role
+            })
+        }).then(() => {
+            location.href = url2;
+        }).catch((error) => {
+            alert('수정에 실패하였습니다.');
+        });
+    }
+
+    async function deleteUsers() {
+        let url = host + '/api/admin/users/delete/' + id;
+
+        if (confirm("삭제하시겠습니까?")) {
+            fetch(url)
+                .then(() => {
+                    location.href = url2;
+                }).catch((error) => {
+                alert(error);
+            });
+        }
+    }
+
+</script>
+</body>
+</html>
