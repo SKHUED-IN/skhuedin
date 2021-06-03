@@ -16,6 +16,8 @@ public interface SocialOauth {
      */
     UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken);
 
+    void logout(OAuthToken oAuthToken);
+
     default Provider type() {
         if (this instanceof GoogleOauth) {
             return Provider.GOOGLE;

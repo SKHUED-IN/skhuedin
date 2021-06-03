@@ -56,6 +56,26 @@ public class NaverOauth implements SocialOauth {
         return user;
     }
 
+    @Override
+    public void logout(OAuthToken oauthToken) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + oauthToken.getAccessToken());
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
+                new HttpEntity<>(headers);
+
+        // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
+        ResponseEntity<String> response2 = restTemplate.exchange(
+                "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=xncCqLDs5xAMfdEgui3A&client_secret=G8wydgDb7C&access_token=" + oauthToken.getAccessToken() + "&service_provider=NAVER",
+                HttpMethod.POST,
+                kakaoProfileRequest2,
+                String.class
+        );
+    }
+
     /**
      * 네이버에서 받은 프로필로
      * User 정보를 채운 후, 디비에 저장

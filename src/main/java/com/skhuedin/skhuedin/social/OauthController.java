@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -57,5 +58,17 @@ public class OauthController {
 
         UserMainResponseDto responseDto = new UserMainResponseDto(userService.findByEmail(user.getEmail()));
         return ResponseEntity.status(HttpStatus.OK).body((new CheckTokenWithCommonResponse<>(responseDto, token, isFirstVisit)));
+    }
+
+    @PostMapping("/{socialLoginType}/logout")
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(
+            @PathVariable("socialLoginType") String socialLoginType,
+            @RequestBody TokenResponse response) {
+
+        OAuthToken oAuthToken = new OAuthToken();
+        oAuthToken.setAccessToken(response.getAccessToken());
+
+        oauthService.logout(socialLoginType, oAuthToken);
     }
 }
