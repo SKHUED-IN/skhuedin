@@ -101,11 +101,11 @@ public class AdminController {
         return "redirect:/categoryList";
     }
 
-    @PostMapping("user/role")
-    public String userRoleChange(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
-        userService.updateRole(id);
-        return "redirect:/userList";
-    }
+//    @PostMapping("user/role")
+//    public String userRoleChange(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {
+//        userService.updateRole(id);
+//        return "redirect:/userList";
+//    }
 
     @PostMapping("question/status")
     public String questionStatus(@RequestParam(value = "id", required = false, defaultValue = "0") Long id) {

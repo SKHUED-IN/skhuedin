@@ -13,6 +13,11 @@ section {
     padding: 5%;
 }
 
+.sm{
+    flex: 1;
+    padding: 5% 30%;
+}
+
 footer {
     text-align: center;
     padding:10px 0;

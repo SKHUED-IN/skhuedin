@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailAndPassword(String email, String password);
 
 
-// admin
+    // admin
     Page<User> findAll(Pageable pageable);
 
     @Query("select u " +
