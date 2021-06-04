@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/admin-header.html :: admin-header"></head>
+<body>
+<header th:replace="/fragments/admin-body-header.html :: admin-body-header"></header>
+
+<section>
+    <div class="container-fluid">
+        <div class="fs-3 fw-bold mb-3 pb-3 text-center">
+            <span class="border-bottom border-secondary border-5 py-3">질문 살펴보기</span>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <div id="title" class="fw-bold fs-4"></div>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item p-0">
+                    <div class="input-group">
+                        <span class="input-group-text">누가</span>
+                        <div id="writer-user" class="fw-bold p-2"></div>
+                    </div>
+                </li>
+                <li class="list-group-item p-0">
+                    <div class="input-group">
+                        <span class="input-group-text">누구에게</span>
+                        <div id="target-user" class="fw-bold p-2"></div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div id="content"></div>
+                </li>
+            </ul>
+        </div>
+        <div class="fs-3 fw-bold my-3 py-3 text-center">
+            <span class="border-bottom border-secondary border-5 py-3">댓글 살펴보기</span>
+        </div>
+        <div id="comments"></div>
+    </div>
+</section>
+
+<footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
+<script>
+    const host = window.location.protocol + '//' + window.location.host;
+
+    let id = window.location.search.split('id=')[1];
+
+    setData();
+
+    async function setData() {
+        let question = await fetchQuestionsById(id);
+        document.getElementById('title').innerText = question.title;
+        document.getElementById('writer-user').innerText = question.writerUser.name;
+        document.getElementById('target-user').innerText = question.targetUser.name;
+        document.getElementById('content').innerText = question.content;
+
+        let comments = document.getElementById('comments');
+        let parentComments = question.comments;
+
+        for (let key in parentComments) {
+            let parentComment = parentComments[key];
+            let div = document.createElement('div');
+            div.className = 'card';
+
+            let ul = document.createElement('ul');
+            ul.className = 'list-group list-group-flush';
+            let writerUser = document.createElement('li');
+            writerUser.className = 'list-group-item';
+            writerUser.innerText = parentComment.writerUser.name;
+
+            let content = document.createElement('li');
+            content.className = 'list-group-item';
+            content.innerText = parentComment.content;
+
+            ul.appendChild(writerUser);
+            ul.appendChild(content);
+
+            let childrenComments = parentComment.children;
+            let children = document.createElement('li');
+            children.className = 'list-group-item p-0 ps-5 border-top-0 border-bottom-0';
+            for (let key2 in childrenComments) {
+                let childComment = childrenComments[key];
+                let div2 = document.createElement('div');
+                div2.className = 'card';
+
+                let ul2 = document.createElement('ul');
+                ul2.className = 'list-group list-group-flush';
+                let writerUser2 = document.createElement('li');
+                writerUser2.className = 'list-group-item';
+                writerUser2.innerText = childComment.writerUser.name;
+
+                let content2 = document.createElement('li');
+                content2.className = 'list-group-item';
+                content2.innerText = childComment.content;
+
+                ul2.appendChild(writerUser2);
+                ul2.appendChild(content2);
+
+                div2.appendChild(ul2);
+                children.appendChild(div2);
+            }
+            ul.appendChild(children);
+
+            div.appendChild(ul);
+            comments.appendChild(div);
+        }
+    }
+
+    async function fetchQuestionsById(id) {
+        let url = host + '/api/admin/questions/' + id;
+
+        let fetchData = await fetch(url)
+            .then((response) => response.json());
+
+        return fetchData.data;
+    }
+
+</script>
+</body>
+</html>
