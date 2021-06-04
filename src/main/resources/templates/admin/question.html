@@ -5,9 +5,164 @@
 <header th:replace="/fragments/admin-body-header.html :: admin-body-header"></header>
 
 <section>
-    <!--    각자 코드를 작성    -->
+    <div class="container-fluid">
+        <div class="row mb-3 align-items-center">
+            <div class="col">
+                <div class="fs-3 fw-bold">질문 목록</div>
+            </div>
+            <div class="col">
+                <form class="row align-items-center" onsubmit="search(); return false">
+                    <div class="col-6 p-0">
+                        <div class="input-group">
+                            <input id="keyword" type="text" class="form-control" placeholder="검색어를 입력하세요."
+                                   aria-label="">
+                        </div>
+                    </div>
+                    <div class="col-3 p-0">
+                        <select id="select-condition" class="form-select" name="inputCondition"
+                                aria-label="Default select example">
+                            <option value="" selected>조건</option>
+                            <option value="writerUser">누가</option>
+                            <option value="targetUser">누구에게</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-secondary">검색</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover text-center">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">누가</th>
+            <th scope="col">누구에게</th>
+            <th scope="col">제목</th>
+            <th scope="col">공개/비공개</th>
+            <th scope="col">상단 고정 유무</th>
+            <th scope="col">생성 시간</th>
+            <th scope="col">수정 시간</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" onclick="prevPage()" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" onclick="nextPage()" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </section>
 
 <footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
+<script>
+    const host = window.location.protocol + '//' + window.location.host;
+
+    let pageable = {
+        page: 0,
+        size: 10,
+        totalPage: 0
+    }
+
+    creatTable();
+
+    function search() {
+        let keyword = document.getElementById('keyword').value;
+        let selectCondition = document.getElementById('select-condition').value;
+
+        let condition = {
+            keyword: keyword,
+            selectCondition: selectCondition
+        }
+
+        creatTable(condition);
+    }
+
+    function prevPage() {
+        if (pageable.page > 0) {
+            pageable.page -= 1;
+            if (document.getElementById('keyword').value !== "") {
+                search();
+            } else {
+                creatTable();
+            }
+        } else {
+            alert('첫 번째 입니다.');
+        }
+    }
+
+    function nextPage() {
+        if (pageable.page < pageable.totalPage - 1) {
+            pageable.page += 1;
+            if (document.getElementById('keyword').value !== "") {
+                search();
+            } else {
+                creatTable();
+            }
+        } else {
+            alert('마지막 입니다.');
+        }
+    }
+
+    async function creatTable(condition) {
+        let tbody = document.getElementById('table-body');
+        removeTable();
+
+        let data = await fetchQuestions(condition);
+        pageable.totalPage = data.totalPages;
+
+        let questions = data.content;
+        for (let key in questions) {
+            let url = '\'' + '/admin/question/detail?id=' + questions[key].id + '\'';
+            let row =
+                '<tr id="tr-' + key + '" onclick="location.href=' + url + '">' +
+                '   <th class="pb-3 pt-3">' + questions[key].id + '</th>' +
+                '   <td class="pb-3 pt-3">' + questions[key].writerUser.name + '</td>' +
+                '   <td class="pb-3 pt-3">' + questions[key].targetUser.name + '</td>' +
+                '   <td class="pb-3 pt-3">' + questions[key].title + '</td>' +
+                '   <td class="pb-3 pt-3">' + (questions[key].status === false ? '공개' : '비공개') + '</td>' +
+                '   <td class="pb-3 pt-3">' + questions[key].fix + '</td>' +
+                '   <td class="pb-3 pt-3">' + questions[key].createdDate + '</td>' +
+                '   <td class="pb-3 pt-3">' + questions[key].lastModifiedDate + '</td>' +
+                '</tr>'
+            tbody.innerHTML += row;
+        }
+    }
+
+    async function fetchQuestions(condition) {
+        let url = host + '/api/admin/questions?page=' + pageable.page + '&size=' + pageable.size;
+
+        if (condition !== undefined) {
+            url += '&' + condition.selectCondition + '=' + condition.keyword;
+        }
+
+        let fetchData = await fetch(url)
+            .then((response) => response.json());
+
+        console.log(fetchData.data);
+        return fetchData.data;
+    }
+
+    function removeTable() {
+        let tbody = document.getElementById('table-body');
+        for (let i = 0; i < pageable.size; i++) {
+            let row = document.getElementById('tr-' + i);
+            if (row != null) {
+                tbody.removeChild(row);
+            }
+        }
+    }
+</script>
 </body>
 </html>

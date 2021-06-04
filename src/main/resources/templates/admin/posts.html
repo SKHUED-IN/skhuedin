@@ -75,7 +75,7 @@
         totalPage: 0
     }
 
-    fetchPosts(pageable);
+    creatTable();
 
     function search() {
         let keyword = document.getElementById('keyword').value;
@@ -86,13 +86,17 @@
             selectCondition: selectCondition
         }
 
-        fetchPosts(pageable, condition);
+        creatTable(condition);
     }
 
     function prevPage() {
         if (pageable.page > 0) {
             pageable.page -= 1;
-            fetchPosts(pageable);
+            if (document.getElementById('keyword').value !== "") {
+                search();
+            } else {
+                creatTable();
+            }
         } else {
             alert('첫 번째 입니다.');
         }
@@ -101,36 +105,22 @@
     function nextPage() {
         if (pageable.page < pageable.totalPage - 1) {
             pageable.page += 1;
-            fetchPosts(pageable);
+            if (document.getElementById('keyword').value !== "") {
+                search();
+            } else {
+                creatTable();
+            }
         } else {
             alert('마지막 입니다.');
         }
     }
 
-    async function fetchPosts(pageable, condition) {
-        let token = localStorage.getItem("token");
-        let url = host + '/api/admin/posts?page=' + pageable.page + '&size=' + pageable.size;
-
-        if (condition !== undefined) {
-            url += '&' + condition.selectCondition + '=' + condition.keyword;
-        }
-
-        let fetchData = await fetch(url, {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization": "Bearer " + token
-                }
-            }
-        ).then((response) => response.json());
-
-        pageable.totalPage = fetchData.data.totalPages;
-
-        creatTable(fetchData.data);
-    }
-
-    function creatTable(data) {
+    async function creatTable(condition) {
         let tbody = document.getElementById('table-body');
-        removeTable();
+        removeTable(condition);
+
+        let data = await fetchPosts(condition);
+        pageable.totalPage = data.totalPages;
 
         let posts = data.content;
         for (let key in posts) {
@@ -148,6 +138,20 @@
                 '</tr>'
             tbody.innerHTML += row;
         }
+    }
+
+    async function fetchPosts(condition) {
+        let url = host + '/api/admin/posts?page=' + pageable.page + '&size=' + pageable.size;
+
+        if (condition !== undefined) {
+            url += '&' + condition.selectCondition + '=' + condition.keyword;
+        }
+
+        let fetchData = await fetch(url)
+            .then((response) => response.json());
+
+        console.log(fetchData.data);
+        return fetchData.data;
     }
 
     function removeTable() {

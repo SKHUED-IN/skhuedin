@@ -17,7 +17,7 @@ public class PostsAdminMainResponseDto {
     private final Boolean deleteStatus;
     private final Integer view;
     private final CategoryMainResponseDto category;
-    private final String createDate;
+    private final String createdDate;
     private final String lastModifiedDate;
 
     public PostsAdminMainResponseDto(Posts posts) {
@@ -28,7 +28,7 @@ public class PostsAdminMainResponseDto {
         this.deleteStatus = posts.getDeleteStatus();
         this.view = posts.getView();
         this.category = new CategoryMainResponseDto(posts.getCategory());
-        this.createDate = posts.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.createdDate = posts.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.lastModifiedDate = posts.getLastModifiedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }

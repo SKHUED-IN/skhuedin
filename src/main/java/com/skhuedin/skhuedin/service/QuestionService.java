@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
+import com.skhuedin.skhuedin.dto.question.QuestionAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
 import com.skhuedin.skhuedin.infra.Role;
@@ -89,6 +90,23 @@ public class QuestionService {
         question.addView();
     }
 
+    /* admin 전용 */
+    public Page<QuestionAdminMainResponseDto> findAll(Pageable pageable) {
+        return questionRepository.findAll(pageable)
+                .map(question -> new QuestionAdminMainResponseDto(question));
+    }
+
+    public Page<QuestionAdminMainResponseDto> findByWriterUserName(Pageable pageable, String writerUserName) {
+        return questionRepository.findWriterUserName(pageable, writerUserName)
+                .map(question -> new QuestionAdminMainResponseDto(question));
+    }
+
+    public Page<QuestionAdminMainResponseDto> findByTargetUserName(Pageable pageable, String targetUserName) {
+        return questionRepository.findTargetUserName(pageable, targetUserName)
+                .map(question -> new QuestionAdminMainResponseDto(question));
+    }
+
+    /* private 메소드 */
     private Question getQuestion(Long id) {
         return questionRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + id));
