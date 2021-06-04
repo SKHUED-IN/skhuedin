@@ -26,7 +26,7 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
+//    @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ModelAndView posts() {
         ModelAndView modelAndView = new ModelAndView();
@@ -34,7 +34,7 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
+//    @MyRole(role = Role.ADMIN)
     @GetMapping("posts/detail")
     public ModelAndView postsDetail() {
         ModelAndView modelAndView = new ModelAndView();
@@ -54,6 +54,28 @@ public class AdminMainController {
     public ModelAndView usersDetail() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/admin-users-detail");
+        return modelAndView;
+    }
+
+    @GetMapping("category")
+    public ModelAndView category() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/admin-category");
+        return modelAndView;
+    }
+
+    //    @MyRole(role = Role.ADMIN)
+    @GetMapping("category/detail")
+    public ModelAndView categoryDetail() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/admin-category-detail");
+        return modelAndView;
+    }
+
+    @GetMapping("category/create")
+    public ModelAndView categoryCreate() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/admin-create-category");
         return modelAndView;
     }
 }
