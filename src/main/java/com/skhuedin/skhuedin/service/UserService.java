@@ -186,14 +186,13 @@ public class UserService {
     }
 
     public Page<UserMainResponseDto> findByUserRole(Pageable pageable, String role) {
-        String findRole = role.toUpperCase(Locale.ROOT);
-        if (findRole.equals("ADMIN")) {
-            return userRepository.findByRoleAdmin(pageable)
+        Role findRole = Role.valueOf(role.toUpperCase(Locale.ROOT));
+        try {
+            return userRepository.findByRoleAdmin(pageable, findRole)
                     .map(users -> new UserMainResponseDto(users));
-        } else if (findRole.equals("USER")) {
-            return userRepository.findByRoleUser(pageable)
-                    .map(users -> new UserMainResponseDto(users));
-        } else throw new IllegalArgumentException("일치하는 권한이 없습니다. ");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("일치하는 권한이 없습니다. ");
+        }
     }
 
     public UserMainResponseDto findByIdByAdmin(Long id) {
