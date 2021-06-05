@@ -43,7 +43,7 @@ public class AdminCategoryApiController {
         }
     }
 
-//    //    @MyRole(role = Role.ADMIN)
+    //    //    @MyRole(role = Role.ADMIN)
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<? extends BasicResponse> getCategory(@PathVariable("categoryId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -53,13 +53,13 @@ public class AdminCategoryApiController {
     @GetMapping("/category/up/{categoryId}")
     public ResponseEntity<? extends BasicResponse> upCategory(@PathVariable("categoryId") Long id) {
         categoryService.addWeight(id);
-        return  ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/category/down/{categoryId}")
     public ResponseEntity<? extends BasicResponse> downCategory(@PathVariable("categoryId") Long id) {
         categoryService.subtractWeight(id);
-        return  ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("create/category")
@@ -67,6 +67,7 @@ public class AdminCategoryApiController {
         categoryService.save(categoryRequestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
     @GetMapping("/category/delete/{categoryId}")
     public ResponseEntity<? extends BasicResponse> deleteUsers(@PathVariable("categoryId") Long id) {
         categoryService.delete(id);

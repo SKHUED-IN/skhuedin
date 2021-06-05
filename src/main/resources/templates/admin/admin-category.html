@@ -10,10 +10,10 @@
             <div class="col">
                 <div class="fs-3 fw-bold">카테고리 목록</div>
             </div>
-            <div class="col">
+            <div class="col" style="margin-left: 620px;">
                 <form class="row align-items-center" onsubmit="search(); return false">
                     <div class="col-3 p-0">
-                        <select id="select-condition" class="form-select" name="inputCondition"
+                        <select id="select-condition" style="width: 90px;" class="form-select" name="inputCondition"
                                 aria-label="Default select example">
                             <option value="" selected>이름</option>
                             <option value="1">가중치</option>
@@ -22,9 +22,9 @@
                     </div>
                     <div class="col">
                         <button type="submit" class="btn btn-secondary">정렬하기</button>
-                    </div>
-                    <div class="col">
-                       <a href="/admin/category/create"><button type="button" class="btn btn-secondary">생성하기</button>
+                        <a href="/admin/category/create">
+                            <button type="button" class="btn btn-secondary">생성하기</button>
+                        </a>
                     </div>
                 </form>
             </div>
