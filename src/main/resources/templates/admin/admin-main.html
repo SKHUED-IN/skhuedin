@@ -45,9 +45,14 @@
             })
         }).then((res) => {
             return res.json(); //Promise 반환
-        })
-            .then((json) => {
-                localStorage.setItem("token", json.token);
-            });
+        }).then((json) => {
+            localStorage.setItem("token", json.token);
+            redirect()
+        });
+    }
+
+    function redirect() {
+        fetch('/admin')
+            .then();
     }
 </script>
