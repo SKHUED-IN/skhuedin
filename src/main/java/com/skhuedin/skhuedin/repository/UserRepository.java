@@ -28,14 +28,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "order by u.lastModifiedDate ")
     Page<User> findByUserName(Pageable pageable, @Param("username") String username);
 
-
     @Query("select u " +
             "from User u " +
-            "where u.role =com.skhuedin.skhuedin.infra.Role.USER ")
-    Page<User> findByRoleUser(Pageable pageable);
-
-    @Query("select u " +
-            "from User u " +
-            "where u.role = com.skhuedin.skhuedin.infra.Role.ADMIN ")
-    Page<User> findByRoleAdmin(Pageable pageable);
+            "where u.role = :role ")
+    Page<User> findByRoleAdmin(Pageable pageable, @Param("role") Role role);
 }

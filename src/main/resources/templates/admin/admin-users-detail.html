@@ -83,7 +83,8 @@
         let url = host + '/api/admin/users/delete/' + id;
 
         if (confirm("삭제하시겠습니까?")) {
-            fetch(url)
+            fetch(url, {
+                method: "DELETE"})
                 .then(() => {
                     location.href = url2;
                 }).catch((error) => {

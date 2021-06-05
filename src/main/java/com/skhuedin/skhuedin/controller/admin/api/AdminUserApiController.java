@@ -61,7 +61,7 @@ public class AdminUserApiController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/users/delete/{userId}")
+    @DeleteMapping("/users/delete/{userId}")
     public ResponseEntity<? extends BasicResponse> deleteUsers(@PathVariable("userId") Long id) {
         userService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
