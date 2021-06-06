@@ -37,26 +37,34 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
     @Query("select p " +
             "from Posts p " +
+            "where p.category.name not like '건의사항' " +
             "order by p.lastModifiedDate DESC")
     Page<Posts> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
     @Query("select p " +
             "from Posts p " +
-            "where p.blog.user.name like %:username% " +
+            "where p.blog.user.name like %:username% and p.category.name not like '건의사항' " +
             "order by p.lastModifiedDate ")
     Page<Posts> findByUserName(Pageable pageable, @Param("username") String username);
 
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
     @Query("select p " +
             "from Posts p " +
-            "where p.category.name like %:categoryName% " +
+            "where p.category.name like %:categoryName% and p.category.name not like '건의사항' " +
             "order by p.lastModifiedDate ")
     Page<Posts> findByCategoryName(Pageable pageable, @Param("categoryName") String categoryName);
 
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
     @Query("select p " +
             "from Posts p " +
-            "where p.id = :postsId ")
+            "where p.id = :postsId")
     Optional<Posts> findById(@Param("postsId") Long id);
+
+    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @Query("select p " +
+            "from Posts p " +
+            "where p.category.name like '건의사항' " +
+            "order by p.lastModifiedDate desc")
+    Page<Posts> findBySuggestions(Pageable pageable);
 }

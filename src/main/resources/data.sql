@@ -59,11 +59,11 @@ values (1, 2, 'test question 1', 'test question content 1', false, false, 0, now
        (4, 1, 'test question 20', 'test question content 20', false, false, 0, now(), now());
 
 insert into category (created_date, last_modified_date, name, weight)
-values (now(), now(), '건의사항', 0),
-       (now(), now(), '학창 시절', 1),
+values (now(), now(), '학창 시절', 1),
        (now(), now(), '취업 준비', 2),
        (now(), now(), '하고싶은말', 3),
-       (now(), now(), '연봉', 4);
+       (now(), now(), '연봉', 4),
+       (now(), now(), '건의사항', 0);
 
 insert into posts (created_date, last_modified_date, content, title, delete_status, view, blog_id, category_id)
 values (now(), now(), 'posts content 1', 'posts title 1', false, 1, 1, 1),
@@ -85,7 +85,23 @@ values (now(), now(), 'posts content 1', 'posts title 1', false, 1, 1, 1),
     (now(), now(), 'posts content 17', 'posts title 8', false, 17, 4, 2),
     (now(), now(), 'posts content 18', 'posts title 8', false, 18, 4, 3),
     (now(), now(), 'posts content 19', 'posts title 8', false, 19, 4, 1),
-    (now(), now(), 'posts content 20', 'posts title 8', false, 20, 4, 2);
+    (now(), now(), 'posts content 20', 'posts title 8', false, 20, 4, 2),
+
+    (now(), now(), '건의 사항 1 입니다.', '건의 사항 1', null, null, 1, 5),
+    (now(), now(), '건의 사항 2 입니다.', '건의 사항 2', null, null, 1, 5),
+    (now(), now(), '건의 사항 3 입니다.', '건의 사항 3', null, null, 1, 5),
+    (now(), now(), '건의 사항 4 입니다.', '건의 사항 4', null, null, 1, 5),
+    (now(), now(), '건의 사항 5 입니다.', '건의 사항 5', null, null, 1, 5),
+    (now(), now(), '건의 사항 6 입니다.', '건의 사항 6', null, null, 1, 5),
+    (now(), now(), '건의 사항 7 입니다.', '건의 사항 7', null, null, 1, 5),
+    (now(), now(), '건의 사항 8 입니다.', '건의 사항 8', null, null, 1, 5),
+    (now(), now(), '건의 사항 9 입니다.', '건의 사항 9', null, null, 1, 5),
+    (now(), now(), '건의 사항 10 입니다.', '건의 사항 10', null, null, 1, 5),
+    (now(), now(), '건의 사항 11 입니다.', '건의 사항 11', null, null, 1, 5),
+    (now(), now(), '건의 사항 12 입니다.', '건의 사항 12', null, null, 1, 5),
+    (now(), now(), '건의 사항 13 입니다.', '건의 사항 13', null, null, 1, 5),
+    (now(), now(), '건의 사항 14 입니다.', '건의 사항 14', null, null, 1, 5),
+    (now(), now(), '건의 사항 15 입니다.', '건의 사항 15', null, null, 1, 5);
 
 insert into comment (question_id, writer_user_id, content, parent_comment_id, created_date, last_modified_date)
 values (21, 1, 'parent 댓글 1', null, now(), now()),

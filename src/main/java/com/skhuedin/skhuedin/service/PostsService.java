@@ -145,6 +145,11 @@ public class PostsService {
         posts.updateCategoryAndStatus(category, requestDto.getDeleteStatus());
     }
 
+    public Page<PostsAdminMainResponseDto> findBySuggestions(Pageable pageable) {
+        return postsRepository.findBySuggestions(pageable)
+                .map(posts -> new PostsAdminMainResponseDto(posts));
+    }
+
     /* private 메소드 */
     private Blog getBlog(Long id) {
         return blogRepository.findById(id).orElseThrow(() ->

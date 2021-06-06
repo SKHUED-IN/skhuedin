@@ -2,7 +2,6 @@ package com.skhuedin.skhuedin.controller.admin;
 
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.infra.Role;
-import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminMainController {
-    private final UserService userService;
 
     @GetMapping
     public ModelAndView main() {
@@ -22,7 +20,7 @@ public class AdminMainController {
         return modelAndView;
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ModelAndView posts() {
         ModelAndView modelAndView = new ModelAndView();
@@ -30,10 +28,11 @@ public class AdminMainController {
         return modelAndView;
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts/detail")
     public ModelAndView postsDetail() {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/posts-detail");
         modelAndView.setViewName("admin/posts-detail");
         return modelAndView;
     }
@@ -57,7 +56,7 @@ public class AdminMainController {
     @GetMapping("users")
     public ModelAndView users() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/admin-users");
+        modelAndView.setViewName("admin/users");
         return modelAndView;
     }
 
@@ -65,14 +64,14 @@ public class AdminMainController {
     @GetMapping("users/detail")
     public ModelAndView usersDetail() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/admin-users-detail");
+        modelAndView.setViewName("admin/users-detail");
         return modelAndView;
     }
 
     @GetMapping("category")
     public ModelAndView category() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/admin-category");
+        modelAndView.setViewName("admin/category");
         return modelAndView;
     }
 
@@ -80,14 +79,22 @@ public class AdminMainController {
     @GetMapping("category/detail")
     public ModelAndView categoryDetail() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/admin-category-detail");
+        modelAndView.setViewName("admin/category-detail");
         return modelAndView;
     }
 
     @GetMapping("category/create")
     public ModelAndView categoryCreate() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/admin-create-category");
+        modelAndView.setViewName("admin/create-category");
+        return modelAndView;
+    }
+
+//    @MyRole(role = Role.ADMIN)
+    @GetMapping("suggestions")
+    public ModelAndView suggestions() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/suggestions");
         return modelAndView;
     }
 }
