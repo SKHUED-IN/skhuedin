@@ -21,4 +21,24 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("select q from Question q where q.targetUser.id = :userId")
     List<Question> findQuestionByTargetUserId(@Param("userId") Long userId);
 
+    /* admin 전용 */
+    @EntityGraph(attributePaths = {"targetUser", "writerUser"})
+    @Query("select q " +
+            "from Question q " +
+            "order by q.lastModifiedDate desc ")
+    Page<Question> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"targetUser", "writerUser"})
+    @Query("select q " +
+            "from Question q " +
+            "where q.writerUser.name like %:writerUserName% " +
+            "order by q.lastModifiedDate desc ")
+    Page<Question> findWriterUserName(Pageable pageable, @Param("writerUserName") String writerUserName);
+
+    @EntityGraph(attributePaths = {"targetUser", "writerUser"})
+    @Query("select q " +
+            "from Question q " +
+            "where q.targetUser.name like %:targetUserName% " +
+            "order by q.lastModifiedDate desc ")
+    Page<Question> findTargetUserName(Pageable pageable, @Param("targetUserName") String targetUserName);
 }

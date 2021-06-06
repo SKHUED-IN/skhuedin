@@ -35,7 +35,7 @@ public class CommonExceptionAdvice {
 
     // 400
     @ExceptionHandler({InvalidDataAccessApiUsageException.class})
-    public ResponseEntity<ErrorResponse<String>> BadRequestException(RuntimeException e) {
+    public ResponseEntity<ErrorResponse<String>> badRequestException(RuntimeException e) {
         log.warn("error", e);
 
         return ResponseEntity
@@ -45,7 +45,7 @@ public class CommonExceptionAdvice {
 
     // 401
     @ExceptionHandler({EmptyTokenException.class})
-    public ResponseEntity<ErrorResponse<String>> EmptyTokenException(RuntimeException e) {
+    public ResponseEntity<ErrorResponse<String>> emptyTokenException(RuntimeException e) {
         log.warn("error", e);
 
         return ResponseEntity
@@ -55,7 +55,7 @@ public class CommonExceptionAdvice {
 
     // 404
     @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<ErrorResponse<String>> NotFoundException(RuntimeException e) {
+    public ResponseEntity<ErrorResponse<String>> notFoundException(RuntimeException e) {
         log.warn("error", e);
 
         return ResponseEntity

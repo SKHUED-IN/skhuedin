@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <header th:fragment="admin-body-header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">skhuedin</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -25,10 +25,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/category">카테고리 관리</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/question">질문 관리</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-
 </header>
 </html>
