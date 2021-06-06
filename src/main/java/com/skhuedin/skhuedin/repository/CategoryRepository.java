@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
@@ -31,4 +32,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             "order by c.createdDate desc ")
     Page<Category> findByCreatedDate(Pageable pageable);
 
+
+    @Query("select c " +
+            "from Category c " +
+            "where c.name = :categoryName")
+    Optional<Category> findByCategoryName(@Param("categoryName") String categoryName);
 }
