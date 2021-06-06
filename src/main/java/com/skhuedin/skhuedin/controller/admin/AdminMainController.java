@@ -26,7 +26,7 @@ public class AdminMainController {
         return modelAndView;
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ModelAndView posts() {
         ModelAndView modelAndView = new ModelAndView();
@@ -34,7 +34,7 @@ public class AdminMainController {
         return modelAndView;
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts/detail")
     public ModelAndView postsDetail() {
         ModelAndView modelAndView = new ModelAndView();
