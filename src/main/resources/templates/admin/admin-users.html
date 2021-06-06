@@ -67,6 +67,7 @@
 <footer th:replace="fragments/admin-body-footer.html :: admin-body-footer"></footer>
 <script>
 
+
     const host = window.location.host;
 
     let pageable = {
@@ -108,14 +109,20 @@
     }
 
     async function fetchUsers(pageable, condition) {
+        let token = localStorage.getItem("token");
         let url = 'http://' + host + '/api/admin/users?page=' + pageable.page + '&size=' + pageable.size;
 
         if (condition !== undefined) {
             url += '&' + condition.selectCondition + '=' + condition.keyword;
         }
 
-        let fetchData = await fetch(url)
-            .then((response) => response.json());
+        let fetchData = await fetch(url, {
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            }
+        ).then((response) => response.json());
 
         pageable.totalPage = fetchData.data.totalPages;
 

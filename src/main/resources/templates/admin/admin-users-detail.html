@@ -35,15 +35,42 @@
 <footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
 <script>
     const host = window.location.protocol + '//' + window.location.host;
-
+    let token = localStorage.getItem("token");
     let id = window.location.search.split('id=')[1];
     let url2 = host + '/admin/users';
+
+
+    async function fetchUsers(pageable, condition) {
+
+        let url = 'http://' + host + '/api/admin/users?page=' + pageable.page + '&size=' + pageable.size;
+
+        if (condition !== undefined) {
+            url += '&' + condition.selectCondition + '=' + condition.keyword;
+        }
+
+        let fetchData = await fetch(url, {
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            }
+        ).then((response) => response.json());
+
+        pageable.totalPage = fetchData.data.totalPages;
+
+        creatTable(fetchData.data);
+    }
 
     async function fetchUsers(id) {
         let url = host + '/api/admin/users/' + id;
 
-        let fetchData = await fetch(url)
-            .then((response) => response.json());
+        let fetchData = await fetch(url, {
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            }
+        ).then((response) => response.json());
 
         return fetchData.data;
     }
@@ -67,6 +94,7 @@
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify({
                 id: id,
@@ -80,11 +108,16 @@
     }
 
     async function deleteUsers() {
-        let url = host + '/api/admin/users/delete/' + id;
+        let url = host + '/api/admin/users/' + id;
 
         if (confirm("삭제하시겠습니까?")) {
             fetch(url, {
-                method: "DELETE"})
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            })
                 .then(() => {
                     location.href = url2;
                 }).catch((error) => {
