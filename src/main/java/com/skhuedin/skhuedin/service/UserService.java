@@ -6,6 +6,8 @@ import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 
+import com.skhuedin.skhuedin.dto.posts.PostsAdminMainResponseDto;
+import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
@@ -20,10 +22,13 @@ import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -52,12 +57,12 @@ public class UserService {
     }
 
     @Transactional
-    public void updateRole(Long id) {
+    public void updateRole(Long id, String role) {
         User user = getUser(id);
-        if (user.getRole() == Role.ADMIN) {
-            user.updateRole(Role.USER);
-        } else if (user.getRole() == Role.USER) {
+        if (role.equals("ADMIN")) {
             user.updateRole(Role.ADMIN);
+        } else if (role.equals("USER")) {
+            user.updateRole(Role.USER);
         }
     }
 
@@ -74,38 +79,48 @@ public class UserService {
 
         if (!comments.isEmpty()) {
             for (Comment comment : comments) {
-                commentRepository.delete(comment);
+                if (comment != null) {
+                    List<Comment> parentComment = commentRepository.findByParentId(comment.getId());
+                    for (Comment parent : parentComment) {
+                        commentRepository.delete(parent);
+                    }
+                    commentRepository.delete(comment);
+                }
             }
         }
 
+        deleteQuestions(questions);
+        deleteQuestions(targetQuestions);
+
+        if (blogByUserId != null) {
+            posts = postsRepository.findPostsByBlogId(blogByUserId.getId());
+            for (Posts post : posts) {
+                postsRepository.deleteById(post.getId());
+            }
+            blogRepository.delete(blogByUserId);
+        }
+        userRepository.delete(findUser);
+    }
+
+    private void deleteQuestions(List<Question> questions) {
         if (!questions.isEmpty()) {
             for (Question question : questions) {
                 List<Comment> innerComment = commentRepository.findByQuestionId(question.getId());
-                if (comments != null) {
+
+                if (innerComment != null) {
                     for (Comment comment : innerComment) {
+                        if (comment != null) {
+                            List<Comment> parentComment = commentRepository.findByParentId(comment.getId());
+                            for (Comment parent : parentComment) {
+                                commentRepository.delete(parent);
+                            }
+                        }
                         commentRepository.delete(comment);
                     }
                 }
                 questionRepository.delete(question);
             }
         }
-
-        if (!targetQuestions.isEmpty()) {
-            for (Question question : targetQuestions) {
-                questionRepository.delete(question);
-            }
-        }
-
-        if (blogByUserId != null) {
-            posts = postsRepository.findPostsByBlogId(blogByUserId.getId());
-
-            for (Posts post : posts) {
-                log.info(post.getId().toString());
-                postsRepository.deleteById(post.getId());
-            }
-            blogRepository.delete(blogByUserId);
-        }
-        userRepository.delete(findUser);
     }
 
     public UserMainResponseDto findById(Long id) {
@@ -157,5 +172,30 @@ public class UserService {
 
     public User getUser(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    /* admin 전용 */
+    public Page<UserMainResponseDto> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(users -> new UserMainResponseDto(users));
+    }
+
+    public Page<UserMainResponseDto> findByUserName(Pageable pageable, String username) {
+        return userRepository.findByUserName(pageable, username)
+                .map(user -> new UserMainResponseDto(user));
+    }
+
+    public Page<UserMainResponseDto> findByUserRole(Pageable pageable, String role) {
+        Role findRole = Role.valueOf(role.toUpperCase(Locale.ROOT));
+        try {
+            return userRepository.findByRoleAdmin(pageable, findRole)
+                    .map(users -> new UserMainResponseDto(users));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("일치하는 권한이 없습니다. ");
+        }
+    }
+
+    public UserMainResponseDto findByIdByAdmin(Long id) {
+        return new UserMainResponseDto(getUser(id));
     }
 }

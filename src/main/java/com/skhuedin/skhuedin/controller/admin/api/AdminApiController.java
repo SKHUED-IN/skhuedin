@@ -7,6 +7,7 @@ import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.CategoryService;
 import com.skhuedin.skhuedin.service.PostsService;
+import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api/admin")
@@ -48,24 +50,26 @@ public class AdminApiController {
         }
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts/{postsId}")
     public ResponseEntity<? extends BasicResponse> getPosts(@PathVariable("postsId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postsService.findByIdByAdmin(id)));
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("categories")
     public ResponseEntity<? extends BasicResponse> categories() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(categoryService.findAll()));
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @PutMapping("posts/{postsId}")
     public ResponseEntity<? extends BasicResponse> updatePosts(@RequestBody PostsAdminUpdateRequestDto requestDto) {
         postsService.update(requestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+
 }
