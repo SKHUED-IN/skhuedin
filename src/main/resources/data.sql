@@ -59,7 +59,8 @@ values (1, 2, 'test question 1', 'test question content 1', false, false, 0, now
        (4, 1, 'test question 20', 'test question content 20', false, false, 0, now(), now());
 
 insert into category (created_date, last_modified_date, name, weight)
-values (now(), now(), '학창 시절', 1),
+values (now(), now(), '건의사항', 0),
+       (now(), now(), '학창 시절', 1),
        (now(), now(), '취업 준비', 2),
        (now(), now(), '하고싶은말', 3),
        (now(), now(), '연봉', 4);

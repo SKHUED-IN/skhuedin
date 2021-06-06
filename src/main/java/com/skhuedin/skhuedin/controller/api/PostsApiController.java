@@ -4,6 +4,7 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
+import com.skhuedin.skhuedin.dto.posts.SuggestionsSaveRequestDto;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.PostsService;
 import lombok.RequiredArgsConstructor;
@@ -69,5 +70,16 @@ public class PostsApiController {
         Page<PostsMainResponseDto> posts = postsService.findByBlogId(id, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(posts));
+    }
+
+//    @MyRole
+    @PostMapping("suggestions")
+    public ResponseEntity<? extends BasicResponse> saveSuggestions(
+            @RequestBody SuggestionsSaveRequestDto requestDto) {
+
+        Long id = postsService.saveSuggestions(requestDto);
+        PostsMainResponseDto responseDto = postsService.findById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 }
