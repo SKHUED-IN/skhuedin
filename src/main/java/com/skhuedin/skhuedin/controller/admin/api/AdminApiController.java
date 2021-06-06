@@ -3,6 +3,8 @@ package com.skhuedin.skhuedin.controller.admin.api;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateRequestDto;
+import com.skhuedin.skhuedin.infra.MyRole;
+import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.CategoryService;
 import com.skhuedin.skhuedin.service.PostsService;
 import com.skhuedin.skhuedin.service.UserService;
