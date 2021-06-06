@@ -29,7 +29,7 @@ class AdminMainControllerTest {
     void main_page_true() throws Exception {
         this.mockMvc.perform(get("/admin"))
                 .andDo(print())
-                .andExpect(view().name("admin/admin-main"))
+                .andExpect(view().name("admin/main"))
                 .andExpect(status().isOk());
     }
 
@@ -38,7 +38,7 @@ class AdminMainControllerTest {
     void posts_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/posts"))
                 .andDo(print())
-                .andExpect(view().name("admin/admin-posts"))
+                .andExpect(view().name("admin/posts"))
                 .andExpect(status().isOk());
     }
 
@@ -47,7 +47,7 @@ class AdminMainControllerTest {
     void posts_detail_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/posts/detail"))
                 .andDo(print())
-                .andExpect(view().name("admin/admin-posts-detail"))
+                .andExpect(view().name("admin/posts-detail"))
                 .andExpect(status().isOk());
     }
 

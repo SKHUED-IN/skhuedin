@@ -2,7 +2,6 @@ package com.skhuedin.skhuedin.controller.admin.api;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
-import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserAdminUpdateRequestDto;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.infra.Role;
@@ -14,13 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -28,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class AdminUserApiController {
     private final UserService userService;
 
-    @MyRole(role = Role.ADMIN)
+//    @MyRole(role = Role.ADMIN)
     @GetMapping("users")
     public ResponseEntity<? extends BasicResponse> getUsers(
             Pageable pageable,
