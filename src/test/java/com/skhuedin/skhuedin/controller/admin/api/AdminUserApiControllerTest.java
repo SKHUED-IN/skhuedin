@@ -54,5 +54,6 @@ class AdminUserApiControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
+
     }
 }

@@ -3,6 +3,8 @@ package com.skhuedin.skhuedin.controller.admin.api;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateRequestDto;
+import com.skhuedin.skhuedin.infra.MyRole;
+import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.CategoryService;
 import com.skhuedin.skhuedin.service.PostsService;
 import com.skhuedin.skhuedin.service.UserService;
@@ -29,7 +31,6 @@ public class AdminApiController {
     private final PostsService postsService;
     private final CategoryService categoryService;
 
-    //    @MyRole(role = Role.ADMIN)
     @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ResponseEntity<? extends BasicResponse> getPosts(
@@ -69,6 +70,4 @@ public class AdminApiController {
         postsService.update(requestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-
 }
