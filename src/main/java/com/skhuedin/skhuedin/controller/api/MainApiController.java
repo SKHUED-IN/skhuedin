@@ -27,7 +27,7 @@ public class MainApiController {
 
     @GetMapping("main")
     public ResponseEntity<? extends BasicResponse> main(Pageable pageable) {
-        List<CategoryMainResponseDto> categories = categoryService.findByWight();
+        List<CategoryMainResponseDto> categories = categoryService.findByWeight();
         List<MainResponseDto> mainPosts = new ArrayList<>();
 
         for (CategoryMainResponseDto category : categories) {

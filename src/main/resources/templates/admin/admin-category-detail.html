@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/admin-header.html :: admin-header"></head>
+<body>
+<header th:replace="/fragments/admin-body-header.html :: admin-body-header"></header>
+
+<section class="sm">
+    <div class="container-sm">
+        <div class="card fs-3 fw-bold mb-3 p-3 text-center">카테고리 수정</div>
+        <div class="row my-3">
+            <div class="col">
+                <div class="card p-0">
+                    <div class="card-header">
+                        <h3>가중치 설정</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div id="title" style="font-size: 20px;"></div>
+                    </div>
+
+                </div>
+                <div class="d-grid gap-2 d-md-block">
+                    <button style="width: 273px;" class="btn btn-secondary" type="button" onclick="upWeight()">증가</button>
+                    <button style="width: 273px;" class="btn btn-secondary" type="button" onclick="downWeight()">감소
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="d-grid gap-2">
+            <button type="button" onclick="deleteCategory()" class="btn btn-primary btn-lg">카테고리 삭제</button>
+            <button type="button" onclick=location.href="/admin/category" class="btn btn-primary btn-lg">뒤로 가기</button>
+        </div>
+        <div class="d-grid gap-2">
+
+        </div>
+    </div>
+</section>
+
+<footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
+</body>
+</html>
+<script>
+
+    const host = window.location.protocol + '//' + window.location.host;
+    let id = window.location.search.split('id=')[1];
+
+    let url2 = host + '/admin/category/detail?id=' + id;
+    let url3 = host + '/admin/category';
+
+    let postCount;
+
+    setData();
+
+    async function setData() {
+        let category = await fetchCategory(id);
+        document.getElementById('title').innerText = "가중치 : " + category.weight;
+        postCount = category.referPostCount;
+    }
+
+    async function fetchCategory(id) {
+        let url = host + '/api/admin/category/' + id;
+        let fetchData = await fetch(url)
+            .then((response) => response.json());
+        return fetchData.data;
+    }
+
+    function upWeight() {
+        let url = host + '/api/admin/category/up/' + id;
+        fetch(url).then(() => {
+            location.href = url2;
+        }).catch((error) => {
+            alert('수정에 실패하였습니다.');
+        });
+    }
+
+    function downWeight() {
+        let url = host + '/api/admin/category/down/' + id;
+        fetch(url
+        ).then(() => {
+            location.href = url2;
+        }).catch((error) => {
+            alert('수정에 실패하였습니다.');
+        });
+    }
+
+    async function deleteCategory() {
+        let url = host + '/api/admin/category/' + id;
+
+        if (confirm("삭제하시겠습니까?")) {
+            if (postCount > 0) {
+                alert("참조하고 있는 포스트가 " + postCount + "개 있어 삭제할 수 없습니다.");
+            } else {
+                fetch(url,{
+                    method:"DELETE"
+                })
+                    .then(() => {
+                        location.href = url3;
+                    }).catch((error) => {
+                    alert(error);
+                });
+            }
+        }
+    }
+</script>

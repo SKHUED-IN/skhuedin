@@ -70,6 +70,4 @@ public class AdminApiController {
         postsService.update(requestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-
 }

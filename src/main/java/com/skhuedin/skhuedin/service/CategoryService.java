@@ -1,10 +1,14 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Category;
+import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
+import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +21,7 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final PostsService postsService;
 
     @Transactional
     public void save(CategoryRequestDto requestDto) {
@@ -30,11 +35,27 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public List<CategoryMainResponseDto> findByWight() {
+    public Page<CategoryMainResponseDto> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable)
+                .map(category -> findByPost(new CategoryMainResponseDto(category)));
+    }
+
+
+    public List<CategoryMainResponseDto> findByWeight() {
         return categoryRepository.findByWeight()
                 .stream()
-                .map(category -> new CategoryMainResponseDto(category))
+                .map(category -> findByPost(new CategoryMainResponseDto(category)))
                 .collect(Collectors.toList());
+    }
+
+    public Page<CategoryMainResponseDto> findByWeightPage(Pageable pageable) {
+        return categoryRepository.findByWeightPage(pageable)
+                .map(category -> findByPost(new CategoryMainResponseDto(category)));
+    }
+
+    public Page<CategoryMainResponseDto> findByCreatedDate(Pageable pageable) {
+        return categoryRepository.findByCreatedDate(pageable)
+                .map(category -> findByPost(new CategoryMainResponseDto(category)));
     }
 
     @Transactional
@@ -54,5 +75,18 @@ public class CategoryService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
                 new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + categoryId));
         category.subtractWeight();
+    }
+
+    public CategoryMainResponseDto findByPost(CategoryMainResponseDto list) {
+        list.add(postsService.findByCategoryId(list.getId()));
+        return list;
+    }
+
+    public CategoryMainResponseDto findByIdByAdmin(Long id) {
+        return findByPost(new CategoryMainResponseDto(getCategory(id)));
+    }
+
+    public Category getCategory(Long id) {
+        return categoryRepository.findById(id).orElse(null);
     }
 }
