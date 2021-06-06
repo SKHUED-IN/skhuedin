@@ -84,13 +84,15 @@
     }
 
     async function deleteCategory() {
-        let url = host + '/api/admin/category/delete/' + id;
+        let url = host + '/api/admin/category/' + id;
 
         if (confirm("삭제하시겠습니까?")) {
             if (postCount > 0) {
                 alert("참조하고 있는 포스트가 " + postCount + "개 있어 삭제할 수 없습니다.");
             } else {
-                fetch(url)
+                fetch(url,{
+                    method:"DELETE"
+                })
                     .then(() => {
                         location.href = url3;
                     }).catch((error) => {
