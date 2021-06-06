@@ -31,7 +31,7 @@ public class AdminApiController {
     private final CategoryService categoryService;
     private final QuestionService questionService;
 
-    @MyRole(role = Role.ADMIN)
+//    @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ResponseEntity<? extends BasicResponse> getPosts(
             Pageable pageable,
@@ -50,21 +50,21 @@ public class AdminApiController {
         }
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts/{postsId}")
     public ResponseEntity<? extends BasicResponse> getPosts(@PathVariable("postsId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postsService.findByIdByAdmin(id)));
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("categories")
     public ResponseEntity<? extends BasicResponse> categories() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(categoryService.findAll()));
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @PutMapping("posts/{postsId}")
     public ResponseEntity<? extends BasicResponse> updatePosts(@RequestBody PostsAdminUpdateRequestDto requestDto) {
         postsService.update(requestDto);
@@ -95,5 +95,12 @@ public class AdminApiController {
     public ResponseEntity<? extends BasicResponse> getQuestions(@PathVariable("questionId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(questionService.findById(id)));
+    }
+
+//    @MyRole(role = Role.ADMIN)
+    @GetMapping("suggestions")
+    public ResponseEntity<? extends BasicResponse> suggestions(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postsService.findBySuggestions(pageable)));
     }
 }

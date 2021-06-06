@@ -47,6 +47,7 @@ class AdminUserApiControllerTest {
 
         //when 무엇을 했을 때 then 어떤 값을 원한다.
         mockMvc.perform(get("/api/admin/category?page=0&size=10")
+                .param("role", "ADMIN")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

@@ -56,7 +56,7 @@ class AdminMainControllerTest {
     void user_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/users"))
                 .andDo(print())
-                .andExpect(view().name("admin/admin-users"))
+                .andExpect(view().name("admin/users"))
                 .andExpect(status().isOk());
     }
 
@@ -65,7 +65,7 @@ class AdminMainControllerTest {
     void user_detail_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/users/detail"))
                 .andDo(print())
-                .andExpect(view().name("admin/admin-users-detail"))
+                .andExpect(view().name("admin/users-detail"))
                 .andExpect(status().isOk());
     }
 }
