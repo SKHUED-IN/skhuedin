@@ -8,19 +8,17 @@ import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class BlogMainResponseDto {
 
-    private Long id;
-    private UserMainResponseDto user;
-    private FileMainResponseDto profile;
-    private String content;
+    private final Long id;
+    private final UserMainResponseDto user;
+    private final FileMainResponseDto profile;
+    private final String content;
     private Page<PostsMainResponseDto> posts;
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
+    private final LocalDateTime createdDate;
+    private final LocalDateTime lastModifiedDate;
 
     public BlogMainResponseDto(Blog blog) {
         this.id = blog.getId();

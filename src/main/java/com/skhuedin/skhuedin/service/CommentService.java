@@ -28,14 +28,8 @@ public class CommentService {
     public Long save(CommentSaveRequestDto requestDto) {
         Question question = getQuestion(requestDto.getQuestionId());
         User writerUser = getUser(requestDto.getWriterUserId());
-        Comment parent;
-        if (requestDto.getParentId() != null) { // 부모 comment 가 존재하면 대댓글
-            parent = getComment(requestDto.getParentId());
-        } else { // 부모 comment 가 null 이면 최상위 댓글
-            parent = null;
-        }
 
-        Comment comment = requestDto.toEntity(question, writerUser, parent);
+        Comment comment = requestDto.toEntity(question, writerUser);
         return commentRepository.save(comment).getId();
     }
 
@@ -44,12 +38,8 @@ public class CommentService {
         Question question = getQuestion(requestDto.getQuestionId());
         User writerUser = getUser(requestDto.getWriterUserId());
         Comment comment = getComment(id);
-        if (requestDto.getParentId() != null) { // 부모 comment 가 존재하면 대댓글
-            Comment parent = getComment(requestDto.getParentId());
-            comment.updateComment(requestDto.toEntity(question, writerUser, parent));
-        } else { // 부모 comment 가 null 이면 부모 댓글
-            comment.updateComment(requestDto.toEntity(question, writerUser));
-        }
+
+        comment.updateComment(requestDto.toEntity(question, writerUser));
 
         return comment.getId();
     }
@@ -65,14 +55,12 @@ public class CommentService {
         return new CommentMainResponseDto(comment);
     }
 
-    public List<CommentMainResponseDto> findByQuestionId(Long questionId) {
-        List<Comment> parents = commentRepository.findByQuestionId(questionId); // 부모 comment 목록 조회
 
-        return parents.stream()
-                .map(comment -> {
-                    List<Comment> children = commentRepository.findByParentId(comment.getId());
-                    return new CommentMainResponseDto(comment, children);
-                }).collect(Collectors.toList());
+    /* private 메소드 */
+    public List<CommentMainResponseDto> findByQuestionId(Long questionId) {
+        return commentRepository.findByQuestionId(questionId).stream()
+                .map(comment -> new CommentMainResponseDto(comment))
+                .collect(Collectors.toList());
     }
 
     private Question getQuestion(Long id) {
