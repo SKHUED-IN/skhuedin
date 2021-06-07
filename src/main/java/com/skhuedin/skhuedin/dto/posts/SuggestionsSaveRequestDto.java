@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 public class SuggestionsSaveRequestDto {
 
     @NotEmpty(message = "title이 비어 있습니다.")
-    @Size(max = 15, message = "title의 길이는 15를 넘을 수 없습니다.")
+    @Size(max = 30, message = "title의 길이는 30을 넘을 수 없습니다.")
     private final String title;
 
     @Size(max = 5000, message = "content의 길이는 5000을 넘을 수 없습니다.")
