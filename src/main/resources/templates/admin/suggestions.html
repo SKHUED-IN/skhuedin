@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/fragments/admin-header.html :: admin-header"></head>
+<head th:replace="fragments/admin-header.html :: admin-header"></head>
 <body>
-<header th:replace="/fragments/admin-body-header.html :: admin-body-header"></header>
+<header th:replace="fragments/admin-body-header.html :: admin-body-header"></header>
 
 <section>
     <div class="container-fluid">
@@ -42,7 +42,7 @@
     </nav>
 </section>
 
-<footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
+<footer th:replace="fragments/admin-body-footer.html :: admin-body-footer"></footer>
 <script>
     const host = window.location.protocol + '//' + window.location.host;
 
