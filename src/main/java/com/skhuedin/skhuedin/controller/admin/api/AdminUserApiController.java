@@ -30,8 +30,7 @@ public class AdminUserApiController {
     public ResponseEntity<? extends BasicResponse> getUsers(
             Pageable pageable,
             @RequestParam(name = "role", defaultValue = "") String role,
-            @RequestParam(name = "username", defaultValue = "") String username
-    ) {
+            @RequestParam(name = "username", defaultValue = "") String username) {
 
         if (username.isEmpty() && !role.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK)

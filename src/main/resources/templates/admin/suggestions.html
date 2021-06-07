@@ -1,46 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/admin-header.html :: admin-header"></head>
+<head th:replace="/fragments/admin-header.html :: admin-header"></head>
 <body>
-<header th:replace="fragments/admin-body-header.html :: admin-body-header"></header>
+<header th:replace="/fragments/admin-body-header.html :: admin-body-header"></header>
 
 <section>
     <div class="container-fluid">
         <div class="row mb-3 align-items-center">
             <div class="col">
-                <div class="fs-3 fw-bold">게시글 목록</div>
+                <div class="fs-3 fw-bold">건의사항 목록</div>
             </div>
-            <div class="col">
-                <form class="row align-items-center" onsubmit="search(); return false">
-                    <div class="col-6 p-0">
-                        <div class="input-group">
-                            <input id="keyword" type="text" class="form-control" placeholder="검색어를 입력하세요."
-                                   aria-label="">
-                        </div>
-                    </div>
-                    <div class="col-3 p-0">
-                        <select id="select-condition" class="form-select" name="inputCondition"
-                                aria-label="Default select example">
-                            <option value="" selected>조건</option>
-                            <option value="category">카테고리</option>
-                            <option value="username">이름</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-secondary">검색</button>
-                    </div>
-                </form>
-            </div>
+            
         </div>
     </div>
     <table class="table table-hover">
         <thead class="table-light">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">이름</th>
             <th scope="col">제목</th>
-            <th scope="col">삭제 상태</th>
-            <th scope="col">조회수</th>
             <th scope="col">카테고리</th>
             <th scope="col">생성 시간</th>
             <th scope="col">수정 시간</th>
@@ -65,7 +42,7 @@
     </nav>
 </section>
 
-<footer th:replace="fragments/admin-body-footer.html :: admin-body-footer"></footer>
+<footer th:replace="/fragments/admin-body-footer.html :: admin-body-footer"></footer>
 <script>
     const host = window.location.protocol + '//' + window.location.host;
 
@@ -115,11 +92,11 @@
         }
     }
 
-    async function creatTable(condition) {
+    async function creatTable() {
         let tbody = document.getElementById('table-body');
         removeTable();
 
-        let data = await fetchPosts(condition);
+        let data = await fetchPosts();
         pageable.totalPage = data.totalPages;
 
         let posts = data.content;
@@ -128,10 +105,7 @@
             let row =
                 '<tr id="tr-' + key + '" onclick="location.href=' + url + '">' +
                 '   <th class="pb-3 pt-3">' + posts[key].id + '</th>' +
-                '   <td class="pb-3 pt-3">' + posts[key].blog.user.name + '</td>' +
                 '   <td class="pb-3 pt-3">' + posts[key].title + '</td>' +
-                '   <td class="pb-3 pt-3">' + posts[key].deleteStatus + '</td>' +
-                '   <td class="pb-3 pt-3">' + posts[key].view + '</td>' +
                 '   <td class="pb-3 pt-3">' + posts[key].category.name + '</td>' +
                 '   <td class="pb-3 pt-3">' + posts[key].createdDate + '</td>' +
                 '   <td class="pb-3 pt-3">' + posts[key].lastModifiedDate + '</td>' +
@@ -140,13 +114,8 @@
         }
     }
 
-    async function fetchPosts(condition) {
-        let url = host + '/api/admin/posts?page=' + pageable.page + '&size=' + pageable.size;
-
-        if (condition !== undefined) {
-            url += '&' + condition.selectCondition + '=' + condition.keyword;
-        }
-
+    async function fetchPosts() {
+        let url = host + '/api/admin/suggestions?page=' + pageable.page + '&size=' + pageable.size + '&category=건의사항';
         let fetchData = await fetch(url)
             .then((response) => response.json());
 

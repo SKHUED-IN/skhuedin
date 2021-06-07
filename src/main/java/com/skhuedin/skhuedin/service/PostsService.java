@@ -9,6 +9,7 @@ import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateRequestDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
+import com.skhuedin.skhuedin.dto.posts.SuggestionsSaveRequestDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CategoryRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
@@ -106,6 +107,16 @@ public class PostsService {
         posts.addView();
     }
 
+    @Transactional
+    public Long saveSuggestions(SuggestionsSaveRequestDto requestDto) {
+        Category category = categoryRepository.findByCategoryName("건의사항").orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 카테고리 입니다."));
+
+        Blog blog = blogRepository.findByUserName("admin").orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 회원의 이름입니다."));
+        return postsRepository.save(requestDto.toEntity(blog, category)).getId();
+    }
+
     /* admin 전용 */
     public Page<PostsAdminMainResponseDto> findAll(Pageable pageable) {
         return postsRepository.findAll(pageable)
@@ -132,6 +143,11 @@ public class PostsService {
         Category category = getCategory(requestDto.getCategoryId());
 
         posts.updateCategoryAndStatus(category, requestDto.getDeleteStatus());
+    }
+
+    public Page<PostsAdminMainResponseDto> findBySuggestions(Pageable pageable) {
+        return postsRepository.findBySuggestions(pageable)
+                .map(posts -> new PostsAdminMainResponseDto(posts));
     }
 
     /* private 메소드 */
