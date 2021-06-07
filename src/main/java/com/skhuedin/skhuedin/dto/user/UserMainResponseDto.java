@@ -6,7 +6,6 @@ import com.skhuedin.skhuedin.infra.Role;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,6 +20,7 @@ public class UserMainResponseDto {
     private Role role;
     private String entranceYear;
     private String graduationYear;
+    private Boolean isBlog;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 
@@ -33,6 +33,20 @@ public class UserMainResponseDto {
         this.userImageUrl = user.getUserImageUrl();
         this.entranceYear = user.getEntranceYear();
         this.graduationYear = user.getGraduationYear();
+        this.createdDate = user.getCreatedDate();
+        this.lastModifiedDate = user.getLastModifiedDate();
+    }
+
+    public UserMainResponseDto(User user, Boolean isBlog) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.name = user.getName();
+        this.provider = user.getProvider();
+        this.role = user.getRole();
+        this.userImageUrl = user.getUserImageUrl();
+        this.entranceYear = user.getEntranceYear();
+        this.graduationYear = user.getGraduationYear();
+        this.isBlog = isBlog;
         this.createdDate = user.getCreatedDate();
         this.lastModifiedDate = user.getLastModifiedDate();
     }

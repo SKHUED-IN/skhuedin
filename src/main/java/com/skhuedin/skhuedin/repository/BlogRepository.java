@@ -12,7 +12,9 @@ import java.util.Optional;
 
 public interface BlogRepository extends JpaRepository<Blog, Long> {
 
-    @Query("select b from Blog b join b.user u")
+    @Query("select b " +
+            "from Blog b " +
+            "join b.user u")
     Page<Blog> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = {"user"})
@@ -25,7 +27,9 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     Boolean existsByUserId(Long id);
 
-    @Query("select b from Blog b where b.user.id = :userId")
+    @Query("select b " +
+            "from Blog b " +
+            "where b.user.id = :userId")
     Blog findBlogByUserId(@Param("userId") Long userId);
 
     @EntityGraph(attributePaths = {"user"})
