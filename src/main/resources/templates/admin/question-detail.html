@@ -54,10 +54,10 @@
         document.getElementById('content').innerText = question.content;
 
         let comments = document.getElementById('comments');
-        let parentComments = question.comments;
+        let fetchComments = question.comments;
 
-        for (let key in parentComments) {
-            let parentComment = parentComments[key];
+        for (let key in fetchComments) {
+            let  comment = fetchComments[key];
             let div = document.createElement('div');
             div.className = 'card';
 
@@ -65,40 +65,14 @@
             ul.className = 'list-group list-group-flush';
             let writerUser = document.createElement('li');
             writerUser.className = 'list-group-item';
-            writerUser.innerText = parentComment.writerUser.name;
+            writerUser.innerText =  comment.writerUser.name;
 
             let content = document.createElement('li');
             content.className = 'list-group-item';
-            content.innerText = parentComment.content;
+            content.innerText =  comment.content;
 
             ul.appendChild(writerUser);
             ul.appendChild(content);
-
-            let childrenComments = parentComment.children;
-            let children = document.createElement('li');
-            children.className = 'list-group-item p-0 ps-5 border-top-0 border-bottom-0';
-            for (let key2 in childrenComments) {
-                let childComment = childrenComments[key];
-                let div2 = document.createElement('div');
-                div2.className = 'card';
-
-                let ul2 = document.createElement('ul');
-                ul2.className = 'list-group list-group-flush';
-                let writerUser2 = document.createElement('li');
-                writerUser2.className = 'list-group-item';
-                writerUser2.innerText = childComment.writerUser.name;
-
-                let content2 = document.createElement('li');
-                content2.className = 'list-group-item';
-                content2.innerText = childComment.content;
-
-                ul2.appendChild(writerUser2);
-                ul2.appendChild(content2);
-
-                div2.appendChild(ul2);
-                children.appendChild(div2);
-            }
-            ul.appendChild(children);
 
             div.appendChild(ul);
             comments.appendChild(div);

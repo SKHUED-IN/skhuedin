@@ -31,7 +31,6 @@ class CommentSaveRequestDtoTest {
                 .questionId(null)
                 .writerUserId(null)
                 .content(stringBuilder.toString())
-                .parentId(1L)
                 .build();
 
         ArrayList<String> errorMessages = new ArrayList<>();

@@ -95,8 +95,7 @@ class CommentServiceTest {
         assertAll(
                 () -> assertEquals(comment.getId(), saveId),
                 () -> assertEquals(comment.getQuestion().getId(), requestDto.getQuestionId()),
-                () -> assertEquals(comment.getWriterUser().getId(), requestDto.getWriterUserId()),
-                () -> assertNull(comment.getParent())
+                () -> assertEquals(comment.getWriterUser().getId(), requestDto.getWriterUserId())
         );
     }
 
@@ -153,8 +152,7 @@ class CommentServiceTest {
                 () -> assertEquals(updateComment.getId(), saveId),
                 () -> assertEquals(updateComment.getQuestion().getId(), updateDto.getQuestionId()),
                 () -> assertEquals(updateComment.getWriterUser().getId(), updateDto.getWriterUserId()),
-                () -> assertEquals(updateComment.getContent(), updateDto.getContent()),
-                () -> assertNull(updateComment.getParent())
+                () -> assertEquals(updateComment.getContent(), updateDto.getContent())
         );
     }
 
@@ -222,28 +220,19 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("question 별 댓글 목록 및 대댓글 목록을 조회하는 테스트")
+    @DisplayName("question 별 댓글 목록 조회하는 테스트")
     void findByQuestionId() {
 
         // given
-        CommentSaveRequestDto requestDto = generateDto("parent 댓글");
-        Long parentId = commentService.save(requestDto);
-
-        CommentSaveRequestDto child1 = generateDto("대댓글 1", parentId);
-        CommentSaveRequestDto child2 = generateDto("대댓글 2", parentId);
-        CommentSaveRequestDto child3 = generateDto("대댓글 3", parentId);
-
-        commentService.save(child1);
-        commentService.save(child2);
-        commentService.save(child3);
+        CommentSaveRequestDto requestDto = generateDto("댓글");
+        commentService.save(requestDto);
 
         // when
         List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
 
         // then
         assertAll(
-                () -> assertEquals(comments.size(), 1),
-                () -> assertEquals(comments.get(0).getChildren().size(), 3)
+                () -> assertEquals(comments.size(), 1)
         );
     }
 
@@ -252,15 +241,6 @@ class CommentServiceTest {
                 .questionId(question.getId())
                 .writerUserId(writerUser.getId())
                 .content(content)
-                .build();
-    }
-
-    private CommentSaveRequestDto generateDto(String content, Long parentId) {
-        return CommentSaveRequestDto.builder()
-                .questionId(question.getId())
-                .writerUserId(writerUser.getId())
-                .content(content)
-                .parentId(parentId)
                 .build();
     }
 

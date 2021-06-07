@@ -34,22 +34,16 @@ public class Comment extends BaseEntity {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id")
-    private Comment parent;
-
     @Builder
-    public Comment(Question question, User writerUser, String content, Comment parent) {
+    public Comment(Question question, User writerUser, String content) {
         this.question = question;
         this.writerUser = writerUser;
         this.content = content;
-        this.parent = parent;
     }
 
     public void updateComment(Comment comment) {
         this.question = comment.question;
         this.writerUser = comment.writerUser;
         this.content = comment.content;
-        this.parent = comment.parent;
     }
 }

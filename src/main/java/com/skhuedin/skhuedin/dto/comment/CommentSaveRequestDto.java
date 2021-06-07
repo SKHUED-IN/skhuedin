@@ -24,14 +24,11 @@ public class CommentSaveRequestDto {
     @Size(max = 1000, message = "content의 size는 1000을 넘을 수 없습니다.")
     private String content;
 
-    private Long parentId;
-
     @Builder
-    public CommentSaveRequestDto(Long questionId, Long writerUserId, String content, Long parentId) {
+    public CommentSaveRequestDto(Long questionId, Long writerUserId, String content) {
         this.questionId = questionId;
         this.writerUserId = writerUserId;
         this.content = content;
-        this.parentId = parentId;
     }
 
     public Comment toEntity(Question question, User writerUser) {
@@ -39,15 +36,6 @@ public class CommentSaveRequestDto {
                 .question(question)
                 .writerUser(writerUser)
                 .content(this.content)
-                .build();
-    }
-
-    public Comment toEntity(Question question, User writerUser, Comment parent) {
-        return Comment.builder()
-                .question(question)
-                .writerUser(writerUser)
-                .content(this.content)
-                .parent(parent)
                 .build();
     }
 }

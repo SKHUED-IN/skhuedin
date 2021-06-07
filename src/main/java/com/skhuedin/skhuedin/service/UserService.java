@@ -6,8 +6,6 @@ import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 
-import com.skhuedin.skhuedin.dto.posts.PostsAdminMainResponseDto;
-import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
@@ -72,7 +70,7 @@ public class UserService {
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
         // 영속성 컨텍스트에 등록
         Blog blogByUserId = blogRepository.findBlogByUserId(id);
-        List<Comment> comments = commentRepository.findCommentsByWriterUserId(id);
+        List<Comment> comments = commentRepository.findByWriterUserId(id);
         List<Question> questions = questionRepository.findQuestionByUserId(id);
         List<Question> targetQuestions = questionRepository.findQuestionByTargetUserId(id);
         List<Posts> posts;
@@ -80,10 +78,6 @@ public class UserService {
         if (!comments.isEmpty()) {
             for (Comment comment : comments) {
                 if (comment != null) {
-                    List<Comment> parentComment = commentRepository.findByParentId(comment.getId());
-                    for (Comment parent : parentComment) {
-                        commentRepository.delete(parent);
-                    }
                     commentRepository.delete(comment);
                 }
             }
@@ -109,12 +103,6 @@ public class UserService {
 
                 if (innerComment != null) {
                     for (Comment comment : innerComment) {
-                        if (comment != null) {
-                            List<Comment> parentComment = commentRepository.findByParentId(comment.getId());
-                            for (Comment parent : parentComment) {
-                                commentRepository.delete(parent);
-                            }
-                        }
                         commentRepository.delete(comment);
                     }
                 }
