@@ -72,7 +72,7 @@ public class PostsApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(posts));
     }
 
-//    @MyRole
+    //    @MyRole
     @PostMapping("suggestions")
     public ResponseEntity<? extends BasicResponse> saveSuggestions(
             @RequestBody SuggestionsSaveRequestDto requestDto) {
