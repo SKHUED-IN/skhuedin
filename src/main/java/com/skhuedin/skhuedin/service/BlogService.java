@@ -100,6 +100,7 @@ public class BlogService {
                 new IllegalArgumentException("해당 blog 가 존재하지 않습니다. id=" + id));
     }
 
+
     private User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));

@@ -37,7 +37,7 @@ public class AdminMainController {
         return modelAndView;
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("question")
     public ModelAndView question() {
         ModelAndView modelAndView = new ModelAndView();
@@ -45,7 +45,7 @@ public class AdminMainController {
         return modelAndView;
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("question/detail")
     public ModelAndView questionDetail() {
         ModelAndView modelAndView = new ModelAndView();
@@ -90,11 +90,18 @@ public class AdminMainController {
         return modelAndView;
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("suggestions")
     public ModelAndView suggestions() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/suggestions");
+        return modelAndView;
+    }
+
+    @GetMapping("blogs")
+    public ModelAndView blogs() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/blogs");
         return modelAndView;
     }
 }
