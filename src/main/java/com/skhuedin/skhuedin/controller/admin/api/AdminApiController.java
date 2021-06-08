@@ -31,7 +31,7 @@ public class AdminApiController {
     private final CategoryService categoryService;
     private final QuestionService questionService;
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ResponseEntity<? extends BasicResponse> getPosts(
             Pageable pageable,
@@ -71,7 +71,7 @@ public class AdminApiController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("questions")
     public ResponseEntity<? extends BasicResponse> getQuestions(
             Pageable pageable,
@@ -90,14 +90,14 @@ public class AdminApiController {
         }
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("questions/{questionId}")
     public ResponseEntity<? extends BasicResponse> getQuestions(@PathVariable("questionId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(questionService.findById(id)));
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("suggestions")
     public ResponseEntity<? extends BasicResponse> suggestions(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)

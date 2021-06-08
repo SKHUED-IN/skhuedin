@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminUserApiController {
     private final UserService userService;
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("users")
     public ResponseEntity<? extends BasicResponse> getUsers(
             Pageable pageable,
