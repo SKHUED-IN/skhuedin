@@ -10,6 +10,7 @@ import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,12 @@ public class GoogleOauth implements SocialOauth {
 
     private final RestTemplate restTemplate;
 
+    @Value("${social.google.login}")
+    private String login;
+
+    @Value("${social.google.logout}")
+    private String logout;
+
     @Override
     public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
 
@@ -38,7 +45,7 @@ public class GoogleOauth implements SocialOauth {
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        String reqURL = "https://www.googleapis.com/userinfo/v2/me?access_token=" + oAuthToken.getAccessToken();
+        String reqURL = login + oAuthToken.getAccessToken();
         String resultJson = restTemplate.getForObject(reqURL, String.class);
         GoogleProfile profile = null;
 
@@ -68,7 +75,7 @@ public class GoogleOauth implements SocialOauth {
 
         // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
         ResponseEntity<String> response2 = restTemplate.exchange(
-                "https://oauth2.googleapis.com/revoke?token=" + oauthToken.getAccessToken(),
+                logout + oauthToken.getAccessToken(),
                 HttpMethod.POST,
                 kakaoProfileRequest2,
                 String.class
