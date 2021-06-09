@@ -17,3 +17,5 @@ spring:
         - real-db
         - real-resources
         - real-oauth
+
+    include: real-oauth
