@@ -7,7 +7,6 @@ import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
-import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.FileRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
@@ -19,9 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -95,11 +91,21 @@ public class BlogService {
         return blogRepository.existsByUserId(userId);
     }
 
+    public BlogMainResponseDto findByUserId(Long userId) {
+
+        Boolean isBlog = blogRepository.existsByUserId(userId);
+
+        Blog blog = blogRepository.findByUserId(userId).orElseThrow(() ->
+                new IllegalArgumentException("blog가 존재하지 않는 user 입니다."));
+
+        return new BlogMainResponseDto(blog, isBlog);
+    }
+
+    /* private 메소드 */
     private Blog getBlog(Long id) {
         return blogRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 blog 가 존재하지 않습니다. id=" + id));
     }
-
 
     private User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(() ->

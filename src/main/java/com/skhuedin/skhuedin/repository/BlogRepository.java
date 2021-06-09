@@ -30,11 +30,11 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
     @Query("select b " +
             "from Blog b " +
             "where b.user.id = :userId")
-    Blog findBlogByUserId(@Param("userId") Long userId);
+    Optional<Blog> findByUserId(@Param("userId") Long userId);
 
     @EntityGraph(attributePaths = {"user"})
     @Query("select b " +
             "from Blog b " +
-            "where b.user.name = :username")
-    Optional<Blog> findByUserName(@Param("username") String username);
+            "where b.user.email = :email")
+    Optional<Blog> findByUserEmail(@Param("email") String email);
 }

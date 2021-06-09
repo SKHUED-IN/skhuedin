@@ -1,6 +1,5 @@
 package com.skhuedin.skhuedin.controller.api;
 
-import com.skhuedin.skhuedin.common.exception.EmptyTokenException;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.controller.response.TokenWithCommonResponse;
@@ -11,6 +10,7 @@ import com.skhuedin.skhuedin.dto.user.UserTokenValidationDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
+import com.skhuedin.skhuedin.service.BlogService;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +33,7 @@ import java.util.List;
 public class UserApiController {
 
     private final UserService userService;
+    private final BlogService blogService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("users/{userId}")
@@ -78,5 +79,12 @@ public class UserApiController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(jwtTokenProvider.validateToken(token)));
+    }
+
+    //    @MyRole
+    @GetMapping("users/{userId}/blogs")
+    public ResponseEntity<? extends BasicResponse> blogByUserId(@PathVariable("userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(blogService.findByUserId(userId)));
     }
 }

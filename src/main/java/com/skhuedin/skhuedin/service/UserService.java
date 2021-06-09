@@ -69,7 +69,8 @@ public class UserService {
         User findUser = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
         // 영속성 컨텍스트에 등록
-        Blog blogByUserId = blogRepository.findBlogByUserId(id);
+        Blog blogByUserId = blogRepository.findByUserId(id).orElseThrow(() ->
+                new IllegalArgumentException("blog가 존재하지 않는 user 입니다."));
         List<Comment> comments = commentRepository.findByWriterUserId(id);
         List<Question> questions = questionRepository.findQuestionByUserId(id);
         List<Question> targetQuestions = questionRepository.findQuestionByTargetUserId(id);

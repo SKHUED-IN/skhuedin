@@ -112,7 +112,7 @@ public class PostsService {
         Category category = categoryRepository.findByCategoryName("건의사항").orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 카테고리 입니다."));
 
-        Blog blog = blogRepository.findByUserName("admin").orElseThrow(() ->
+        Blog blog = blogRepository.findByUserEmail("admin@email.com").orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 회원의 이름입니다."));
         return postsRepository.save(requestDto.toEntity(blog, category)).getId();
     }
