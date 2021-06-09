@@ -6,6 +6,7 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.social.SocialOauth;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,12 @@ public class KakaoOauth implements SocialOauth {
 
     private final RestTemplate restTemplate;
 
+    @Value("${social.kakao.login}")
+    private String login;
+
+    @Value("${social.kakao.logout}")
+    private String logout;
+
     public UserSaveRequestDto requestAccessToken(OAuthToken oauthToken) {
         UserSaveRequestDto user = null;
 
@@ -36,7 +43,7 @@ public class KakaoOauth implements SocialOauth {
 
         // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
         ResponseEntity<String> response2 = restTemplate.exchange(
-                "https://kapi.kakao.com/v2/user/me",
+                login,
                 HttpMethod.POST,
                 kakaoProfileRequest2,
                 String.class
@@ -73,7 +80,7 @@ public class KakaoOauth implements SocialOauth {
 
         // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
         ResponseEntity<String> response2 = restTemplate.exchange(
-                "http://kapi.kakao.com/v1/user/logout",
+                logout,
                 HttpMethod.POST,
                 kakaoProfileRequest2,
                 String.class
