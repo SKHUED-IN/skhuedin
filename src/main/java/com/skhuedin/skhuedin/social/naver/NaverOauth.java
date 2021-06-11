@@ -8,6 +8,7 @@ import com.skhuedin.skhuedin.social.SocialOauth;
 import com.skhuedin.skhuedin.social.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,11 +25,15 @@ import java.util.UUID;
 public class NaverOauth implements SocialOauth {
 
     private final RestTemplate restTemplate;
+    @Value("${social.naver.login}")
+    private String login;
+
+    @Value("${social.naver.logout}")
+    private String logout;
 
     @Override
     public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
-
-        // 프로필 받아오기
+// 프로필 받아오기
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + oAuthToken.getAccessToken());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -38,7 +43,7 @@ public class NaverOauth implements SocialOauth {
 
         // Http 요청하기 - post 방식으로 ㅡ 그리고 응답받음.
         ResponseEntity<String> response = restTemplate.exchange(
-                "https://openapi.naver.com/v1/nid/me",
+                login,
                 HttpMethod.POST,
                 naverProfileRequest,
                 String.class
@@ -69,7 +74,7 @@ public class NaverOauth implements SocialOauth {
 
         // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
         ResponseEntity<String> response2 = restTemplate.exchange(
-                "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=xncCqLDs5xAMfdEgui3A&client_secret=G8wydgDb7C&access_token=" + oauthToken.getAccessToken() + "&service_provider=NAVER",
+                logout + oauthToken.getAccessToken() + "&service_provider=NAVER",
                 HttpMethod.POST,
                 kakaoProfileRequest2,
                 String.class
