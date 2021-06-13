@@ -43,8 +43,8 @@ public class BlogService {
 
     @Transactional
     public Long update(Long id, BlogSaveRequestDto requestDto, Long fileId) {
-        User user = getUser(requestDto.getUserId());
         Blog blog = getBlog(id);
+        User user = getUser(blog.getUser().getId());
 
         if (blog.getProfile().getId() != 1L) { // default image를 제외한 나머지 이미지는 update가 이뤄지면 삭제
             File removeFile = getFile(blog.getProfile().getId());
