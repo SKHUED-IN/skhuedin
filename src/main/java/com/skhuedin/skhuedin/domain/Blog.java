@@ -55,6 +55,7 @@ public class Blog extends BaseEntity {
 
     public void updateBlog(Blog blog) {
         this.user = blog.user;
+        blog.user.addBlog(this);
         this.profile = blog.profile;
         this.content = blog.content;
         this.posts = blog.posts;
