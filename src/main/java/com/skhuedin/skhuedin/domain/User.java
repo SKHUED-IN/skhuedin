@@ -13,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 @Getter
@@ -41,6 +42,9 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne(mappedBy = "user")
+    private Blog blog;
 
     @Builder
     public User(String email, String password, String name, Provider provider,
@@ -72,5 +76,9 @@ public class User extends BaseEntity {
 
     public void updateRole(Role role) {
         this.role = role;
+    }
+
+    public void addBlog(Blog blog) {
+        this.blog = blog;
     }
 }

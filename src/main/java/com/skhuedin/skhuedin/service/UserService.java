@@ -115,8 +115,7 @@ public class UserService {
     public UserMainResponseDto findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
-        Boolean isBlog = blogRepository.existsByUserId(user.getId());
-        return new UserMainResponseDto(user, isBlog);
+        return new UserMainResponseDto(user);
     }
 
     /**

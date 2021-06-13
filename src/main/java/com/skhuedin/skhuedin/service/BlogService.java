@@ -43,8 +43,8 @@ public class BlogService {
 
     @Transactional
     public Long update(Long id, BlogSaveRequestDto requestDto, Long fileId) {
-        User user = getUser(requestDto.getUserId());
         Blog blog = getBlog(id);
+        User user = getUser(blog.getUser().getId());
 
         if (blog.getProfile().getId() != 1L) { // default image를 제외한 나머지 이미지는 update가 이뤄지면 삭제
             File removeFile = getFile(blog.getProfile().getId());
@@ -93,12 +93,10 @@ public class BlogService {
 
     public BlogMainResponseDto findByUserId(Long userId) {
 
-        Boolean isBlog = blogRepository.existsByUserId(userId);
-
         Blog blog = blogRepository.findByUserId(userId).orElseThrow(() ->
                 new IllegalArgumentException("blog가 존재하지 않는 user 입니다."));
 
-        return new BlogMainResponseDto(blog, isBlog);
+        return new BlogMainResponseDto(blog);
     }
 
     /* private 메소드 */
