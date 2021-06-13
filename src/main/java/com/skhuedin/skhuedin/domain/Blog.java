@@ -45,6 +45,7 @@ public class Blog extends BaseEntity {
     @Builder
     public Blog(User user, File profile, String content, List<Posts> posts) {
         this.user = user;
+        this.user.addBlog(this);
         this.profile = profile;
         this.content = content;
         if (posts != null) {
