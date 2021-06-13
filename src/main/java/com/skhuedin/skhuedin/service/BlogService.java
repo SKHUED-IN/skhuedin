@@ -93,12 +93,10 @@ public class BlogService {
 
     public BlogMainResponseDto findByUserId(Long userId) {
 
-        Boolean isBlog = blogRepository.existsByUserId(userId);
-
         Blog blog = blogRepository.findByUserId(userId).orElseThrow(() ->
                 new IllegalArgumentException("blog가 존재하지 않는 user 입니다."));
 
-        return new BlogMainResponseDto(blog, isBlog);
+        return new BlogMainResponseDto(blog);
     }
 
     /* private 메소드 */

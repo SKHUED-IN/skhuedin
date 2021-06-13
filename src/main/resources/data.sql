@@ -3,7 +3,8 @@ insert into user (created_date, last_modified_date, email, password, name, provi
 values (now(), now(), 'admin@email.com', '1234', 'admin', 'SELF', '/img', now(), now(), 'ADMIN'),
        (now(), now(), 'dev.hyeonic@gmail.com', null, 'hyeonic', 'KAKAO', null, '2016', null, 'ADMIN'),
        (now(), now(), 'her0807@naver.com', null, 'her0807', 'KAKAO', null, '2017', null, 'ADMIN'),
-       (now(), now(), 'hs98414@naver.com', null, '오혜성', 'KAKAO', null, '2017', null, 'ADMIN');
+       (now(), now(), 'hs98414@naver.com', null, '오혜성', 'KAKAO', null, '2017', null, 'ADMIN'),
+       (now(), now(), 'user1@email.com', null, '일반 유저', 'KAKAO', null, '2017', null, 'USER');
 
 insert into file (created_date, last_modified_date, original_name, name, path)
 values (now(), now(), 'user.png', 'user.png', '/home/ec2-user/app/profile/');

@@ -38,13 +38,4 @@ public class BlogMainResponseDto {
         this.createdDate = blog.getCreatedDate();
         this.lastModifiedDate = blog.getLastModifiedDate();
     }
-
-    public BlogMainResponseDto(Blog blog, Boolean isBlog) {
-        this.id = blog.getId();
-        this.user = new UserMainResponseDto(blog.getUser(), isBlog);
-        this.profile = blog.getProfile() != null ? new FileMainResponseDto(blog.getProfile()) : null;
-        this.content = blog.getContent();
-        this.createdDate = blog.getCreatedDate();
-        this.lastModifiedDate = blog.getLastModifiedDate();
-    }
 }
