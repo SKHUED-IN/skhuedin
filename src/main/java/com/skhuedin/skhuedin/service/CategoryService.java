@@ -1,10 +1,8 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Category;
-import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
-import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,8 +22,8 @@ public class CategoryService {
     private final PostsService postsService;
 
     @Transactional
-    public void save(CategoryRequestDto requestDto) {
-        categoryRepository.save(requestDto.toEntity());
+    public Long save(CategoryRequestDto requestDto) {
+        return categoryRepository.save(requestDto.toEntity()).getId();
     }
 
     public List<CategoryMainResponseDto> findAll() {
@@ -40,6 +38,10 @@ public class CategoryService {
                 .map(category -> findByPost(new CategoryMainResponseDto(category)));
     }
 
+    public CategoryMainResponseDto findById(Long id) {
+        return new CategoryMainResponseDto(categoryRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 category 존재하지 않습니다. id=" + id)));
+    }
 
     public List<CategoryMainResponseDto> findByWeight() {
         return categoryRepository.findByWeight()

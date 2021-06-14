@@ -24,7 +24,7 @@ class AdminMainControllerTest {
                 .build();
     }
 
-    @DisplayName("어드민 메인 페이 로딩 ")
+    @DisplayName("어드민 메인 페이 로딩")
     @Test
     void main_page_true() throws Exception {
         this.mockMvc.perform(get("/admin"))
@@ -33,7 +33,7 @@ class AdminMainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("게시글 관리 페이지 로딩 ")
+    @DisplayName("게시글 관리 페이지 로딩")
     @Test
     void posts_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/posts"))
@@ -69,7 +69,7 @@ class AdminMainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'회원 관리 페이지 로딩 ")
+    @DisplayName("회원 관리 페이지 로딩")
     @Test
     void user_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/users"))
@@ -78,7 +78,7 @@ class AdminMainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'회원 수정 페이지 로딩 ")
+    @DisplayName("회원 수정 페이지 로딩")
     @Test
     void user_detail_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/users/detail"))
@@ -87,7 +87,7 @@ class AdminMainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'카테고리 관리 페이지 로딩 ")
+    @DisplayName("카테고리 관리 페이지 로딩")
     @Test
     void category_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/category"))
@@ -96,7 +96,7 @@ class AdminMainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'카테고리 관리 수정 페이지 로딩 ")
+    @DisplayName("카테고리 관리 수정 페이지 로딩")
     @Test
     void category_detail_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/category/detail"))
