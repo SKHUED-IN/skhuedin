@@ -33,7 +33,6 @@ public class AdminMainController {
     public ModelAndView postsDetail() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/posts-detail");
-        modelAndView.setViewName("admin/posts-detail");
         return modelAndView;
     }
 
