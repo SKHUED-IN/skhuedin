@@ -27,37 +27,35 @@ public class CategoryService {
     }
 
     public List<CategoryMainResponseDto> findAll() {
-        return categoryRepository.findAll()
-                .stream()
+        return categoryRepository.findAll().stream()
                 .map(category -> new CategoryMainResponseDto(category))
                 .collect(Collectors.toList());
     }
 
     public Page<CategoryMainResponseDto> findAll(Pageable pageable) {
         return categoryRepository.findAll(pageable)
-                .map(category -> findByPost(new CategoryMainResponseDto(category)));
+                .map(category -> changeMainResponseDto(category.getId()));
     }
 
     public CategoryMainResponseDto findById(Long id) {
-        return new CategoryMainResponseDto(categoryRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 category 존재하지 않습니다. id=" + id)));
+        return new CategoryMainResponseDto(getCategory(id));
     }
 
     public List<CategoryMainResponseDto> findByWeight() {
         return categoryRepository.findByWeight()
                 .stream()
-                .map(category -> findByPost(new CategoryMainResponseDto(category)))
+                .map(category -> changeMainResponseDto(category.getId()))
                 .collect(Collectors.toList());
     }
 
     public Page<CategoryMainResponseDto> findByWeightPage(Pageable pageable) {
         return categoryRepository.findByWeightPage(pageable)
-                .map(category -> findByPost(new CategoryMainResponseDto(category)));
+                .map(category -> changeMainResponseDto(category.getId()));
     }
 
     public Page<CategoryMainResponseDto> findByCreatedDate(Pageable pageable) {
         return categoryRepository.findByCreatedDate(pageable)
-                .map(category -> findByPost(new CategoryMainResponseDto(category)));
+                .map(category -> changeMainResponseDto(category.getId()));
     }
 
     @Transactional
@@ -67,28 +65,29 @@ public class CategoryService {
 
     @Transactional
     public void addWeight(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
-                new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + categoryId));
+        Category category = getCategory(categoryId);
         category.addWeight();
     }
 
     @Transactional
     public void subtractWeight(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
-                new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + categoryId));
+        Category category = getCategory(categoryId);
         category.subtractWeight();
     }
 
-    public CategoryMainResponseDto findByPost(CategoryMainResponseDto list) {
-        list.add(postsService.findByCategoryId(list.getId()));
-        return list;
-    }
-
     public CategoryMainResponseDto findByIdByAdmin(Long id) {
-        return findByPost(new CategoryMainResponseDto(getCategory(id)));
+        return changeMainResponseDto(id);
     }
 
-    public Category getCategory(Long id) {
-        return categoryRepository.findById(id).orElse(null);
+    /* private 메소드 */
+    private CategoryMainResponseDto changeMainResponseDto(Long categoryId) {
+        CategoryMainResponseDto responseDto = new CategoryMainResponseDto(getCategory(categoryId));
+        responseDto.addReferPostCount(postsService.findByCategoryId(categoryId));
+        return responseDto;
+    }
+
+    private Category getCategory(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + id));
     }
 }

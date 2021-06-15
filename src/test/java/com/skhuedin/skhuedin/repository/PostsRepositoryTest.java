@@ -7,14 +7,12 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -75,39 +73,6 @@ class PostsRepositoryTest {
 
         categoryRepository.save(category1);
         categoryRepository.save(category2);
-    }
-
-    @Test
-    @DisplayName("blog id 별 posts 목록을 수정날짜 내림차순으로 조회하는 테스트")
-    @Disabled
-    void findByBlogId() {
-
-        // given
-        Posts posts1 = Posts.builder()
-                .blog(blog)
-                .title("책장의 첫 게시글")
-                .content("저는 이렇게 저렇게 공부했어요!")
-                .category(null)
-                .build();
-
-        Posts posts2 = Posts.builder()
-                .blog(blog)
-                .title("책장의 첫 게시글")
-                .content("저는 이렇게 저렇게 공부했어요!")
-                .category(null)
-                .build();
-
-        postsRepository.save(posts1);
-        postsRepository.save(posts2);
-
-        // when
-        List<Posts> posts = postsRepository.findByBlogIdOrderByLastModifiedDateDesc(blog.getId());
-
-        // then
-        assertAll(
-                () -> assertEquals(posts.get(0).getLastModifiedDate()
-                        .compareTo(posts.get(1).getLastModifiedDate()), 1)
-        );
     }
 
     @Test

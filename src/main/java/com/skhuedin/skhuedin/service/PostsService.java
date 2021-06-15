@@ -35,6 +35,29 @@ public class PostsService {
     public Long save(PostsSaveRequestDto requestDto) {
         Blog blog = getBlog(requestDto.getBlogId());
 
+        if (blog.getPosts().size() == 0) {
+            Posts posts = postsRepository.save(requestDto.toEntity(blog));
+            Category category = categoryRepository.findByCategoryName("자기소개").orElseThrow(() ->
+                    new IllegalArgumentException("존재하지 않는 category name 입니다."));
+
+            posts.updateCategory(category);
+            return posts.getId();
+        } else if (blog.getPosts().size() == 1) {
+            Posts posts = postsRepository.save(requestDto.toEntity(blog));
+            Category category = categoryRepository.findByCategoryName("학교생활").orElseThrow(() ->
+                    new IllegalArgumentException("존재하지 않는 category name 입니다."));
+
+            posts.updateCategory(category);
+            return posts.getId();
+        } else if (blog.getPosts().size() == 2) {
+            Posts posts = postsRepository.save(requestDto.toEntity(blog));
+            Category category = categoryRepository.findByCategoryName("졸업 후 현재").orElseThrow(() ->
+                    new IllegalArgumentException("존재하지 않는 category name 입니다."));
+
+            posts.updateCategory(category);
+            return posts.getId();
+        }
+
         return postsRepository.save(requestDto.toEntity(blog)).getId();
     }
 
@@ -65,12 +88,6 @@ public class PostsService {
         postsRepository.delete(posts);
     }
 
-    @Transactional
-    public void deletePostAdmin(Long id) {
-        Posts posts = getPosts(id);
-        posts.setDeleteStatus();
-    }
-
     public PostsMainResponseDto findById(Long id) {
         Posts posts = getPosts(id);
         return new PostsMainResponseDto(posts);
@@ -90,9 +107,7 @@ public class PostsService {
     }
 
     public Long findByCategoryId(Long id) {
-        List<Posts> posts = postsRepository.findPostsByCategoryId(id);
-        Long count = Long.valueOf(posts.size());
-        return count;
+        return postsRepository.countByCategoryId(id);
     }
 
     public Page<PostsMainResponseDto> findByBlogId(Long blogId, Pageable pageable) {
@@ -114,6 +129,7 @@ public class PostsService {
 
         Blog blog = blogRepository.findByUserEmail("admin@email.com").orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 회원의 이름입니다."));
+
         return postsRepository.save(requestDto.toEntity(blog, category)).getId();
     }
 
@@ -145,8 +161,8 @@ public class PostsService {
         posts.updateCategoryAndStatus(category, requestDto.getDeleteStatus());
     }
 
-    public Page<PostsAdminMainResponseDto> findBySuggestions(Pageable pageable) {
-        return postsRepository.findBySuggestions(pageable)
+    public Page<PostsAdminMainResponseDto> findSuggestions(Pageable pageable) {
+        return postsRepository.findSuggestions(pageable)
                 .map(posts -> new PostsAdminMainResponseDto(posts));
     }
 

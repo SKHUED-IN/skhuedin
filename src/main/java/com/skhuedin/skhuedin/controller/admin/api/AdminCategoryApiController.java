@@ -36,8 +36,7 @@ public class AdminCategoryApiController {
     @GetMapping("category")
     public ResponseEntity<? extends BasicResponse> getCategory(
             Pageable pageable,
-            @RequestParam(name = "cmd", defaultValue = "") String cmd
-    ) {
+            @RequestParam(name = "cmd", defaultValue = "") String cmd) {
         if (cmd.equals("")) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CommonResponse<>(categoryService.findAll(pageable)));

@@ -17,7 +17,7 @@ public class CategoryMainResponseDto {
         this.weight = category.getWeight();
     }
 
-    public void add(Long referPostCount) {
+    public void addReferPostCount(Long referPostCount) {
         this.referPostCount = referPostCount;
     }
 }
