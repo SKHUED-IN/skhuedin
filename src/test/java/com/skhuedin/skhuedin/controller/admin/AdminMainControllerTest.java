@@ -24,7 +24,7 @@ class AdminMainControllerTest {
                 .build();
     }
 
-    @DisplayName("어드민 메인 페이 로딩 ")
+    @DisplayName("어드민 메인 페이 로딩")
     @Test
     void main_page_true() throws Exception {
         this.mockMvc.perform(get("/admin"))
@@ -33,7 +33,7 @@ class AdminMainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("게시글 관리 페이지 로딩 ")
+    @DisplayName("게시글 관리 페이지 로딩")
     @Test
     void posts_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/posts"))
@@ -51,7 +51,25 @@ class AdminMainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'회원 관리 페이지 로딩 ")
+    @DisplayName("질문 관리 페이지 로딩")
+    @Test
+    void question_page_true() throws Exception {
+        this.mockMvc.perform(get("/admin/question"))
+                .andDo(print())
+                .andExpect(view().name("admin/question"))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("질문 관리 수정 페이지 로딩")
+    @Test
+    void question_detail_page_true() throws Exception {
+        this.mockMvc.perform(get("/admin/question/detail"))
+                .andDo(print())
+                .andExpect(view().name("admin/question-detail"))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("회원 관리 페이지 로딩")
     @Test
     void user_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/users"))
@@ -60,12 +78,30 @@ class AdminMainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("'회원 수정 페이지 로딩 ")
+    @DisplayName("회원 수정 페이지 로딩")
     @Test
     void user_detail_page_true() throws Exception {
         this.mockMvc.perform(get("/admin/users/detail"))
                 .andDo(print())
                 .andExpect(view().name("admin/users-detail"))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("카테고리 관리 페이지 로딩")
+    @Test
+    void category_page_true() throws Exception {
+        this.mockMvc.perform(get("/admin/category"))
+                .andDo(print())
+                .andExpect(view().name("admin/category"))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("카테고리 관리 수정 페이지 로딩")
+    @Test
+    void category_detail_page_true() throws Exception {
+        this.mockMvc.perform(get("/admin/category/detail"))
+                .andDo(print())
+                .andExpect(view().name("admin/category-detail"))
                 .andExpect(status().isOk());
     }
 }

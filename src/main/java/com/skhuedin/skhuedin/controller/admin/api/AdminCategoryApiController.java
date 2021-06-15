@@ -25,7 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminCategoryApiController {
     private final CategoryService categoryService;
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
+    @GetMapping("categories")
+    public ResponseEntity<? extends BasicResponse> categories() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(categoryService.findAll()));
+    }
+
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("category")
     public ResponseEntity<? extends BasicResponse> getCategory(
             Pageable pageable,
@@ -43,7 +50,7 @@ public class AdminCategoryApiController {
         }
     }
 
-//    @MyRole(role = Role.ADMIN)
+    //    @MyRole(role = Role.ADMIN)
     @GetMapping("category/{categoryId}")
     public ResponseEntity<? extends BasicResponse> getCategory(@PathVariable("categoryId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
