@@ -82,7 +82,7 @@ public class CategoryService {
     /* private 메소드 */
     private CategoryMainResponseDto changeMainResponseDto(Long categoryId) {
         CategoryMainResponseDto responseDto = new CategoryMainResponseDto(getCategory(categoryId));
-        responseDto.addReferPostCount(postsService.findByCategoryId(categoryId));
+        responseDto.addReferPostCount(postsService.countByCategoryId(categoryId));
         return responseDto;
     }
 
