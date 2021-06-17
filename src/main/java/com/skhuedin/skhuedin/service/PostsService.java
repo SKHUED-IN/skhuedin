@@ -4,7 +4,6 @@ import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Category;
 import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminMainResponseDto;
-import com.skhuedin.skhuedin.dto.posts.PostsAdminResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateRequestDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
@@ -72,17 +71,6 @@ public class PostsService {
     }
 
     @Transactional
-    public Long update(Long id, Long categoryId) {
-
-        Posts posts = getPosts(id);
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 category 입니다. id=" + id));
-        posts.updateCategory(category);
-
-        return posts.getId();
-    }
-
-    @Transactional
     public void delete(Long id) {
         Posts posts = getPosts(id);
         postsRepository.delete(posts);
@@ -94,19 +82,13 @@ public class PostsService {
     }
 
     public List<PostsMainResponseDto> findByCategoryId(Long categoryId, Pageable pageable) {
-        List<Posts> posts = postsRepository.findByCategoryIdOrderByView(categoryId, pageable);
-        return posts.stream()
-                .map(posts1 -> new PostsMainResponseDto(posts1))
+        return postsRepository.findByCategoryIdOrderByView(categoryId, pageable)
+                .stream()
+                .map(posts -> new PostsMainResponseDto(posts))
                 .collect(Collectors.toList());
     }
 
-    public List<PostsAdminResponseDto> findAll() {
-        return postsRepository.findAll().stream()
-                .map(post -> new PostsAdminResponseDto(post))
-                .collect(Collectors.toList());
-    }
-
-    public Long findByCategoryId(Long id) {
+    public Long countByCategoryId(Long id) {
         return postsRepository.countByCategoryId(id);
     }
 
