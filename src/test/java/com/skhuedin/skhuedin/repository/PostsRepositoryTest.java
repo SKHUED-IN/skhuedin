@@ -130,6 +130,107 @@ class PostsRepositoryTest {
         );
     }
 
+    @Test
+    @DisplayName("blog id로 posts를 조회하는 테스트")
+    void findByBlogId() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i);
+            postsRepository.save(posts);
+        }
+
+        // when
+        List<Posts> posts = postsRepository.findByBlogId(blog.getId());
+
+        // then
+        assertEquals(posts.size(), 10);
+    }
+
+    @Test
+    @DisplayName("등록한 user 이름을 활용하여 조회하는 테스트")
+    void findByUserName() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Posts> postsList = postsRepository.findByUserName(pageRequest, "user");
+
+        // then
+        assertEquals(postsList.getContent().size(), 10);
+    }
+
+    @Test
+    @DisplayName("등록한 category name을 활용하여 조회하는 테스트")
+    void findByCategoryName() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Posts> postsList = postsRepository.findByCategoryName(pageRequest, "category1");
+
+        // then
+        assertEquals(postsList.getContent().size(), 10);
+    }
+
+    @Test
+    @DisplayName("suggestions을 조회하는 테스트")
+    void findSuggestions() {
+
+        // given
+        Category suggestions = Category.builder()
+                .name("건의사항")
+                .weight(0L)
+                .build();
+        categoryRepository.save(suggestions);
+
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i, suggestions);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Posts> posts = postsRepository.findSuggestions(pageRequest);
+
+        // then
+        assertEquals(posts.getContent().size(), 10);
+    }
+
+    @Test
+    @DisplayName("category id 별로 count 조회하는 테스트")
+    void countByCategoryId() {
+        
+        // given
+        Category suggestions = Category.builder()
+                .name("건의사항")
+                .weight(0L)
+                .build();
+        categoryRepository.save(suggestions);
+
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i, suggestions);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Long count = postsRepository.countByCategoryId(suggestions.getId());
+
+        // then
+        assertEquals(count, 10);
+    }
+    
     Posts generatePosts(int index, Category category) {
         return Posts.builder()
                 .blog(blog)
@@ -144,10 +245,9 @@ class PostsRepositoryTest {
                 .blog(blog)
                 .title("책장의 게시글 " + index)
                 .content("저는 이렇게 저렇게 공부했어요!")
-                .category(null)
+                .category(category1)
                 .build();
     }
-
 
     @AfterEach
     void afterEach() {

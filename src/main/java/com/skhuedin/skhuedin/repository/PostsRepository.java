@@ -15,11 +15,6 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
 
     @Query("select p " +
             "from Posts p " +
-            "where p.blog.id = :blogId")
-    List<Posts> findByBlogId(@Param("blogId") Long blogId);
-
-    @Query("select p " +
-            "from Posts p " +
             "where p.category.id = :categoryId " +
             "order by p.view desc, p.lastModifiedDate")
     List<Posts> findByCategoryIdOrderByView(@Param("categoryId") Long categoryId, Pageable pageable);
@@ -28,7 +23,8 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
             "from Posts p " +
             "where p.blog.id = :blogId and p.deleteStatus = :deleteStatus " +
             "order by p.lastModifiedDate")
-    Page<Posts> findByBlogId(@Param("blogId") Long blogId, boolean deleteStatus, Pageable pageable);
+    Page<Posts> findByBlogId(@Param("blogId") Long blogId,
+                             @Param("deleteStatus") boolean deleteStatus, Pageable pageable);
 
     /* admin 전용 */
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
@@ -37,6 +33,12 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
             "where p.category.name not like '건의사항' " +
             "order by p.lastModifiedDate DESC")
     Page<Posts> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @Query("select p " +
+            "from Posts p " +
+            "where p.blog.id = :blogId")
+    List<Posts> findByBlogId(@Param("blogId") Long blogId);
 
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
     @Query("select p " +
