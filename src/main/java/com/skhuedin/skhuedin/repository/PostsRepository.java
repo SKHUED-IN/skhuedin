@@ -13,14 +13,6 @@ import java.util.Optional;
 
 public interface PostsRepository extends JpaRepository<Posts, Long> {
 
-    List<Posts> findByBlogIdOrderByLastModifiedDateDesc(Long blogId);
-
-    @Query("select p from Posts p where p.blog.id = :blogId")
-    List<Posts> findPostsByBlogId(@Param("blogId") Long blogId);
-
-    @Query("select p from Posts p where p.category.id = :categoryId")
-    List<Posts> findPostsByCategoryId(@Param("categoryId") Long categoryId);
-
     @Query("select p " +
             "from Posts p " +
             "where p.category.id = :categoryId " +
@@ -31,7 +23,8 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
             "from Posts p " +
             "where p.blog.id = :blogId and p.deleteStatus = :deleteStatus " +
             "order by p.lastModifiedDate")
-    Page<Posts> findByBlogId(@Param("blogId") Long blogId, boolean deleteStatus, Pageable pageable);
+    Page<Posts> findByBlogId(@Param("blogId") Long blogId,
+                             @Param("deleteStatus") boolean deleteStatus, Pageable pageable);
 
     /* admin 전용 */
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
@@ -40,6 +33,12 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
             "where p.category.name not like '건의사항' " +
             "order by p.lastModifiedDate DESC")
     Page<Posts> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @Query("select p " +
+            "from Posts p " +
+            "where p.blog.id = :blogId")
+    List<Posts> findByBlogId(@Param("blogId") Long blogId);
 
     @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
     @Query("select p " +
@@ -66,5 +65,7 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
             "from Posts p " +
             "where p.category.name like '건의사항' " +
             "order by p.lastModifiedDate desc")
-    Page<Posts> findBySuggestions(Pageable pageable);
+    Page<Posts> findSuggestions(Pageable pageable);
+
+    Long countByCategoryId(@Param("categoryId") Long categoryId);
 }

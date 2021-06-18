@@ -64,7 +64,10 @@ values (now(), now(), '학창 시절', 1),
        (now(), now(), '취업 준비', 2),
        (now(), now(), '하고싶은말', 3),
        (now(), now(), '연봉', 4),
-       (now(), now(), '건의사항', 0);
+       (now(), now(), '건의사항', 0),
+       (now(), now(), '자기소개', 1),
+       (now(), now(), '학교생활', 1),
+       (now(), now(), '졸업 후 현재', 1);
 
 insert into posts (created_date, last_modified_date, content, title, delete_status, view, blog_id, category_id)
 values (now(), now(), 'posts content 1', 'posts title 1', false, 1, 1, 1),

@@ -54,6 +54,6 @@ public class AdminQuestionsApiController {
     @GetMapping("suggestions")
     public ResponseEntity<? extends BasicResponse> suggestions(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(postsService.findBySuggestions(pageable)));
+                .body(new CommonResponse<>(postsService.findSuggestions(pageable)));
     }
 }

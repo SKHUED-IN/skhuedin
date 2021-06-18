@@ -4,7 +4,6 @@ import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Category;
 import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminMainResponseDto;
-import com.skhuedin.skhuedin.dto.posts.PostsAdminResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateRequestDto;
 import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
@@ -35,6 +34,26 @@ public class PostsService {
     public Long save(PostsSaveRequestDto requestDto) {
         Blog blog = getBlog(requestDto.getBlogId());
 
+        if (blog.getPosts().size() == 0) {
+            Posts posts = postsRepository.save(requestDto.toEntity(blog));
+            Category category = getCategory("자기소개");
+
+            posts.updateCategory(category);
+            return posts.getId();
+        } else if (blog.getPosts().size() == 1) {
+            Posts posts = postsRepository.save(requestDto.toEntity(blog));
+            Category category = getCategory("학교생활");
+
+            posts.updateCategory(category);
+            return posts.getId();
+        } else if (blog.getPosts().size() == 2) {
+            Posts posts = postsRepository.save(requestDto.toEntity(blog));
+            Category category = getCategory("졸업 후 현재");
+
+            posts.updateCategory(category);
+            return posts.getId();
+        }
+
         return postsRepository.save(requestDto.toEntity(blog)).getId();
     }
 
@@ -49,26 +68,9 @@ public class PostsService {
     }
 
     @Transactional
-    public Long update(Long id, Long categoryId) {
-
-        Posts posts = getPosts(id);
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 category 입니다. id=" + id));
-        posts.updateCategory(category);
-
-        return posts.getId();
-    }
-
-    @Transactional
     public void delete(Long id) {
         Posts posts = getPosts(id);
         postsRepository.delete(posts);
-    }
-
-    @Transactional
-    public void deletePostAdmin(Long id) {
-        Posts posts = getPosts(id);
-        posts.setDeleteStatus();
     }
 
     public PostsMainResponseDto findById(Long id) {
@@ -77,22 +79,14 @@ public class PostsService {
     }
 
     public List<PostsMainResponseDto> findByCategoryId(Long categoryId, Pageable pageable) {
-        List<Posts> posts = postsRepository.findByCategoryIdOrderByView(categoryId, pageable);
-        return posts.stream()
-                .map(posts1 -> new PostsMainResponseDto(posts1))
+        return postsRepository.findByCategoryIdOrderByView(categoryId, pageable)
+                .stream()
+                .map(posts -> new PostsMainResponseDto(posts))
                 .collect(Collectors.toList());
     }
 
-    public List<PostsAdminResponseDto> findAll() {
-        return postsRepository.findAll().stream()
-                .map(post -> new PostsAdminResponseDto(post))
-                .collect(Collectors.toList());
-    }
-
-    public Long findByCategoryId(Long id) {
-        List<Posts> posts = postsRepository.findPostsByCategoryId(id);
-        Long count = Long.valueOf(posts.size());
-        return count;
+    public Long countByCategoryId(Long id) {
+        return postsRepository.countByCategoryId(id);
     }
 
     public Page<PostsMainResponseDto> findByBlogId(Long blogId, Pageable pageable) {
@@ -114,6 +108,7 @@ public class PostsService {
 
         Blog blog = blogRepository.findByUserEmail("admin@email.com").orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 회원의 이름입니다."));
+
         return postsRepository.save(requestDto.toEntity(blog, category)).getId();
     }
 
@@ -145,8 +140,8 @@ public class PostsService {
         posts.updateCategoryAndStatus(category, requestDto.getDeleteStatus());
     }
 
-    public Page<PostsAdminMainResponseDto> findBySuggestions(Pageable pageable) {
-        return postsRepository.findBySuggestions(pageable)
+    public Page<PostsAdminMainResponseDto> findSuggestions(Pageable pageable) {
+        return postsRepository.findSuggestions(pageable)
                 .map(posts -> new PostsAdminMainResponseDto(posts));
     }
 
@@ -166,5 +161,10 @@ public class PostsService {
     private Category getCategory(Long id) {
         return categoryRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 category 입니다. id=" + id));
+    }
+
+    private Category getCategory(String categoryName) {
+        return categoryRepository.findByCategoryName(categoryName).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 category name 입니다."));
     }
 }

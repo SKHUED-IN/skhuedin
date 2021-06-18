@@ -7,14 +7,12 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -78,39 +76,6 @@ class PostsRepositoryTest {
     }
 
     @Test
-    @DisplayName("blog id 별 posts 목록을 수정날짜 내림차순으로 조회하는 테스트")
-    @Disabled
-    void findByBlogId() {
-
-        // given
-        Posts posts1 = Posts.builder()
-                .blog(blog)
-                .title("책장의 첫 게시글")
-                .content("저는 이렇게 저렇게 공부했어요!")
-                .category(null)
-                .build();
-
-        Posts posts2 = Posts.builder()
-                .blog(blog)
-                .title("책장의 첫 게시글")
-                .content("저는 이렇게 저렇게 공부했어요!")
-                .category(null)
-                .build();
-
-        postsRepository.save(posts1);
-        postsRepository.save(posts2);
-
-        // when
-        List<Posts> posts = postsRepository.findByBlogIdOrderByLastModifiedDateDesc(blog.getId());
-
-        // then
-        assertAll(
-                () -> assertEquals(posts.get(0).getLastModifiedDate()
-                        .compareTo(posts.get(1).getLastModifiedDate()), 1)
-        );
-    }
-
-    @Test
     @DisplayName("categoryId 별로 최신 update 및 최대 조회수 순으로 limit 3로 정렬하여 조회하는 테스트")
     void findByCategoryIdOrderByView() {
 
@@ -165,6 +130,107 @@ class PostsRepositoryTest {
         );
     }
 
+    @Test
+    @DisplayName("blog id로 posts를 조회하는 테스트")
+    void findByBlogId() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i);
+            postsRepository.save(posts);
+        }
+
+        // when
+        List<Posts> posts = postsRepository.findByBlogId(blog.getId());
+
+        // then
+        assertEquals(posts.size(), 10);
+    }
+
+    @Test
+    @DisplayName("등록한 user 이름을 활용하여 조회하는 테스트")
+    void findByUserName() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Posts> postsList = postsRepository.findByUserName(pageRequest, "user");
+
+        // then
+        assertEquals(postsList.getContent().size(), 10);
+    }
+
+    @Test
+    @DisplayName("등록한 category name을 활용하여 조회하는 테스트")
+    void findByCategoryName() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Posts> postsList = postsRepository.findByCategoryName(pageRequest, "category1");
+
+        // then
+        assertEquals(postsList.getContent().size(), 10);
+    }
+
+    @Test
+    @DisplayName("suggestions을 조회하는 테스트")
+    void findSuggestions() {
+
+        // given
+        Category suggestions = Category.builder()
+                .name("건의사항")
+                .weight(0L)
+                .build();
+        categoryRepository.save(suggestions);
+
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i, suggestions);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Posts> posts = postsRepository.findSuggestions(pageRequest);
+
+        // then
+        assertEquals(posts.getContent().size(), 10);
+    }
+
+    @Test
+    @DisplayName("category id 별로 count 조회하는 테스트")
+    void countByCategoryId() {
+        
+        // given
+        Category suggestions = Category.builder()
+                .name("건의사항")
+                .weight(0L)
+                .build();
+        categoryRepository.save(suggestions);
+
+        for (int i = 0; i < 10; i++) {
+            Posts posts = generatePosts(i, suggestions);
+            postsRepository.save(posts);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Long count = postsRepository.countByCategoryId(suggestions.getId());
+
+        // then
+        assertEquals(count, 10);
+    }
+    
     Posts generatePosts(int index, Category category) {
         return Posts.builder()
                 .blog(blog)
@@ -179,10 +245,9 @@ class PostsRepositoryTest {
                 .blog(blog)
                 .title("책장의 게시글 " + index)
                 .content("저는 이렇게 저렇게 공부했어요!")
-                .category(null)
+                .category(category1)
                 .build();
     }
-
 
     @AfterEach
     void afterEach() {

@@ -88,7 +88,7 @@ public class UserService {
         deleteQuestions(targetQuestions);
 
         if (blogByUserId != null) {
-            posts = postsRepository.findPostsByBlogId(blogByUserId.getId());
+            posts = postsRepository.findByBlogId(blogByUserId.getId());
             for (Posts post : posts) {
                 postsRepository.deleteById(post.getId());
             }
