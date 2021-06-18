@@ -58,7 +58,7 @@ public class BlogApiController {
         if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
             String extension = originalFileName.split("\\.")[1];
-            String fileName = UUID.randomUUID().toString() + "." + extension;
+            String fileName = UUID.randomUUID() + "." + extension;
             String savePath = resourcesLocation;
             if (!new File(savePath).exists()) {
                 new File(savePath).mkdir();
@@ -116,7 +116,7 @@ public class BlogApiController {
         if (files != null && !files.isEmpty()) {
             String originalFileName = files.getOriginalFilename();
             String extension = originalFileName.split("\\.")[1];
-            String fileName = UUID.randomUUID().toString() + "." + extension;
+            String fileName = UUID.randomUUID() + "." + extension;
             String savePath = resourcesLocation;
             if (!new File(savePath).exists()) {
                 new File(savePath).mkdir();
