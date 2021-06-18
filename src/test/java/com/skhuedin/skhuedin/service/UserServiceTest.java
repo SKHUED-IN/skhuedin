@@ -2,9 +2,11 @@ package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.user.UserAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
+import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
@@ -124,6 +128,92 @@ class UserServiceTest {
         assertThrows(IllegalArgumentException.class, () -> userService.findById(0L));
     }
 
+    @Test
+    @DisplayName("user 목록을 paging하여 조회하는 테스트")
+    void findAll() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            User user = generateUser(i);
+            userRepository.save(user);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<UserAdminMainResponseDto> users = userService.findAll(pageRequest);
+
+        // then
+        assertAll(
+                () -> assertEquals(users.getContent().size(), 5), // 조회된 데이터 수
+                () -> assertEquals(users.getTotalElements(), 10), // 전체 데이터 수
+                () -> assertEquals(users.getNumber(), 0), // 페이지 번호
+                () -> assertEquals(users.getTotalPages(), 2), // 전체 페이지 번호
+                () -> assertTrue(users.isFirst()), // 첫 번째 페이지 t/f
+                () -> assertTrue(users.hasNext()) // 다음 페이지 t/f
+        );
+    }
+
+    @Test
+    @DisplayName("username을 활용하여 user를 조회하는 테스트")
+    void findByUserName() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            User user = generateUser(i);
+            userRepository.save(user);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<UserAdminMainResponseDto> users = userService.findByUserName(pageRequest, "user");
+
+        // then
+        assertAll(
+                () -> assertEquals(users.getContent().size(), 5), // 조회된 데이터 수
+                () -> assertEquals(users.getTotalElements(), 10), // 전체 데이터 수
+                () -> assertEquals(users.getNumber(), 0), // 페이지 번호
+                () -> assertEquals(users.getTotalPages(), 2), // 전체 페이지 번호
+                () -> assertTrue(users.isFirst()), // 첫 번째 페이지 t/f
+                () -> assertTrue(users.hasNext()) // 다음 페이지 t/f
+        );
+    }
+
+    @Test
+    @DisplayName("user의 role를 활용하여 user를 조회하는 테스트")
+    void findByUserRole() {
+
+        // given
+        for (int i = 0; i < 10; i++) {
+            User user = generateUser(i);
+            userRepository.save(user);
+        }
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<UserAdminMainResponseDto> users = userService.findByUserRole(pageRequest, "USER");
+
+        // then
+        assertAll(
+                () -> assertEquals(users.getContent().size(), 5), // 조회된 데이터 수
+                () -> assertEquals(users.getTotalElements(), 10), // 전체 데이터 수
+                () -> assertEquals(users.getNumber(), 0), // 페이지 번호
+                () -> assertEquals(users.getTotalPages(), 2), // 전체 페이지 번호
+                () -> assertTrue(users.isFirst()), // 첫 번째 페이지 t/f
+                () -> assertTrue(users.hasNext()) // 다음 페이지 t/f
+        );
+    }
+
+    private User generateUser(int index) {
+        return User.builder()
+                .email("user" + index + "@email.com")
+                .name("user" + index)
+                .userImageUrl("/img")
+                .graduationYear("2016")
+                .entranceYear("2022")
+                .provider(Provider.SELF)
+                .role(Role.USER)
+                .build();
+    }
 
     @AfterEach
     void afterEach() {

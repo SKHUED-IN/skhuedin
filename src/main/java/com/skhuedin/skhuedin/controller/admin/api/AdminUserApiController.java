@@ -3,8 +3,6 @@ package com.skhuedin.skhuedin.controller.admin.api;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.user.UserAdminUpdateRequestDto;
-import com.skhuedin.skhuedin.infra.MyRole;
-import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +46,7 @@ public class AdminUserApiController {
     @GetMapping("users/{userId}")
     public ResponseEntity<? extends BasicResponse> getUsers(@PathVariable("userId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.findByIdByAdmin(id)));
+                .body(new CommonResponse<>(userService.findByIdForAdmin(id)));
     }
 
     //    @MyRole(role = Role.ADMIN)

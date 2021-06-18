@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmailAndPassword(String email, String password);
 
-    // admin
+    /* admin 전용 */
     Page<User> findAll(Pageable pageable);
 
     @Query("select u " +
@@ -28,5 +28,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u " +
             "from User u " +
             "where u.role = :role ")
-    Page<User> findByRoleAdmin(Pageable pageable, @Param("role") Role role);
+    Page<User> findByRole(Pageable pageable, @Param("role") Role role);
 }
