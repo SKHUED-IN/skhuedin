@@ -5,13 +5,12 @@ import com.skhuedin.skhuedin.domain.Comment;
 import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
-
+import com.skhuedin.skhuedin.dto.user.UserAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
-
 import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CommentRepository;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -164,27 +162,28 @@ public class UserService {
     }
 
     /* admin 전용 */
-    public Page<UserMainResponseDto> findAll(Pageable pageable) {
+    public Page<UserAdminMainResponseDto> findAll(Pageable pageable) {
         return userRepository.findAll(pageable)
-                .map(users -> new UserMainResponseDto(users));
+                .map(user -> new UserAdminMainResponseDto(user));
     }
 
-    public Page<UserMainResponseDto> findByUserName(Pageable pageable, String username) {
+    public Page<UserAdminMainResponseDto> findByUserName(Pageable pageable, String username) {
         return userRepository.findByUserName(pageable, username)
-                .map(user -> new UserMainResponseDto(user));
+                .map(user -> new UserAdminMainResponseDto(user));
     }
 
-    public Page<UserMainResponseDto> findByUserRole(Pageable pageable, String role) {
-        Role findRole = Role.valueOf(role.toUpperCase(Locale.ROOT));
-        try {
-            return userRepository.findByRoleAdmin(pageable, findRole)
-                    .map(users -> new UserMainResponseDto(users));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("일치하는 권한이 없습니다. ");
+    public Page<UserAdminMainResponseDto> findByUserRole(Pageable pageable, String role) {
+        Role findRole = null;
+        if (role.equals("USER")) {
+            findRole = Role.USER;
+        } else if (role.equals("ADMIN")) {
+            findRole = Role.ADMIN;
         }
+        return userRepository.findByRole(pageable, findRole)
+                .map(user -> new UserAdminMainResponseDto(user));
     }
 
-    public UserMainResponseDto findByIdByAdmin(Long id) {
-        return new UserMainResponseDto(getUser(id));
+    public UserAdminMainResponseDto findByIdForAdmin(Long id) {
+        return new UserAdminMainResponseDto(getUser(id));
     }
 }
