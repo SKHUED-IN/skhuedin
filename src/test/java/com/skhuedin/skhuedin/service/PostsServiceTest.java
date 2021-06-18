@@ -1,11 +1,13 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Blog;
+import com.skhuedin.skhuedin.domain.Category;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
+import com.skhuedin.skhuedin.repository.CategoryRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -17,8 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,6 +34,9 @@ class PostsServiceTest {
 
     @Autowired
     PostsRepository postsRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Autowired
     PostsService postsService;
@@ -61,6 +64,25 @@ class PostsServiceTest {
                 .build();
 
         blogRepository.save(blog);
+
+        Category category1 = Category.builder()
+                .name("자기소개")
+                .weight(1L)
+                .build();
+
+        Category category2 = Category.builder()
+                .name("학교생활")
+                .weight(1L)
+                .build();
+
+        Category category3 = Category.builder()
+                .name("졸업 후 현재")
+                .weight(1L)
+                .build();
+
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
+        categoryRepository.save(category3);
     }
 
     @Test
