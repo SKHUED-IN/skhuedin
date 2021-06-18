@@ -31,6 +31,11 @@ public class Category extends BaseEntity {
         this.weight = weight;
     }
 
+    public void updateCategory(Category category) {
+        this.name = category.name;
+        this.weight = category.weight;
+    }
+
     public void addWeight() {
         this.weight++;
     }

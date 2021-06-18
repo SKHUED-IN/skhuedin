@@ -36,22 +36,19 @@ public class PostsService {
 
         if (blog.getPosts().size() == 0) {
             Posts posts = postsRepository.save(requestDto.toEntity(blog));
-            Category category = categoryRepository.findByCategoryName("자기소개").orElseThrow(() ->
-                    new IllegalArgumentException("존재하지 않는 category name 입니다."));
+            Category category = getCategory("자기소개");
 
             posts.updateCategory(category);
             return posts.getId();
         } else if (blog.getPosts().size() == 1) {
             Posts posts = postsRepository.save(requestDto.toEntity(blog));
-            Category category = categoryRepository.findByCategoryName("학교생활").orElseThrow(() ->
-                    new IllegalArgumentException("존재하지 않는 category name 입니다."));
+            Category category = getCategory("학교생활");
 
             posts.updateCategory(category);
             return posts.getId();
         } else if (blog.getPosts().size() == 2) {
             Posts posts = postsRepository.save(requestDto.toEntity(blog));
-            Category category = categoryRepository.findByCategoryName("졸업 후 현재").orElseThrow(() ->
-                    new IllegalArgumentException("존재하지 않는 category name 입니다."));
+            Category category = getCategory("졸업 후 현재");
 
             posts.updateCategory(category);
             return posts.getId();
@@ -164,5 +161,10 @@ public class PostsService {
     private Category getCategory(Long id) {
         return categoryRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 category 입니다. id=" + id));
+    }
+
+    private Category getCategory(String categoryName) {
+        return categoryRepository.findByCategoryName(categoryName).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 category name 입니다."));
     }
 }
