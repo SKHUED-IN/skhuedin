@@ -2,8 +2,8 @@ package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.File;
-import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.blog.BlogAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
@@ -71,10 +71,10 @@ public class BlogService {
 
     public BlogMainResponseDto findById(Long id, Pageable pageable) {
         Blog blog = getBlog(id);
-        Page<Posts> posts = postsRepository.findByBlogId(blog.getId(), false, pageable);
-        Page<PostsMainResponseDto> postsMainResponseDtos = posts.map(posts1 -> new PostsMainResponseDto(posts1));
+        Page<PostsMainResponseDto> postsPage = postsRepository.findByBlogId(blog.getId(), false, pageable)
+                .map(posts -> new PostsMainResponseDto(posts));
 
-        return new BlogMainResponseDto(blog, postsMainResponseDtos);
+        return new BlogMainResponseDto(blog, postsPage);
     }
 
     public Page<BlogMainResponseDto> findAll(Pageable pageable) {
@@ -97,6 +97,12 @@ public class BlogService {
                 new IllegalArgumentException("blog가 존재하지 않는 user 입니다."));
 
         return new BlogMainResponseDto(blog);
+    }
+
+    /* admin 전용 */
+    public Page<BlogAdminMainResponseDto> findAllForAdmin(Pageable pageable) {
+        return blogRepository.findAll(pageable)
+                .map(blog -> new BlogAdminMainResponseDto(blog));
     }
 
     /* private 메소드 */
