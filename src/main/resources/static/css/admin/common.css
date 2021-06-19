@@ -4,10 +4,6 @@ body {
     flex-direction: column;
 }
 
-header {
-
-}
-
 section {
     flex: 1;
     padding: 5%;
@@ -40,12 +36,24 @@ a:hover {
 }
 
 .contents {
-    width: 40%;
+    width: 50%;
     height: 80%;
     padding: 5%;
     margin: 0 auto;
     background:  #f8f9fa!important;
     text-align: center;
     border: 1px solid #f8f9fa!important;
+    border-radius: 40px 40px 40px 40px;
+}
+
+#swagger-btn > img {
+    width: 222px;
+    height: 49px;
+}
+
+#swagger-btn > img:hover {
+    cursor: pointer;
+    opacity: 0.5;
+    border: 1px solid #f8f9fa;
     border-radius: 40px 40px 40px 40px;
 }
