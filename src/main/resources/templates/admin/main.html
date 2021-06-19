@@ -6,14 +6,22 @@
 
 <section>
     <div class="contents">
-        <h3 style="font-weight: bold">[ SKHUED-IN Admin page ]</h3>
+        <h3 class="fw-bold">[ SKHUED-IN Admin page ]</h3>
         <br>
         <h4>
             Available only to administrators.</h4>
         <h4>If you are not an administrator, please leave.</h4>
         <br>
         <br>
-        <a id="kakao-login-btn"></a>
+        <div>
+            <a id="kakao-login-btn"></a>
+        </div>
+        <br>
+        <div>
+            <a id="swagger-btn" onclick="goSwagger()">
+                <img src="/images/swagger.png">
+            </a>
+        </div>
     </div>
 </section>
 
@@ -54,5 +62,9 @@
     function redirect() {
         fetch('/admin')
             .then();
+    }
+
+    function goSwagger() {
+        location.href = '/swagger-ui.html';
     }
 </script>
