@@ -21,7 +21,7 @@ public class PostsSaveRequestDto {
     @Size(max = 30, message = "title의 길이는 30을 넘을 수 없습니다.")
     private String title;
 
-    @Size(max = 5000, message = "content의 길이는 5000을 넘을 수 없습니다.")
+    @Size(max = 50000, message = "content의 길이는 50000을 넘을 수 없습니다.")
     private String content;
 
     @Builder

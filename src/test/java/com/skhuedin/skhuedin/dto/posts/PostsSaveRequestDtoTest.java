@@ -23,7 +23,7 @@ class PostsSaveRequestDtoTest {
 
         // given
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 5001; i++) {
+        for (int i = 0; i < 50001; i++) {
             stringBuilder.append(i);
         }
 
@@ -36,7 +36,7 @@ class PostsSaveRequestDtoTest {
         ArrayList<String> errorMessages = new ArrayList<>();
         errorMessages.add("blog의 id는 null이 될 수 없습니다.");
         errorMessages.add("title이 비어 있습니다.");
-        errorMessages.add("content의 길이는 5000을 넘을 수 없습니다.");
+        errorMessages.add("content의 길이는 50000을 넘을 수 없습니다.");
         errorMessages.add("title의 길이는 15를 넘을 수 없습니다.");
 
         // when
