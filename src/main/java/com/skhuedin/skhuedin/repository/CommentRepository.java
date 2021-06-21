@@ -20,5 +20,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "from Comment c " +
             "where c.writerUser.id = :userId")
     List<Comment> findByWriterUserId(@Param("userId") Long userId);
-
 }

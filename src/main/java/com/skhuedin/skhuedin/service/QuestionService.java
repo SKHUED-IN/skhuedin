@@ -3,11 +3,9 @@ package com.skhuedin.skhuedin.service;
 import com.skhuedin.skhuedin.domain.Question;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
-import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
-import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -48,17 +46,6 @@ public class QuestionService {
     }
 
     @Transactional
-    public void updateStatus(Long id) {
-        Question question = getQuestion(id);
-
-        if (question.getStatus() == false) {
-            question.updateStatus(true);
-        } else if (question.getStatus() == true) {
-            question.updateStatus(false);
-        }
-    }
-
-    @Transactional
     public void delete(Long id) {
         Question question = getQuestion(id);
         questionRepository.delete(question);
@@ -77,8 +64,7 @@ public class QuestionService {
 
     public Page<QuestionMainResponseDto> findByTargetUserId(Long id, Pageable pageable) {
         Page<Question> questions = questionRepository.findByTargetUserId(id, pageable);
-        return questions
-                .map(question -> {
+        return questions.map(question -> {
                     List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
                     return new QuestionMainResponseDto(question, comments);
                 });
