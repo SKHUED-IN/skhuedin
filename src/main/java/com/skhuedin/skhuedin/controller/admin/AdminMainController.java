@@ -1,7 +1,5 @@
 package com.skhuedin.skhuedin.controller.admin;
 
-import com.skhuedin.skhuedin.infra.MyRole;
-import com.skhuedin.skhuedin.infra.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +18,6 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ModelAndView posts() {
         ModelAndView modelAndView = new ModelAndView();
@@ -28,7 +25,6 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
     @GetMapping("posts/detail")
     public ModelAndView postsDetail() {
         ModelAndView modelAndView = new ModelAndView();
@@ -36,7 +32,6 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
     @GetMapping("question")
     public ModelAndView question() {
         ModelAndView modelAndView = new ModelAndView();
@@ -44,7 +39,6 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
     @GetMapping("question/detail")
     public ModelAndView questionDetail() {
         ModelAndView modelAndView = new ModelAndView();
@@ -59,7 +53,6 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
     @GetMapping("users/detail")
     public ModelAndView usersDetail() {
         ModelAndView modelAndView = new ModelAndView();
@@ -74,7 +67,6 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
     @GetMapping("category/detail")
     public ModelAndView categoryDetail() {
         ModelAndView modelAndView = new ModelAndView();
@@ -89,7 +81,6 @@ public class AdminMainController {
         return modelAndView;
     }
 
-    //    @MyRole(role = Role.ADMIN)
     @GetMapping("suggestions")
     public ModelAndView suggestions() {
         ModelAndView modelAndView = new ModelAndView();

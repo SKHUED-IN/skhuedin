@@ -27,7 +27,7 @@ public class AdminPostsApiController {
 
     private final PostsService postsService;
 
-    //    @MyRole(role = Role.ADMIN)
+    @MyRole(role = Role.ADMIN)
     @GetMapping("posts")
     public ResponseEntity<? extends BasicResponse> getPosts(
             Pageable pageable,
@@ -46,14 +46,14 @@ public class AdminPostsApiController {
         }
     }
 
-    //    @MyRole(role = Role.ADMIN)
+    @MyRole(role = Role.ADMIN)
     @GetMapping("posts/{postsId}")
     public ResponseEntity<? extends BasicResponse> getPosts(@PathVariable("postsId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postsService.findByIdByAdmin(id)));
     }
 
-    //    @MyRole(role = Role.ADMIN)
+    @MyRole(role = Role.ADMIN)
     @PutMapping("posts/{postsId}")
     public ResponseEntity<? extends BasicResponse> updatePosts(@RequestBody PostsAdminUpdateRequestDto requestDto) {
         postsService.update(requestDto);

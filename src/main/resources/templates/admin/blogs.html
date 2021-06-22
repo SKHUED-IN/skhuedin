@@ -106,8 +106,19 @@
             url += '&' + condition.selectCondition + '=' + condition.keyword;
         }
 
-        let fetchData = await fetch(url)
-            .then((response) => response.json());
+        let fetchData = await fetch(url, {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }).then((response) => {
+            if (response.status === 401) {
+                alert('로그인 후 사용해주세요!');
+            } else if (response.status === 404) {
+                alert('권한이 없는 회원입니다!');
+            }
+            return response.json();
+        });
 
         return fetchData.data;
     }
