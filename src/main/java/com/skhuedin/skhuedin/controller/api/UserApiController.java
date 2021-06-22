@@ -10,6 +10,7 @@ import com.skhuedin.skhuedin.dto.user.UserTokenValidationDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
 import com.skhuedin.skhuedin.infra.LoginRequest;
+import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.BlogService;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -81,7 +82,7 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(jwtTokenProvider.validateToken(token)));
     }
 
-    //    @MyRole
+    @MyRole
     @GetMapping("users/{userId}/blogs")
     public ResponseEntity<? extends BasicResponse> blogByUserId(@PathVariable("userId") Long userId) {
         return ResponseEntity.status(HttpStatus.OK)
