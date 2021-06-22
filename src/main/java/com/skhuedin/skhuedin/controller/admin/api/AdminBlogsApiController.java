@@ -21,9 +21,8 @@ public class AdminBlogsApiController {
 
     @MyRole(role = Role.ADMIN)
     @GetMapping("blogs")
-    public ResponseEntity<? extends BasicResponse> getUsers(Pageable pageable) {
+    public ResponseEntity<? extends BasicResponse> getBlogs(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(blogService.findAllForAdmin(pageable)));
     }
 }
-
