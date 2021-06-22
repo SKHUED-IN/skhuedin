@@ -57,7 +57,7 @@
         let fetchComments = question.comments;
 
         for (let key in fetchComments) {
-            let  comment = fetchComments[key];
+            let comment = fetchComments[key];
             let div = document.createElement('div');
             div.className = 'card';
 
@@ -65,11 +65,11 @@
             ul.className = 'list-group list-group-flush';
             let writerUser = document.createElement('li');
             writerUser.className = 'list-group-item';
-            writerUser.innerText =  comment.writerUser.name;
+            writerUser.innerText = comment.writerUser.name;
 
             let content = document.createElement('li');
             content.className = 'list-group-item';
-            content.innerText =  comment.content;
+            content.innerText = comment.content;
 
             ul.appendChild(writerUser);
             ul.appendChild(content);
@@ -82,8 +82,19 @@
     async function fetchQuestionsById(id) {
         let url = host + '/api/admin/questions/' + id;
 
-        let fetchData = await fetch(url)
-            .then((response) => response.json());
+        let fetchData = await fetch(url, {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+        }).then((response) => {
+            if (response.status === 401) {
+                alert('로그인 후 사용해주세요!');
+            } else if (response.status === 404) {
+                alert('권한이 없는 회원입니다!');
+            }
+            return response.json();
+        });
 
         return fetchData.data;
     }
