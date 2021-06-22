@@ -140,7 +140,6 @@
         removeTable();
 
         let users = data.content;
-        console.table(users);
         for (let key in users) {
             let url = '\'' + '/admin/users/detail?id=' + users[key].id + '\'';
             let row =
