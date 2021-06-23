@@ -59,7 +59,7 @@ public class CommentApiController {
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("commentId") Long id) {
         commentService.delete(id);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new CommonResponse<>("삭제에 성공하였습니다."));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("questions/{questionId}/comments")

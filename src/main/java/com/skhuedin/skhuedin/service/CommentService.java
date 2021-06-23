@@ -55,14 +55,13 @@ public class CommentService {
         return new CommentMainResponseDto(comment);
     }
 
-
-    /* private 메소드 */
     public List<CommentMainResponseDto> findByQuestionId(Long questionId) {
         return commentRepository.findByQuestionId(questionId).stream()
                 .map(comment -> new CommentMainResponseDto(comment))
                 .collect(Collectors.toList());
     }
 
+    /* private 메소드 */
     private Question getQuestion(Long id) {
         return questionRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + id));
