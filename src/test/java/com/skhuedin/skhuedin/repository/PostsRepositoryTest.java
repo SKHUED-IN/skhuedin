@@ -230,7 +230,33 @@ class PostsRepositoryTest {
         // then
         assertEquals(count, 10);
     }
-    
+
+    @Test
+    @DisplayName("최대 길이의 content를 저장하는 테스트")
+    void save_max_content() {
+
+        // given
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 50000; i++) {
+            stringBuilder.append("+");
+        }
+
+        Posts posts = Posts.builder()
+                .blog(blog)
+                .title("책장의 게시글")
+                .content(stringBuilder.toString())
+                .category(category1)
+                .build();
+
+        Posts save = postsRepository.save(posts);
+
+        // when
+        Posts findPosts = postsRepository.findById(save.getId()).get();
+
+        // then
+        assertEquals(findPosts.getContent().length(), 50000);
+    }
+
     Posts generatePosts(int index, Category category) {
         return Posts.builder()
                 .blog(blog)

@@ -33,6 +33,7 @@ public class Posts extends BaseEntity {
 
     private String title;
 
+    @Column(length = 50000)
     private String content;
 
     private Boolean deleteStatus;
