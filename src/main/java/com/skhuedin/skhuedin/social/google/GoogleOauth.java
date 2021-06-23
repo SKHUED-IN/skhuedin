@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
@@ -40,8 +39,6 @@ public class GoogleOauth implements SocialOauth {
         ObjectMapper mapper = new ObjectMapper();
         UserSaveRequestDto user = null;
 
-        //JSON 파싱을 위한 기본값 세팅
-        //요청시 파라미터는 스네이크 케이스로 세팅되므로 Object mapper에 미리 설정해준다.
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
@@ -86,7 +83,7 @@ public class GoogleOauth implements SocialOauth {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
         UserSaveRequestDto user = UserSaveRequestDto.builder()
-                .email(googleProfile.getId())// google 에서 이메일을 주지 않아 든 Google 계정에서 고유하며 재사용되지 않는 사용자의 식별자를 저장
+                .email(googleProfile.getEmail())
                 .name(googleProfile.getName())
                 .provider(Provider.GOOGLE)
                 .userImageUrl(googleProfile.getPicture())
