@@ -20,7 +20,8 @@
 
                 </div>
                 <div class="d-grid gap-2 d-md-block">
-                    <button style="width: 273px;" class="btn btn-secondary" type="button" onclick="upWeight()">증가</button>
+                    <button style="width: 273px;" class="btn btn-secondary" type="button" onclick="upWeight()">증가
+                    </button>
                     <button style="width: 273px;" class="btn btn-secondary" type="button" onclick="downWeight()">감소
                     </button>
                 </div>
@@ -59,14 +60,31 @@
 
     async function fetchCategory(id) {
         let url = host + '/api/admin/category/' + id;
-        let fetchData = await fetch(url)
-            .then((response) => response.json());
+        let fetchData = await fetch(url, {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }).then((response) => {
+            if (response.status === 401) {
+                alert('로그인 후 사용해주세요!');
+            } else if (response.status === 404) {
+                alert('권한이 없는 회원입니다!');
+            }
+            return response.json();
+        });
+
         return fetchData.data;
     }
 
     function upWeight() {
         let url = host + '/api/admin/category/up/' + id;
-        fetch(url).then(() => {
+        fetch(url, {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }).then(() => {
             location.href = url2;
         }).catch((error) => {
             alert('수정에 실패하였습니다.');
@@ -75,8 +93,12 @@
 
     function downWeight() {
         let url = host + '/api/admin/category/down/' + id;
-        fetch(url
-        ).then(() => {
+        fetch(url, {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }).then(() => {
             location.href = url2;
         }).catch((error) => {
             alert('수정에 실패하였습니다.');
@@ -90,12 +112,15 @@
             if (postCount > 0) {
                 alert("참조하고 있는 포스트가 " + postCount + "개 있어 삭제할 수 없습니다.");
             } else {
-                fetch(url,{
-                    method:"DELETE"
-                })
-                    .then(() => {
-                        location.href = url3;
-                    }).catch((error) => {
+                fetch(url, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem("token")
+                    }
+                }).then(() => {
+                    location.href = url3;
+                }).catch((error) => {
                     alert(error);
                 });
             }

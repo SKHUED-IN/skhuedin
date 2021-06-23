@@ -14,11 +14,13 @@
                 <form class="row align-items-center" onsubmit="search(); return false">
                     <div class="col-6 p-0">
                         <div class="input-group">
-                            <input id="keyword" type="text" class="form-control" placeholder="검색어를 입력하세요." aria-label="">
+                            <input id="keyword" type="text" class="form-control" placeholder="검색어를 입력하세요."
+                                   aria-label="">
                         </div>
                     </div>
                     <div class="col-3 p-0">
-                        <select id="select-condition" class="form-select" name="inputCondition" aria-label="Default select example">
+                        <select id="select-condition" class="form-select" name="inputCondition"
+                                aria-label="Default select example">
                             <option value="" selected>조건</option>
                             <option value="username">이름</option>
                             <option value="role">권한</option>
@@ -66,9 +68,7 @@
 
 <footer th:replace="fragments/admin-body-footer.html :: admin-body-footer"></footer>
 <script>
-
-
-    const host = window.location.host;
+    const host = window.location.protocol + '//' + window.location.host;
 
     let pageable = {
         page: 0,
@@ -110,19 +110,25 @@
 
     async function fetchUsers(pageable, condition) {
         let token = localStorage.getItem("token");
-        let url = 'http://' + host + '/api/admin/users?page=' + pageable.page + '&size=' + pageable.size;
+        let url = host + '/api/admin/users?page=' + pageable.page + '&size=' + pageable.size;
 
         if (condition !== undefined) {
             url += '&' + condition.selectCondition + '=' + condition.keyword;
         }
 
         let fetchData = await fetch(url, {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization": "Bearer " + token
-                }
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + token
             }
-        ).then((response) => response.json());
+        }).then((response) => {
+            if (response.status === 401) {
+                alert('로그인 후 사용해주세요!');
+            } else if (response.status === 404) {
+                alert('권한이 없는 회원입니다!');
+            }
+            return response.json();
+        });
 
         pageable.totalPage = fetchData.data.totalPages;
 
@@ -133,8 +139,8 @@
         let tbody = document.getElementById('table-body');
         removeTable();
 
-
         let users = data.content;
+        console.table(users);
         for (let key in users) {
             let url = '\'' + '/admin/users/detail?id=' + users[key].id + '\'';
             let row =
@@ -142,7 +148,7 @@
                 '   <th class="pb-3 pt-3">' + users[key].id + '</th>' +
                 '   <td class="pb-3 pt-3">' + users[key].name + '</td>' +
                 '   <td class="pb-3 pt-3">' + users[key].email + '</td>' +
-                '   <td class="pb-3 pt-3">' + users[key].entranceYear+ '</td>' +
+                '   <td class="pb-3 pt-3">' + users[key].entranceYear + '</td>' +
                 '   <td class="pb-3 pt-3">' + users[key].graduationYear + '</td>' +
                 '   <td class="pb-3 pt-3">' + users[key].provider + '</td>' +
                 '   <td class="pb-3 pt-3">' + users[key].role + '</td>' +

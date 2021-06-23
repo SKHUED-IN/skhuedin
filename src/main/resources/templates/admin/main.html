@@ -54,7 +54,8 @@
         }).then((res) => {
             return res.json(); //Promise 반환
         }).then((json) => {
-            localStorage.setItem("token", json.token);
+            console.log(json);
+            localStorage.setItem("token", json.data.token);
             redirect()
         });
     }

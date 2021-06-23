@@ -2,6 +2,8 @@ package com.skhuedin.skhuedin.controller.admin.api;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
+import com.skhuedin.skhuedin.infra.MyRole;
+import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.PostsService;
 import com.skhuedin.skhuedin.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,7 @@ public class AdminQuestionsApiController {
     private final PostsService postsService;
     private final QuestionService questionService;
 
-    //    @MyRole(role = Role.ADMIN)
+    @MyRole(role = Role.ADMIN)
     @GetMapping("questions")
     public ResponseEntity<? extends BasicResponse> getQuestions(
             Pageable pageable,
@@ -43,14 +45,14 @@ public class AdminQuestionsApiController {
         }
     }
 
-    //    @MyRole(role = Role.ADMIN)
+    @MyRole(role = Role.ADMIN)
     @GetMapping("questions/{questionId}")
     public ResponseEntity<? extends BasicResponse> getQuestions(@PathVariable("questionId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(questionService.findById(id)));
     }
 
-    //    @MyRole(role = Role.ADMIN)
+    @MyRole(role = Role.ADMIN)
     @GetMapping("suggestions")
     public ResponseEntity<? extends BasicResponse> suggestions(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
