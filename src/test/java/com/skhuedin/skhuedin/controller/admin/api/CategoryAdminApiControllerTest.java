@@ -1,7 +1,11 @@
 package com.skhuedin.skhuedin.controller.admin.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
+import com.skhuedin.skhuedin.infra.JwtTokenProvider;
+import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.CategoryService;
 import com.skhuedin.skhuedin.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +48,11 @@ class CategoryAdminApiControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+
+    String token;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -60,13 +69,28 @@ class CategoryAdminApiControllerTest {
                 .weight(4L)
                 .build();
         categoryService.save(category);
+
+        User user = User.builder()
+                .name("admin")
+                .email("test@naver.com")
+                .password("1234")
+                .role(Role.ADMIN)
+                .userImageUrl("/img")
+                .entranceYear("2016")
+                .graduationYear("2022")
+                .provider(Provider.KAKAO)
+                .build();
+        userService.save(user);
+
+        token = jwtTokenProvider.createToken("test@naver.com");
     }
 
     @DisplayName("category findAll")
     @Test
     void categories() throws Exception {
 
-        this.mockMvc.perform(get("/api/admin/categories"))
+        this.mockMvc.perform(get("/api/admin/categories")
+                .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -80,6 +104,7 @@ class CategoryAdminApiControllerTest {
 
         //given & when
         MockHttpServletRequestBuilder requestBuilder = get("/api/admin/category")
+                .header("Authorization", "Bearer " + token)
                 .params(getPage());
 
         //then 어떤 값을 원한다.
@@ -95,6 +120,7 @@ class CategoryAdminApiControllerTest {
 
         //given & when
         MockHttpServletRequestBuilder requestBuilder = get("/api/admin/category")
+                .header("Authorization", "Bearer " + token)
                 .param("cmd", String.valueOf(1))
                 .params(getPage());
 
@@ -112,6 +138,7 @@ class CategoryAdminApiControllerTest {
 
         //given & when
         MockHttpServletRequestBuilder requestBuilder = get("/api/admin/category")
+                .header("Authorization", "Bearer " + token)
                 .param("cmd", String.valueOf(2))
                 .params(getPage());
 
@@ -127,7 +154,8 @@ class CategoryAdminApiControllerTest {
     void findById_true() throws Exception {
 
         //given & when & then
-        MvcResult result = this.mockMvc.perform(get("/api/admin/category/" + saveId))
+        MvcResult result = this.mockMvc.perform(get("/api/admin/category/" + saveId)
+                .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(jsonPath("$..id").value(saveId))
                 .andExpect(status().isOk())
@@ -141,12 +169,14 @@ class CategoryAdminApiControllerTest {
         int weight = Math.toIntExact(category.getWeight()) + 1;
 
         //when
-        MvcResult result = this.mockMvc.perform(get("/api/admin/category/up/" + saveId))
+        MvcResult result = this.mockMvc.perform(get("/api/admin/category/up/" + saveId)
+                .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isNoContent())
                 .andReturn();
         //then
-        MvcResult result2 = this.mockMvc.perform(get("/api/admin/category/" + saveId))
+        MvcResult result2 = this.mockMvc.perform(get("/api/admin/category/" + saveId)
+                .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(jsonPath("$..weight").value(weight))
                 .andReturn();
@@ -159,12 +189,14 @@ class CategoryAdminApiControllerTest {
         int weight = Math.toIntExact(category.getWeight()) - 1;
 
         //when
-        MvcResult result = this.mockMvc.perform(get("/api/admin/category/down/" + saveId))
+        MvcResult result = this.mockMvc.perform(get("/api/admin/category/down/" + saveId)
+                .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isNoContent())
                 .andReturn();
         //then
-        MvcResult result2 = this.mockMvc.perform(get("/api/admin/category/" + saveId))
+        MvcResult result2 = this.mockMvc.perform(get("/api/admin/category/" + saveId)
+                .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(jsonPath("$..weight").value(weight))
                 .andReturn();
@@ -178,6 +210,7 @@ class CategoryAdminApiControllerTest {
 
         //when & then
         this.mockMvc.perform(post("/api/admin/category")
+                .header("Authorization", "Bearer " + token)
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -189,7 +222,8 @@ class CategoryAdminApiControllerTest {
     @Test
     void category_delete_true() throws Exception {
         //given
-        this.mockMvc.perform(delete("/api/admin/category/" + saveId))
+        this.mockMvc.perform(delete("/api/admin/category/" + saveId)
+                .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
