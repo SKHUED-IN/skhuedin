@@ -35,9 +35,11 @@ public class AdminUserApiController {
         if (username.isEmpty() && !role.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CommonResponse<>(userService.findByUserRole(pageable, role)));
+
         } else if (!username.isEmpty() && role.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CommonResponse<>(userService.findByUserName(pageable, username)));
+
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CommonResponse<>(userService.findAll(pageable)));
@@ -46,14 +48,14 @@ public class AdminUserApiController {
 
     @MyRole(role = Role.ADMIN)
     @GetMapping("users/{userId}")
-    public ResponseEntity<? extends BasicResponse> getUsers(@PathVariable("userId") Long id) {
+    public ResponseEntity<? extends BasicResponse> getUser(@PathVariable("userId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.findByIdForAdmin(id)));
+                .body(new CommonResponse<>(userService.toUserAdminMainResponseDto(id)));
     }
 
     @MyRole(role = Role.ADMIN)
-    @PutMapping("users/{userId}")
-    public ResponseEntity<? extends BasicResponse> updateUsers(
+    @PutMapping("users")
+    public ResponseEntity<? extends BasicResponse> updateUserRole(
             @RequestBody UserAdminUpdateRequestDto requestDto) {
         userService.updateRole(requestDto.getId(), requestDto.getRole());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -61,7 +63,7 @@ public class AdminUserApiController {
 
     @MyRole(role = Role.ADMIN)
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<? extends BasicResponse> deleteUsers(@PathVariable("userId") Long id) {
+    public ResponseEntity<? extends BasicResponse> deleteUser(@PathVariable("userId") Long id) {
         userService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

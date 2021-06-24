@@ -4,7 +4,6 @@ import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.user.UserAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
-import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.UserRepository;
@@ -18,9 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,14 +73,12 @@ class UserServiceTest {
         );
     }
 
-
     @Test
     @DisplayName("입학년도, 졸업년도를 받아 업데이트가 되는 지 확인")
     @Disabled
     void updateAddUserInfo() {
 
-        //given 어떤 값이 주어지고
-
+        //given
         User user = User.builder()
                 .name("홍길동")
                 .email("hong@email.com")
@@ -102,13 +96,11 @@ class UserServiceTest {
                 .graduationYear("2020")
                 .build();
 
-        //when 무엇을 했을 때
-
-        userService.update(saveUser.getId(), requestDto);
+        //when
+        userService.updateYearData(saveUser.getId(), requestDto);
         User user1 = userService.getUser(saveUser.getId());
 
-        //then 어떤 값을 원한다.
-
+        //then
         assertAll(
                 () -> assertEquals(requestDto.getEntranceYear(), user1.getEntranceYear()),
                 () -> assertEquals(requestDto.getGraduationYear(), user1.getGraduationYear()),

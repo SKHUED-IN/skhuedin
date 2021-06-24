@@ -37,7 +37,6 @@ public class GoogleOauth implements SocialOauth {
     public UserSaveRequestDto requestAccessToken(OAuthToken oAuthToken) {
 
         ObjectMapper mapper = new ObjectMapper();
-        UserSaveRequestDto user = null;
 
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -53,10 +52,7 @@ public class GoogleOauth implements SocialOauth {
             e.printStackTrace();
         }
 
-        // 사용자 유저로 저장.
-        user = saveGoogleUser(profile);
-
-        return user;
+        return toGoogleUserSaveRequestDto(profile);
     }
 
     @Override
@@ -66,11 +62,9 @@ public class GoogleOauth implements SocialOauth {
         headers.add("Authorization", "Bearer " + oauthToken.getAccessToken());
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
                 new HttpEntity<>(headers);
 
-        // Http 요청하기 - post 방식으로ㅡ 그리고 응답받음.
         ResponseEntity<String> response2 = restTemplate.exchange(
                 logout + oauthToken.getAccessToken(),
                 HttpMethod.POST,
@@ -79,7 +73,7 @@ public class GoogleOauth implements SocialOauth {
         );
     }
 
-    public UserSaveRequestDto saveGoogleUser(GoogleProfile googleProfile) {
+    public UserSaveRequestDto toGoogleUserSaveRequestDto(GoogleProfile googleProfile) {
         UUID password = UUID.randomUUID(); // 임시 비밀번호
 
         UserSaveRequestDto user = UserSaveRequestDto.builder()

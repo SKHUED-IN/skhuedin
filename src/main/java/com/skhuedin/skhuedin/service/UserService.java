@@ -10,7 +10,6 @@ import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
-import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CommentRepository;
@@ -18,7 +17,6 @@ import com.skhuedin.skhuedin.repository.PostsRepository;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -47,7 +44,7 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Long id, UserUpdateDto updateDto) {
+    public void updateYearData(Long id, UserUpdateDto updateDto) {
         User user = getUser(id);
         user.addYear(updateDto.getEntranceYear(), updateDto.getGraduationYear());
     }
@@ -55,44 +52,40 @@ public class UserService {
     @Transactional
     public void updateRole(Long id, String role) {
         User user = getUser(id);
-        if (role.equals("ADMIN")) {
-            user.updateRole(Role.ADMIN);
-        } else if (role.equals("USER")) {
-            user.updateRole(Role.USER);
-        }
+        user.updateRole(Role.getRole(role));
     }
 
     @Transactional
     public void delete(Long id) {
         User findUser = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
-        // 영속성 컨텍스트에 등록
-        Blog blogByUserId = blogRepository.findByUserId(id).orElseThrow(() ->
-                new IllegalArgumentException("blog가 존재하지 않는 user 입니다."));
+
+        Optional<Blog> blogByUserId = blogRepository.findByUserId(id);
         List<Comment> comments = commentRepository.findByWriterUserId(id);
         List<Question> questions = questionRepository.findQuestionByUserId(id);
         List<Question> targetQuestions = questionRepository.findQuestionByTargetUserId(id);
         List<Posts> posts;
 
-        if (!comments.isEmpty()) {
-            for (Comment comment : comments) {
-                if (comment != null) {
-                    commentRepository.delete(comment);
-                }
-            }
-        }
-
+        deleteComments(comments);
         deleteQuestions(questions);
         deleteQuestions(targetQuestions);
 
-        if (blogByUserId != null) {
-            posts = postsRepository.findByBlogId(blogByUserId.getId());
+        if (!blogByUserId.isEmpty()) {
+            posts = postsRepository.findByBlogId(blogByUserId.get().getId());
             for (Posts post : posts) {
                 postsRepository.deleteById(post.getId());
             }
-            blogRepository.delete(blogByUserId);
+            blogRepository.delete(blogByUserId.get());
         }
         userRepository.delete(findUser);
+    }
+
+    private void deleteComments(List<Comment> comments) {
+        if (!comments.isEmpty()) {
+            for (Comment comment : comments) {
+                commentRepository.delete(comment);
+            }
+        }
     }
 
     private void deleteQuestions(List<Question> questions) {
@@ -100,11 +93,7 @@ public class UserService {
             for (Question question : questions) {
                 List<Comment> innerComment = commentRepository.findByQuestionId(question.getId());
 
-                if (innerComment != null) {
-                    for (Comment comment : innerComment) {
-                        commentRepository.delete(comment);
-                    }
-                }
+                deleteComments(innerComment);
                 questionRepository.delete(question);
             }
         }
@@ -115,26 +104,25 @@ public class UserService {
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
         return new UserMainResponseDto(user);
     }
-
     /**
-     * token 으로 회원 가입
+     * 회원 가입 로직
      */
     public String createToken(String email) {
         //비밀번호 확인 등의 유효성 검사 진행
         return jwtTokenProvider.createToken(email);
     }
 
-    public String signUp(UserSaveRequestDto requestDto) { // 회원가입
+    public String signUp(UserSaveRequestDto requestDto) {
         save(requestDto.toEntity());
         return signIn(requestDto);
     }
 
     @Transactional
-    public String signIn(UserSaveRequestDto requestDto) { // 로그인
+    public String signIn(UserSaveRequestDto requestDto) {
         User findUser = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
         requestDto.addYear(findUser.getEntranceYear(), findUser.getGraduationYear());
-        // 로그인 전 변경 사항이 있는지 체크 findUser
+
         findUser.update(requestDto.toEntity());
         return createToken(findUser.getEmail());
     }
@@ -151,17 +139,13 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public String adminSignIn(LoginRequest loginRequest) {
-        User user = userRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPwd()).orElseThrow(() ->
-                new IllegalArgumentException("email과 password가 일치하지 않습니다. "));
-        return createToken(user.getEmail());
-    }
-
     public User getUser(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    /* admin 전용 */
+    /**
+     * admin 전용
+     */
     public Page<UserAdminMainResponseDto> findAll(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(user -> new UserAdminMainResponseDto(user));
@@ -173,17 +157,11 @@ public class UserService {
     }
 
     public Page<UserAdminMainResponseDto> findByUserRole(Pageable pageable, String role) {
-        Role findRole = null;
-        if (role.equals("USER")) {
-            findRole = Role.USER;
-        } else if (role.equals("ADMIN")) {
-            findRole = Role.ADMIN;
-        }
-        return userRepository.findByRole(pageable, findRole)
+        return userRepository.findByRole(pageable, Role.getRole(role))
                 .map(user -> new UserAdminMainResponseDto(user));
     }
 
-    public UserAdminMainResponseDto findByIdForAdmin(Long id) {
+    public UserAdminMainResponseDto toUserAdminMainResponseDto(Long id) {
         return new UserAdminMainResponseDto(getUser(id));
     }
 }
