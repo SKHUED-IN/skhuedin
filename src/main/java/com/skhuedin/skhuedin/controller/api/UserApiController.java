@@ -9,7 +9,6 @@ import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserTokenValidationDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
 import com.skhuedin.skhuedin.infra.JwtTokenProvider;
-import com.skhuedin.skhuedin.infra.LoginRequest;
 import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.BlogService;
 import com.skhuedin.skhuedin.service.UserService;
@@ -47,7 +46,7 @@ public class UserApiController {
     @PostMapping("users/{userId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("userId") Long id,
                                                           @Valid @RequestBody UserUpdateDto updateDto) {
-        userService.update(id, updateDto);
+        userService.updateYearData(id, updateDto);
         User user = userService.getUser(id);
         UserSaveRequestDto requestDto = new UserSaveRequestDto(user);
         String token = userService.signIn(requestDto);
@@ -62,29 +61,20 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(users));
     }
 
-    @PostMapping("token")
-    public ResponseEntity<? extends BasicResponse> token(@RequestBody LoginRequest loginRequest) {
-
-        String token = userService.adminSignIn(loginRequest);
-        User user = userService.findByEmail(loginRequest.getEmail());
-        UserMainResponseDto responseDto = new UserMainResponseDto(user);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new TokenWithCommonResponse<>(responseDto, "Bearer " + token));
-    }
-
     @PostMapping("token/validate")
     public ResponseEntity<? extends BasicResponse> validate(@RequestBody UserTokenValidationDto requestDto) {
+
         String token = requestDto.getToken();
         if (token.contains("Bearer")) {
             token = token.split("Bearer ")[1];
         }
-
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(jwtTokenProvider.validateToken(token)));
     }
 
     @MyRole
     @GetMapping("users/{userId}/blogs")
     public ResponseEntity<? extends BasicResponse> blogByUserId(@PathVariable("userId") Long userId) {
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(blogService.findByUserId(userId)));
     }
