@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.social;
 
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.social.google.GoogleOauth;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ class OauthServiceTest {
 
     @DisplayName("google 로 들어온 요청 확인")
     @Test
+    @Disabled
     void requestAccessToken() {
         //when 무엇을 했을 때
         SocialOauth socialOauth = findSocialOauthByType("google");
