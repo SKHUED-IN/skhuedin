@@ -21,15 +21,18 @@ function kakaoLogin() {
         });
         localStorage.removeItem('token');
         document.getElementById('login-btn').innerText = '로그인';
+        redirect()
     }
 }
 
 function isLogin() {
+    let url =  window.location.host + "/" + window.location.pathname;
     let value = localStorage.getItem('token');
     if (value === null) {
         document.getElementById('login-btn').innerText = '로그인';
     } else {
         document.getElementById('login-btn').innerText = '로그아웃';
+
     }
 }
 
@@ -46,13 +49,12 @@ function fetchToken(token) {
     }).then((response) => response.json()
     ).then((json) => {
         localStorage.setItem("token", json.data.token);
-        redirect();
+        redirect()
     });
 }
 
 function redirect() {
-    fetch('/admin')
-        .then();
+    location.reload();
 }
 
 function goSwagger() {
