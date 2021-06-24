@@ -1,11 +1,6 @@
 spring:
   console:
     enabled: true
-  profiles:
-    active: local
-    group:
-      local:
-        - real-oauth
 
   datasource:
     url: jdbc:h2:mem:testdb
