@@ -5,7 +5,6 @@ import com.skhuedin.skhuedin.domain.User;
 import com.skhuedin.skhuedin.dto.blog.BlogAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
-import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -21,6 +20,7 @@ import org.springframework.test.context.jdbc.Sql;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Sql("/truncate.sql")
