@@ -60,23 +60,23 @@ public class UserService {
         User findUser = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
 
-        Optional<Blog> blogByUserId = blogRepository.findByUserId(id);
+        Optional<Blog> blogOptional = blogRepository.findByUserId(id);
         List<Comment> comments = commentRepository.findByWriterUserId(id);
         List<Question> questions = questionRepository.findQuestionByUserId(id);
         List<Question> targetQuestions = questionRepository.findQuestionByTargetUserId(id);
-        List<Posts> posts;
 
         deleteComments(comments);
         deleteQuestions(questions);
         deleteQuestions(targetQuestions);
 
-        if (!blogByUserId.isEmpty()) {
-            posts = postsRepository.findByBlogId(blogByUserId.get().getId());
+        blogOptional.ifPresent((blog) -> {
+            List<Posts> posts;
+            posts = postsRepository.findByBlogId(blog.getId());
             for (Posts post : posts) {
                 postsRepository.deleteById(post.getId());
             }
-            blogRepository.delete(blogByUserId.get());
-        }
+            blogRepository.delete(blog);
+        });
         userRepository.delete(findUser);
     }
 
@@ -104,6 +104,7 @@ public class UserService {
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
         return new UserMainResponseDto(user);
     }
+
     /**
      * 회원 가입 로직
      */
