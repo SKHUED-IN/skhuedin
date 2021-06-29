@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.social;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.social.google.GoogleOauth;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Sql("/truncate.sql")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestPropertySource(properties = {"classpath:/application-real-oauth.yml"})
+@Disabled
 class OauthControllerTest {
 
     @Autowired
