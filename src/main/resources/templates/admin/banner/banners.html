@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/admin-header.html :: admin-header"></head>
+<body>
+<header th:replace="fragments/admin-body-header.html :: admin-body-header"></header>
+
+<section>
+    <div class="container-fluid">
+        <div class="row mb-3 align-items-center">
+            <div class="col">
+                <div class="fs-3 fw-bold">배너 목록</div>
+            </div>
+            <div class="col">
+                <a class="btn btn-secondary" href="/admin/banner/new">배너 생성</a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">제목</th>
+            <th scope="col">내용</th>
+            <!--            <th scope="col">가중치</th>-->
+            <th scope="col">생성 시간</th>
+            <th scope="col">수정 시간</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" onclick="prevPage()" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" onclick="nextPage()" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</section>
+
+<footer th:replace="fragments/admin-body-footer.html :: admin-body-footer"></footer>
+<script>
+    const host = window.location.protocol + '//' + window.location.host;
+
+    let pageable = {
+        page: 0,
+        size: 10,
+        totalPage: 0
+    }
+
+    creatTable();
+
+    function prevPage() {
+        if (pageable.page > 0) {
+            pageable.page -= 1;
+            if (document.getElementById('keyword').value !== "") {
+                search();
+            } else {
+                creatTable();
+            }
+        } else {
+            alert('첫 번째 입니다.');
+        }
+    }
+
+    function nextPage() {
+        if (pageable.page < pageable.totalPage - 1) {
+            pageable.page += 1;
+            if (document.getElementById('keyword').value !== "") {
+                search();
+            } else {
+                creatTable();
+            }
+        } else {
+            alert('마지막 입니다.');
+        }
+    }
+
+    async function creatTable() {
+        let tbody = document.getElementById('table-body');
+        removeTable();
+
+        let data = await fetchBanners();
+        pageable.totalPage = data.totalPages;
+
+        let banners = data.content;
+        for (let key in banners) {
+            let row =
+                '<tr>' +
+                '   <th class="pb-3 pt-3">' + banners[key].id + '</th>' +
+                '   <td class="pb-3 pt-3">' + banners[key].title + '</td>' +
+                '   <td class="pb-3 pt-3">' + banners[key].content + '</td>' +
+                // '   <td class="pb-3 pt-3">' + banners[key].weight + '</td>' +
+                '   <td class="pb-3 pt-3">' + banners[key].createdDate + '</td>' +
+                '   <td class="pb-3 pt-3">' + banners[key].lastModifiedDate + '</td>' +
+                '</tr>'
+            tbody.innerHTML += row;
+        }
+    }
+
+    async function fetchBanners() {
+        let url = host + '/api/admin/banners?page=' + pageable.page + '&size=' + pageable.size;
+
+        let fetchData = await fetch(url, {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }).then((response) => {
+            if (response.status === 401) {
+                alert('로그인 후 사용해주세요!');
+            } else if (response.status === 404) {
+                alert('권한이 없는 회원입니다!');
+            }
+            return response.json();
+        });
+
+        return fetchData.data;
+    }
+
+    function removeTable() {
+        let tbody = document.getElementById('table-body');
+        for (let i = 0; i < pageable.size; i++) {
+            let row = document.getElementById('tr-' + i);
+            if (row != null) {
+                tbody.removeChild(row);
+            }
+        }
+    }
+</script>
+</body>
+</html>

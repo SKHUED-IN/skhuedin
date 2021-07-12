@@ -94,4 +94,14 @@ public class AdminMainController {
         modelAndView.setViewName("admin/blogs");
         return modelAndView;
     }
+
+    @GetMapping("banners")
+    public String banners() {
+        return "admin/banner/banners";
+    }
+
+    @GetMapping("banner/new")
+    public String newBanner() {
+        return "admin/banner/banner-form";
+    }
 }

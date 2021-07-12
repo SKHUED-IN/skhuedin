@@ -26,7 +26,6 @@ function kakaoLogin() {
 }
 
 function isLogin() {
-    let url =  window.location.host + "/" + window.location.pathname;
     let value = localStorage.getItem('token');
     if (value === null) {
         document.getElementById('login-btn').innerText = '로그인';
