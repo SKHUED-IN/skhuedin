@@ -17,6 +17,11 @@ spring:
         dialect: org.hibernate.dialect.MySQL57Dialect
         storage_engine: innodb
 
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 10MB
+
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace

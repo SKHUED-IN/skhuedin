@@ -1,5 +1,6 @@
 package com.skhuedin.skhuedin.controller.admin;
 
+import com.skhuedin.skhuedin.service.BannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminMainController {
+
+    private final BannerService bannerService;
 
     @GetMapping
     public ModelAndView main() {
@@ -100,8 +103,13 @@ public class AdminMainController {
         return "admin/banner/banners";
     }
 
-    @GetMapping("banner/new")
+    @GetMapping("banners/new")
     public String newBanner() {
         return "admin/banner/banner-form";
+    }
+
+    @GetMapping("banners/update")
+    public String updateBanner() {
+        return "admin/banner/banner-update-form";
     }
 }

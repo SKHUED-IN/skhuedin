@@ -32,6 +32,11 @@ public class FileStore {
         return new UploadFile(originalFilename, storeFileName);
     }
 
+    public void removeFile(String filename) {
+        File file = new File(getFullPath(filename));
+        file.delete();
+    }
+
     private String createStoreFileName(String originalFileName) {
         String ext = extractExt(originalFileName);
         String uuid = UUID.randomUUID().toString();

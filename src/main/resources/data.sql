@@ -118,3 +118,7 @@ values (21, 1, '댓글 1', now(), now()),
        (21, 2, '댓글 8', now(), now()),
        (21, 2, '댓글 9', now(), now()),
        (21, 2, '댓글 10', now(), now());
+
+insert into banner (banner_id, title, content, weight, store_file_name, upload_file_name, created_date, last_modified_date)
+values (1, '스크린샷1', '123', 100, '0bf27d50-6fdb-4f49-8ece-7da3203e411c.png', '스크린샷1.png', now(), now()),
+       (2, '스크린샷2', '123', 10, '49dc1cc3-db59-4c71-84ee-3b5366a43569.png', '스크린샷2.png', now(), now());

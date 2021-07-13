@@ -6,7 +6,7 @@
 
 <section>
     <div class="card p-5">
-        <form onsubmit="createBanner(); return false" id="bannerForm">
+        <form onsubmit="updateBanner(); return false" id="bannerForm">
             <div class="mb-3">
                 <label for="title" class="form-label">제목</label>
                 <input type="text" class="form-control" id="title" name="title">
@@ -23,7 +23,7 @@
                 <label for="file" class="form-label">배너 이미지 파일</label>
                 <input class="form-control" type="file" id="file" name="imageFile">
             </div>
-            <button type="submit" class="btn btn-secondary">저장</button>
+            <button type="submit" class="btn btn-secondary">수정</button>
         </form>
     </div>
 </section>
@@ -31,15 +31,38 @@
 <footer th:replace="fragments/admin-body-footer.html :: admin-body-footer"></footer>
 <script>
     const host = window.location.protocol + '//' + window.location.host;
+    const id = getParameter('id');
 
-    function createBanner() {
-        let url = host + '/api/admin/banners';
+    fetchBanner()
+
+    function fetchBanner() {
+        let url = host + '/api/admin/banners/' + id;
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }).then(response =>
+            response.json()
+        ).catch(error =>
+            alert('조회에 실패하였습니다!')
+        ).then(response => {
+            let banner = response.data;
+            document.getElementById('title').value = banner.title;
+            document.getElementById('content').value = banner.content;
+            document.getElementById('weight').value = banner.weight;
+        });
+    }
+
+    function updateBanner() {
+        let url = host + '/api/admin/banners/' + id;
 
         let form = document.getElementById('bannerForm');
         let bannerForm = new FormData(form);
 
         fetch(url, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token")
             },
@@ -47,11 +70,18 @@
         }).then(response =>
             response.json()
         ).catch(error =>
-            alert('저장에 실패하였습니다!')
+            alert('수정에 실패하였습니다!')
         ).then(response => {
-                alert('배너가 등록되었습니다!')
-                location.href = host + '/admin/banners'
+            alert('배너가 수정되었습니다!')
+            location.href = host + '/admin/banners'
         });
+    }
+
+    function getParameter(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        let regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 </script>
 </body>

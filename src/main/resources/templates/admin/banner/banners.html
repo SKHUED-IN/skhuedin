@@ -11,7 +11,7 @@
                 <div class="fs-3 fw-bold">배너 목록</div>
             </div>
             <div class="col">
-                <a class="btn btn-secondary" href="/admin/banner/new">배너 생성</a>
+                <a class="btn btn-secondary" href="/admin/banners/new">배너 생성</a>
             </div>
         </div>
     </div>
@@ -21,9 +21,11 @@
             <th scope="col">#</th>
             <th scope="col">제목</th>
             <th scope="col">내용</th>
-            <!--            <th scope="col">가중치</th>-->
+            <th scope="col">가중치</th>
             <th scope="col">생성 시간</th>
             <th scope="col">수정 시간</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody id="table-body">
@@ -92,17 +94,36 @@
 
         let banners = data.content;
         for (let key in banners) {
+            let url = '\'' + '/admin/banners/update?id=' + banners[key].id + '\'';
             let row =
-                '<tr>' +
-                '   <th class="pb-3 pt-3">' + banners[key].id + '</th>' +
+                '<tr id="tr-' + key + '">' +
+                '   <td class="pb-3 pt-3">' + banners[key].id + '</td>' +
                 '   <td class="pb-3 pt-3">' + banners[key].title + '</td>' +
                 '   <td class="pb-3 pt-3">' + banners[key].content + '</td>' +
-                // '   <td class="pb-3 pt-3">' + banners[key].weight + '</td>' +
+                '   <td class="pb-3 pt-3">' + banners[key].weight + '</td>' +
                 '   <td class="pb-3 pt-3">' + banners[key].createdDate + '</td>' +
                 '   <td class="pb-3 pt-3">' + banners[key].lastModifiedDate + '</td>' +
+                '   <td class="pb-3 pt-3">' +
+                '       <a class="btn btn-secondary" href=' + url + '>수정</a>' +
+                '   </td>' +
+                '   <td class="pb-3 pt-3">' +
+                '       <a class="btn btn-secondary" onclick="removeBanner(' + banners[key].id + ')">삭제</a>' +
+                '   </td>' +
                 '</tr>'
             tbody.innerHTML += row;
         }
+    }
+
+    function removeBanner(id) {
+        let url = host + '/api/admin/banners/' + id;
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }).then(response => {
+            location.reload()
+        })
     }
 
     async function fetchBanners() {

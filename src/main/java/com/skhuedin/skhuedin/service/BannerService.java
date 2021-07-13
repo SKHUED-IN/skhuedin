@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @Service
@@ -23,6 +24,11 @@ public class BannerService {
     private final BannerRepository bannerRepository;
     private final FileStore fileStore;
 
+    public List<Banner> findAll() {
+        return bannerRepository.findAll();
+    }
+
+    /* admin 전용 */
     @Transactional
     public Long save(BannerForm bannerForm) throws IOException {
         UploadFile uploadFile = fileStore.storeFile(bannerForm.getImageFile());
@@ -30,6 +36,7 @@ public class BannerService {
         Banner banner = Banner.builder()
                 .title(bannerForm.getTitle())
                 .content(bannerForm.getContent())
+                .weight(bannerForm.getWeight())
                 .uploadFile(uploadFile)
                 .build();
 
@@ -41,7 +48,37 @@ public class BannerService {
                 .map(banner -> new BannerAdminMainResponseDto(banner));
     }
 
-    public Banner findById(Long id) {
+    public BannerAdminMainResponseDto findById(Long id) {
+        Banner banner = getBanner(id);
+        return new BannerAdminMainResponseDto(banner);
+    }
+
+    @Transactional
+    public void update(Long id, BannerForm bannerForm) throws IOException {
+        UploadFile uploadFile = fileStore.storeFile(bannerForm.getImageFile());
+        Banner updateBanner = Banner.builder()
+                .title(bannerForm.getTitle())
+                .content(bannerForm.getContent())
+                .weight(bannerForm.getWeight())
+                .uploadFile(uploadFile)
+                .build();
+
+        Banner banner = getBanner(id);
+        fileStore.removeFile(banner.getUploadFile().getStoreFileName());
+
+        banner.updateBanner(updateBanner);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Banner banner = getBanner(id);
+
+        fileStore.removeFile(banner.getUploadFile().getStoreFileName());
+        bannerRepository.delete(banner);
+    }
+
+    /* private 메소드 */
+    private Banner getBanner(Long id) {
         return bannerRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 banner 가 존재하지 않습니다. id=" + id));
     }
