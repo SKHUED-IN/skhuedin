@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/admin-header.html :: admin-header"></head>
+<body>
+<header th:replace="fragments/admin-body-header.html :: admin-body-header"></header>
+
+<section>
+    <div class="card p-5">
+        <form onsubmit="createBanner(); return false" id="bannerForm">
+            <div class="mb-3">
+                <label for="title" class="form-label">제목</label>
+                <input type="text" class="form-control" id="title" name="title">
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <input type="text" class="form-control" id="content" name="content">
+            </div>
+            <div class="mb-3">
+                <label for="weight" class="form-label">가중치</label>
+                <input type="text" class="form-control" id="weight" name="weight">
+            </div>
+            <div class="mb-3">
+                <label for="file" class="form-label">배너 이미지 파일</label>
+                <input class="form-control" type="file" id="file" name="imageFile" required>
+            </div>
+            <button type="submit" class="btn btn-secondary">저장</button>
+        </form>
+    </div>
+</section>
+
+<footer th:replace="fragments/admin-body-footer.html :: admin-body-footer"></footer>
+<script>
+    const host = window.location.protocol + '//' + window.location.host;
+
+    function createBanner() {
+        let url = host + '/api/admin/banners';
+
+        let form = document.getElementById('bannerForm');
+        let bannerForm = new FormData(form);
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            body: bannerForm
+        }).then(response =>
+            response.json()
+        ).catch(error =>
+            alert('저장에 실패하였습니다!')
+        ).then(response => {
+                alert('배너가 등록되었습니다!')
+                location.href = host + '/admin/banners'
+        });
+    }
+</script>
+</body>
+</html>
