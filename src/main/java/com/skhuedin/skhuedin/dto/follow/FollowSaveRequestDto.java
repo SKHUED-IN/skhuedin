@@ -4,10 +4,12 @@ import com.skhuedin.skhuedin.domain.Follow;
 import com.skhuedin.skhuedin.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
+@NoArgsConstructor
 public class FollowSaveRequestDto {
 
     @NotNull(message = "toUser의 id는 null이 될 수 없습니다.")
@@ -22,9 +24,9 @@ public class FollowSaveRequestDto {
         this.fromUserId = fromUserId;
     }
 
-    public Follow toEntity(User toUSer, User fromUser) {
+    public Follow toEntity(User toUser, User fromUser) {
         return Follow.builder()
-                .toUser(toUSer)
+                .toUser(toUser)
                 .fromUser(fromUser)
                 .build();
     }

@@ -69,9 +69,16 @@ public class FollowApiController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("users/{toUserId}/follows")
+    @GetMapping("follows/to-user/{toUserId}")
     public ResponseEntity<? extends BasicResponse> findByToUserId(@PathVariable("toUserId") Long toUserId) {
         List<FollowMainResponseDto> follows = followService.findByToUserId(toUserId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(follows));
+    }
+
+    @GetMapping("follows/from-user/{fromUserId}")
+    public ResponseEntity<? extends BasicResponse> findByFromUserId(@PathVariable("fromUserId") Long fromUserId) {
+        List<FollowMainResponseDto> follows = followService.findByFromUserId(fromUserId);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(follows));
     }

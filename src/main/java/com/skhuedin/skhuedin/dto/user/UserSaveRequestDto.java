@@ -20,9 +20,7 @@ public class UserSaveRequestDto {
     private String userImageUrl;
     private String entranceYear;
     private String graduationYear;
-
     private Role role;
-
 
     @Builder
     public UserSaveRequestDto(String email,
@@ -56,7 +54,6 @@ public class UserSaveRequestDto {
             this.role = Role.USER;
         }
         User user = User.builder()
-
                 .email(this.email)
                 .password(this.password)
                 .name(this.name)
