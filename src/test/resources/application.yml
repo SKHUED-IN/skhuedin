@@ -29,6 +29,9 @@ resources:
   # 각각 local 운영 체제에 맞추어 실제로 저장되는 저장소 위치를 설정
   storage_location: c:/profile/
 
+file:
+  dir: /Users/hyeonic/project/file/
+
 social:
   naver:
     login: ""
