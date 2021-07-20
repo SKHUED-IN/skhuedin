@@ -11,11 +11,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @Sql("/truncate.sql")
@@ -110,5 +108,66 @@ class FollowRepositoryTest {
 
         // then
         assertEquals(follows.size(), 3);
+    }
+
+    @Test
+    @DisplayName("fromUser 가 follow 한 toUser 목록을 조회하는 테스트")
+    void findByFromUserId() {
+
+        // given
+        Follow follow = Follow.builder()
+                .toUser(toUser)
+                .fromUser(fromUser1)
+                .build();
+
+        followRepository.save(follow);
+
+        // when
+        List<Follow> follows = followRepository.findByFromUserId(follow.getFromUser().getId());
+
+        // then
+        assertEquals(1, follows.size());
+    }
+
+    @Test
+    @DisplayName("toUserId 와 fromUserId 로 follow 를 조회하는 테스트")
+    void findByToUserIdAndFromUserId() {
+
+        // given
+        Follow follow = Follow.builder()
+                .toUser(toUser)
+                .fromUser(fromUser1)
+                .build();
+
+        followRepository.save(follow);
+
+        // when
+        Follow findFollow = followRepository.findByToUserIdAndFromUserId(
+                follow.getToUser().getId(),
+                follow.getFromUser().getId());
+
+        // then
+        assertEquals(follow, findFollow);
+    }
+
+    @Test
+    @DisplayName("fromUser 가 toUser 의 follow 유무를 확인하는 테스트")
+    void existsByToUserIdAndFromUserId() {
+
+        // given
+        Follow follow = Follow.builder()
+                .toUser(toUser)
+                .fromUser(fromUser1)
+                .build();
+
+        Follow save = followRepository.save(follow);
+
+        // when
+        Boolean exists = followRepository.existsByToUserIdAndFromUserId(
+                follow.getToUser().getId(),
+                follow.getFromUser().getId());
+
+        // then
+        assertEquals(true, exists);
     }
 }

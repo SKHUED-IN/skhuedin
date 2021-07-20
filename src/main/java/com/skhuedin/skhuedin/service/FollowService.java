@@ -23,6 +23,13 @@ public class FollowService {
 
     @Transactional
     public Long save(FollowSaveRequestDto requestDto) {
+
+        if (followRepository.existsByToUserIdAndFromUserId(requestDto.getToUserId(), requestDto.getFromUserId())) {
+            return followRepository.findByToUserIdAndFromUserId(
+                    requestDto.getToUserId(), requestDto.getFromUserId())
+                    .getId();
+        }
+
         User toUser = getUser(requestDto.getToUserId());
         User fromUser = getUser(requestDto.getFromUserId());
 
@@ -60,6 +67,13 @@ public class FollowService {
 
     public List<FollowMainResponseDto> findByToUserId(Long toUserId) {
         return followRepository.findByToUserId(toUserId)
+                .stream()
+                .map(follow -> new FollowMainResponseDto(follow))
+                .collect(Collectors.toList());
+    }
+
+    public List<FollowMainResponseDto> findByFromUserId(Long fromUserId) {
+        return followRepository.findByFromUserId(fromUserId)
                 .stream()
                 .map(follow -> new FollowMainResponseDto(follow))
                 .collect(Collectors.toList());
