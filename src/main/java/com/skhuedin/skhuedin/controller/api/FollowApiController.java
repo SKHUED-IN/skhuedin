@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.controller.api;
 
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
+import com.skhuedin.skhuedin.dto.follow.FollowDeleteRequestDto;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;
 import com.skhuedin.skhuedin.dto.follow.FollowSaveRequestDto;
 import com.skhuedin.skhuedin.infra.MyRole;
@@ -62,9 +63,9 @@ public class FollowApiController {
     }
 
     @MyRole
-    @DeleteMapping("follows/{followId}")
-    public ResponseEntity<? extends BasicResponse> delete(@PathVariable("followId") Long id) {
-        followService.delete(id);
+    @DeleteMapping("follows")
+    public ResponseEntity<? extends BasicResponse> delete(@RequestBody FollowDeleteRequestDto requestDto) {
+        followService.delete(requestDto);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
