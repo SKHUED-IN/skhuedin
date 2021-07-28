@@ -2,6 +2,7 @@ package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Follow;
 import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.dto.follow.FollowDeleteRequestDto;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;
 import com.skhuedin.skhuedin.dto.follow.FollowSaveRequestDto;
 import com.skhuedin.skhuedin.repository.FollowRepository;
@@ -26,7 +27,8 @@ public class FollowService {
 
         if (followRepository.existsByToUserIdAndFromUserId(requestDto.getToUserId(), requestDto.getFromUserId())) {
             return followRepository.findByToUserIdAndFromUserId(
-                    requestDto.getToUserId(), requestDto.getFromUserId())
+                    requestDto.getToUserId(),
+                    requestDto.getFromUserId())
                     .getId();
         }
 
@@ -51,6 +53,15 @@ public class FollowService {
     public void delete(Long id) {
         Follow follow = getFollow(id);
         followRepository.delete(follow);
+    }
+
+    @Transactional
+    public void delete(FollowDeleteRequestDto requestDto) {
+        if (followRepository.existsByToUserIdAndFromUserId(requestDto.getToUserId(), requestDto.getFromUserId())) {
+            Follow follow = followRepository.findByToUserIdAndFromUserId(
+                    requestDto.getToUserId(), requestDto.getFromUserId());
+            followRepository.delete(follow);
+        }
     }
 
     public FollowMainResponseDto findById(Long id) {
