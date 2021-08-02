@@ -2,7 +2,7 @@ package com.skhuedin.skhuedin.dto.blog;
 
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.File;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
