@@ -1,7 +1,7 @@
 package com.skhuedin.skhuedin.repository;
 
-import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.infra.Role;
+import com.skhuedin.skhuedin.domain.user.Role;
+import com.skhuedin.skhuedin.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,5 +26,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u " +
             "from User u " +
             "where u.role = :role ")
-    Page<User> findByRole(Pageable pageable, @Param("role") Role role);
+    Page<User> findByRole(Pageable pageable, @Param("role") String role);
 }
