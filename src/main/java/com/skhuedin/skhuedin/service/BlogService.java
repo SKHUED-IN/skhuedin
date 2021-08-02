@@ -2,7 +2,7 @@ package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.File;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.blog.BlogAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;

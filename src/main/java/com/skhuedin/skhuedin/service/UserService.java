@@ -4,13 +4,11 @@ import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Comment;
 import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Question;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.Role;
+import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.user.UserAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
-import com.skhuedin.skhuedin.dto.user.UserSaveRequestDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
-import com.skhuedin.skhuedin.infra.JwtTokenProvider;
-import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CommentRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
@@ -32,7 +30,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final BlogRepository blogRepository;
     private final PostsRepository postsRepository;
     private final CommentRepository commentRepository;
@@ -50,9 +47,9 @@ public class UserService {
     }
 
     @Transactional
-    public void updateRole(Long id, String role) {
+    public void updateRole(Long id, Role role) {
         User user = getUser(id);
-        user.updateRole(Role.getRole(role));
+        user.updateRole(role);
     }
 
     @Transactional
@@ -105,35 +102,6 @@ public class UserService {
         return new UserMainResponseDto(user);
     }
 
-    /**
-     * 회원 가입 로직
-     */
-    public String createToken(String email) {
-        //비밀번호 확인 등의 유효성 검사 진행
-        return jwtTokenProvider.createToken(email);
-    }
-
-    public String signUp(UserSaveRequestDto requestDto) {
-        save(requestDto.toEntity());
-        return signIn(requestDto);
-    }
-
-    @Transactional
-    public String signIn(UserSaveRequestDto requestDto) {
-        User findUser = userRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
-        requestDto.addYear(findUser.getEntranceYear(), findUser.getGraduationYear());
-
-        findUser.update(requestDto.toEntity());
-        return createToken(findUser.getEmail());
-    }
-
-    public User findByEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        // Bearer 검증에 null 값을 넘기기 위해 일부러 이렇게 작성함
-        return user.orElse(null);
-    }
-
     public List<UserMainResponseDto> findAll() {
         return userRepository.findAll().stream()
                 .map(user -> new UserMainResponseDto(user))
@@ -158,7 +126,7 @@ public class UserService {
     }
 
     public Page<UserAdminMainResponseDto> findByUserRole(Pageable pageable, String role) {
-        return userRepository.findByRole(pageable, Role.getRole(role))
+        return userRepository.findByRole(pageable, role)
                 .map(user -> new UserAdminMainResponseDto(user));
     }
 
