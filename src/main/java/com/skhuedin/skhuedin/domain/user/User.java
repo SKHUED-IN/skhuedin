@@ -1,6 +1,8 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.skhuedin.domain.user;
 
-import com.skhuedin.skhuedin.infra.Role;
+import com.skhuedin.skhuedin.domain.BaseEntity;
+import com.skhuedin.skhuedin.domain.Blog;
+import com.skhuedin.skhuedin.domain.Provider;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,8 +30,6 @@ public class User extends BaseEntity {
 
     private String email;
 
-    private String password;
-
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -48,21 +48,16 @@ public class User extends BaseEntity {
     private Blog blog;
 
     @Builder
-    public User(String email, String password, String name, Provider provider,
-                String userImageUrl, String entranceYear, String graduationYear, Role role) {
+    public User(String email, String name, Provider provider, String userImageUrl, Role role) {
         this.email = email;
-        this.password = password;
         this.name = name;
         this.provider = provider;
         this.userImageUrl = userImageUrl;
-        this.entranceYear = entranceYear;
-        this.graduationYear = graduationYear;
         this.role = role;
     }
 
     public void update(User user) {
         this.email = user.email;
-        this.password = user.password;
         this.name = user.name;
         this.provider = user.provider;
         this.userImageUrl = user.userImageUrl;
