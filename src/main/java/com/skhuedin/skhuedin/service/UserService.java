@@ -125,7 +125,7 @@ public class UserService {
                 .map(user -> new UserAdminMainResponseDto(user));
     }
 
-    public Page<UserAdminMainResponseDto> findByUserRole(Pageable pageable, String role) {
+    public Page<UserAdminMainResponseDto> findByUserRole(Pageable pageable, Role role) {
         return userRepository.findByRole(pageable, role)
                 .map(user -> new UserAdminMainResponseDto(user));
     }

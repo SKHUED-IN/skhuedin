@@ -28,6 +28,7 @@ out/
 src/main/resources/application-real-db.yml
 src/main/resources/application-real-resources.yml
 src/main/resources/application-real-oauth.yml
+src/main/resources/application-real-jwt.yml
 
 ### NetBeans ###
 /nbproject/private/
