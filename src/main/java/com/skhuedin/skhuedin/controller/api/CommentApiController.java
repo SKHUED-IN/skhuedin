@@ -4,11 +4,11 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
-import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +28,8 @@ public class CommentApiController {
 
     private final CommentService commentService;
 
-    @MyRole
     @PostMapping("comments")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> save(@Valid @RequestBody CommentSaveRequestDto requestDto) {
         Long saveId = commentService.save(requestDto);
 
@@ -44,8 +44,8 @@ public class CommentApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @MyRole
     @PutMapping("comments/{commentId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("commentId") Long id,
                                                           @Valid @RequestBody CommentSaveRequestDto updateDto) {
         Long commentId = commentService.update(id, updateDto);
@@ -54,8 +54,8 @@ public class CommentApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @MyRole
     @DeleteMapping("comments/{commentId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("commentId") Long id) {
         commentService.delete(id);
 

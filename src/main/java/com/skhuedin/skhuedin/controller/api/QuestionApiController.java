@@ -4,7 +4,6 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
-import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +31,8 @@ public class QuestionApiController {
 
     private final QuestionService questionService;
 
-    @MyRole
     @PostMapping("questions")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> save(@Valid @RequestBody QuestionSaveRequestDto requestDto) {
         Long saveId = questionService.save(requestDto);
 
@@ -57,8 +57,8 @@ public class QuestionApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(questions));
     }
 
-    @MyRole
     @PutMapping("questions/{questionId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("questionId") Long id,
                                                           @Valid @RequestBody QuestionSaveRequestDto updateDto) {
         Long questionId = questionService.update(id, updateDto);
@@ -67,15 +67,14 @@ public class QuestionApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @MyRole
     @DeleteMapping("questions/{questionId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("questionId") Long id) {
         questionService.delete(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @MyRole
     @PostMapping("questions/{questionId}/views")
     public ResponseEntity<? extends BasicResponse> addView(@PathVariable("questionId") Long id) {
         questionService.addView(id);

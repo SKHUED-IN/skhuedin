@@ -3,8 +3,6 @@ package com.skhuedin.skhuedin.controller.admin.api;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.user.UserAdminUpdateRequestDto;
-import com.skhuedin.skhuedin.infra.MyRole;
-import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminUserApiController {
     private final UserService userService;
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("users")
     public ResponseEntity<? extends BasicResponse> getUsers(
             Pageable pageable,
@@ -46,22 +43,18 @@ public class AdminUserApiController {
         }
     }
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("users/{userId}")
     public ResponseEntity<? extends BasicResponse> getUser(@PathVariable("userId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.toUserAdminMainResponseDto(id)));
     }
 
-    @MyRole(role = Role.ADMIN)
     @PutMapping("users")
-    public ResponseEntity<? extends BasicResponse> updateUserRole(
-            @RequestBody UserAdminUpdateRequestDto requestDto) {
+    public ResponseEntity<? extends BasicResponse> updateUserRole(@RequestBody UserAdminUpdateRequestDto requestDto) {
         userService.updateRole(requestDto.getId(), requestDto.getRole());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @MyRole(role = Role.ADMIN)
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<? extends BasicResponse> deleteUser(@PathVariable("userId") Long id) {
         userService.delete(id);

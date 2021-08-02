@@ -6,7 +6,6 @@ import com.skhuedin.skhuedin.controller.response.ErrorResponse;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
 import com.skhuedin.skhuedin.dto.file.FileSaveRequestDto;
-import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.BlogService;
 import com.skhuedin.skhuedin.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,8 +43,8 @@ public class BlogApiController {
     @Value("${resources.storage_location}")
     private String resourcesLocation;
 
-    @MyRole
     @PostMapping("blogs")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> save(
             @RequestParam(name = "file", required = false) MultipartFile files,
             @Valid BlogSaveRequestDto requestDto) throws NoSuchAlgorithmException, IOException {
@@ -105,8 +105,8 @@ public class BlogApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(blogs));
     }
 
-    @MyRole
     @PutMapping("blogs/{blogId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> update(
             @PathVariable("blogId") Long id,
             @RequestParam(name = "file", required = false) MultipartFile files,
@@ -143,8 +143,8 @@ public class BlogApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @MyRole
     @DeleteMapping("blogs/{blogId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("blogId") Long id) {
         blogService.delete(id);
 
