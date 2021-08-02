@@ -2,7 +2,7 @@ package com.skhuedin.skhuedin.repository;
 
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,11 +54,8 @@ class UserRepositoryTest {
     User generateUser() {
         return User.builder()
                 .email("user@email.com")
-                .password("1234")
                 .name("user")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
     }

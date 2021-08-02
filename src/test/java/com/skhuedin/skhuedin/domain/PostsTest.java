@@ -1,10 +1,9 @@
 package com.skhuedin.skhuedin.domain;
 
+import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,11 +15,8 @@ class PostsTest {
     void beforeEach() {
         User user = User.builder()
                 .email("user@email.com")
-                .password("1234")
                 .name("user")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 

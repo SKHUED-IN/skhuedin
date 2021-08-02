@@ -3,7 +3,7 @@ package com.skhuedin.skhuedin.service;
 import com.skhuedin.skhuedin.domain.Comment;
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.Question;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
 import com.skhuedin.skhuedin.repository.CommentRepository;
@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,21 +45,15 @@ class CommentServiceTest {
     void beforeEach() {
         targetUser = User.builder()
                 .email("target@email.com")
-                .password("1234")
                 .name("target")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
         writerUser = User.builder()
                 .email("writer@email.com")
-                .password("1234")
                 .name("writer")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 

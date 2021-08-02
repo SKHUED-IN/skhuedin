@@ -1,9 +1,9 @@
 package com.skhuedin.skhuedin.controller.admin.api;
 
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
-import com.skhuedin.skhuedin.infra.JwtTokenProvider;
-import com.skhuedin.skhuedin.infra.Role;
+import com.skhuedin.skhuedin.domain.user.Role;
+import com.skhuedin.skhuedin.domain.user.User;
+import com.skhuedin.skhuedin.jwt.TokenProvider;
 import com.skhuedin.skhuedin.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ class AdminUserApiControllerTest {
     UserService userService;
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    TokenProvider jwtTokenProvider;
 
     String token;
 
@@ -44,16 +44,13 @@ class AdminUserApiControllerTest {
         User user = User.builder()
                 .name("admin")
                 .email("test@naver.com")
-                .password("1234")
-                .role(Role.ADMIN)
+                .role(Role.ROLE_ADMIN)
                 .userImageUrl("/img")
-                .entranceYear("2016")
-                .graduationYear("2022")
                 .provider(Provider.KAKAO)
                 .build();
         userService.save(user);
 
-        token = jwtTokenProvider.createToken("test@naver.com");
+//        token = jwtTokenProvider.createToken("test@naver.com");
     }
 
     @DisplayName("user 검색 없이 전체 조회")
@@ -63,7 +60,7 @@ class AdminUserApiControllerTest {
         //given & when
         mockMvc.perform(get("/api/admin/users?page=0&size=10")
                 .header("Authorization", "Bearer " + token)
-                .param("role", "ADMIN")
+                .param("role", String.valueOf(Role.ROLE_ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

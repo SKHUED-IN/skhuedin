@@ -1,10 +1,9 @@
 package com.skhuedin.skhuedin.domain;
 
+import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,21 +15,15 @@ class QuestionTest {
     void beforeEach() {
         User targetUser = User.builder()
                 .email("target@email.com")
-                .password("1234")
                 .name("target")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
         User writerUser = User.builder()
                 .email("writer@email.com")
-                .password("1234")
                 .name("writer")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 

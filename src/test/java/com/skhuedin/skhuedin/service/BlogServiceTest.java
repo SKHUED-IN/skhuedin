@@ -1,7 +1,7 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.blog.BlogAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
@@ -41,11 +41,8 @@ class BlogServiceTest {
     void beforeEach() {
         user = User.builder()
                 .email("user@email.com")
-                .password("1234")
                 .name("user")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
@@ -238,11 +235,8 @@ class BlogServiceTest {
     private User generateUser(int index) {
         user = User.builder()
                 .email("user" + index + "@email.com")
-                .password("1234")
                 .name("user")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 

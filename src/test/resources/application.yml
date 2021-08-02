@@ -42,3 +42,8 @@ social:
   google:
     login: ""
     logout: ""
+
+jwt:
+  header: Authorization
+  secret: c2todWVkaW4tdGVzdC1za2h1ZWRpbi10ZXN0LXNraHVlZGluLXRlc3Qtc2todWVkaW4tdGVzdC1za2h1ZWRpbi10ZXN0
+  token-validity-in-seconds: 1800

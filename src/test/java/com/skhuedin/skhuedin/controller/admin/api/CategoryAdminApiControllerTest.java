@@ -2,10 +2,10 @@ package com.skhuedin.skhuedin.controller.admin.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.Role;
+import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
-import com.skhuedin.skhuedin.infra.JwtTokenProvider;
-import com.skhuedin.skhuedin.infra.Role;
+import com.skhuedin.skhuedin.jwt.TokenProvider;
 import com.skhuedin.skhuedin.service.CategoryService;
 import com.skhuedin.skhuedin.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ class CategoryAdminApiControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    TokenProvider jwtTokenProvider;
 
     String token;
 
@@ -73,16 +73,13 @@ class CategoryAdminApiControllerTest {
         User user = User.builder()
                 .name("admin")
                 .email("test@naver.com")
-                .password("1234")
-                .role(Role.ADMIN)
+                .role(Role.ROLE_ADMIN)
                 .userImageUrl("/img")
-                .entranceYear("2016")
-                .graduationYear("2022")
                 .provider(Provider.KAKAO)
                 .build();
         userService.save(user);
 
-        token = jwtTokenProvider.createToken("test@naver.com");
+//        token = jwtTokenProvider.createToken("test@naver.com");
     }
 
     @DisplayName("category findAll")
