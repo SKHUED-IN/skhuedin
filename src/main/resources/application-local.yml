@@ -24,4 +24,5 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
+  com.skhuedin.skhuedin: debug
 #  org.hibernate.type: trace
