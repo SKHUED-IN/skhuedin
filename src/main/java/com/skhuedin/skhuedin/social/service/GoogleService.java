@@ -12,19 +12,17 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GoogleService {
-
-    public static final String GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo";
-    public static final String HEADER_NAME = "Authorization";
+public class GoogleService implements SocialService {
 
     private final RestTemplate restTemplate;
 
+    @Override
     public GoogleUserInfo getUserInfo(String accessToken) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HEADER_NAME, accessToken);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HEADER_AUTHORIZATION, GRANT_TYPE + " " + accessToken);
 
-        HttpEntity requestEntity = new HttpEntity(headers);
+        HttpEntity requestEntity = new HttpEntity(httpHeaders);
         GoogleUserInfo googleUserInfo = restTemplate.exchange(
                 GOOGLE_USERINFO_URL,
                 HttpMethod.GET,

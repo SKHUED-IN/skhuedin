@@ -12,17 +12,15 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class KakaoService {
-
-    public static final String KAKAO_USERINFO_URL = "https://kapi.kakao.com/v2/user/me";
-    public static final String HEADER_NAME = "Authorization";
+public class KakaoService implements SocialService {
 
     private final RestTemplate restTemplate;
 
+    @Override
     public KakaoUserInfo getUserInfo(String accessToken) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(HEADER_NAME, "Bearer " + accessToken);
+        httpHeaders.set(HEADER_AUTHORIZATION, GRANT_TYPE + " " + accessToken);
 
         HttpEntity requestEntity = new HttpEntity(httpHeaders);
         KakaoUserInfo kakaoUserInfo = restTemplate.exchange(
