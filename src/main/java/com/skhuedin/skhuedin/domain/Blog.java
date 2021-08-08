@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -34,20 +35,19 @@ public class Blog extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id")
-    private File profile;
-
     private String content;
 
     @OneToMany(mappedBy = "blog", fetch = FetchType.LAZY)
     private List<Posts> posts = new ArrayList<>();
 
+    @Embedded
+    private UploadFile uploadFile;
+
     @Builder
-    public Blog(User user, File profile, String content, List<Posts> posts) {
+    public Blog(User user, UploadFile uploadFile, String content, List<Posts> posts) {
         this.user = user;
         this.user.addBlog(this);
-        this.profile = profile;
+        this.uploadFile = uploadFile;
         this.content = content;
         if (posts != null) {
             this.posts = posts;
@@ -57,7 +57,7 @@ public class Blog extends BaseEntity {
     public void updateBlog(Blog blog) {
         this.user = blog.user;
         blog.user.addBlog(this);
-        this.profile = blog.profile;
+        this.uploadFile = blog.uploadFile;
         this.content = blog.content;
         this.posts = blog.posts;
     }

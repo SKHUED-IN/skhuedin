@@ -6,14 +6,11 @@ values (now(), now(), 'admin@email.com', 'admin', 'SELF', '/img', now(), now(), 
        (now(), now(), 'hs98414@naver.com', '오혜성', 'KAKAO', null, '2017', null, 'ROLE_ADMIN'),
        (now(), now(), 'user1@email.com', '일반 유저', 'KAKAO', null, '2017', null, 'ROLE_USER');
 
-insert into file (created_date, last_modified_date, original_name, name, path)
-values (now(), now(), 'user.png', 'user.png', '/home/ec2-user/app/profile/');
-
-insert into blog (user_id, profile_id, content, created_date, last_modified_date)
-values (1, 1, 'admin blog', now(), now()),
-       (2, 1, 'hyeonic 책장', now(), now()),
-       (3, 1, 'her0807 책장', now(), now()),
-       (4, 1, '오혜성의 책장', now(), now());
+insert into blog (user_id, content, created_date, last_modified_date)
+values (1, 'admin blog', now(), now()),
+       (2, 'hyeonic 책장', now(), now()),
+       (3, 'her0807 책장', now(), now()),
+       (4, '오혜성의 책장', now(), now());
 
 insert into question (target_user_id, writer_user_id, title, content, status, fix, view, created_date,
                       last_modified_date)

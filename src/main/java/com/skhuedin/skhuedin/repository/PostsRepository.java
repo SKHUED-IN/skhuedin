@@ -27,40 +27,40 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
                              @Param("deleteStatus") boolean deleteStatus, Pageable pageable);
 
     /* admin 전용 */
-    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @EntityGraph(attributePaths = {"blog", "blog.user", "category"})
     @Query("select p " +
             "from Posts p " +
             "where p.category.name not like '건의사항' " +
             "order by p.lastModifiedDate DESC")
     Page<Posts> findAll(Pageable pageable);
 
-    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @EntityGraph(attributePaths = {"blog", "blog.user", "category"})
     @Query("select p " +
             "from Posts p " +
             "where p.blog.id = :blogId")
     List<Posts> findByBlogId(@Param("blogId") Long blogId);
 
-    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @EntityGraph(attributePaths = {"blog", "blog.user", "category"})
     @Query("select p " +
             "from Posts p " +
             "where p.blog.user.name like %:username% and p.category.name not like '건의사항' " +
             "order by p.lastModifiedDate ")
     Page<Posts> findByUserName(Pageable pageable, @Param("username") String username);
 
-    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @EntityGraph(attributePaths = {"blog", "blog.user", "category"})
     @Query("select p " +
             "from Posts p " +
             "where p.category.name like %:categoryName% and p.category.name not like '건의사항' " +
             "order by p.lastModifiedDate ")
     Page<Posts> findByCategoryName(Pageable pageable, @Param("categoryName") String categoryName);
 
-    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @EntityGraph(attributePaths = {"blog", "blog.user", "category"})
     @Query("select p " +
             "from Posts p " +
             "where p.id = :postsId")
     Optional<Posts> findById(@Param("postsId") Long id);
 
-    @EntityGraph(attributePaths = {"blog", "blog.user", "blog.profile", "category"})
+    @EntityGraph(attributePaths = {"blog", "blog.user", "category"})
     @Query("select p " +
             "from Posts p " +
             "where p.category.name like '건의사항' " +

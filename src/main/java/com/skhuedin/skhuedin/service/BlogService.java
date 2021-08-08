@@ -1,23 +1,26 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Blog;
-import com.skhuedin.skhuedin.domain.File;
+import com.skhuedin.skhuedin.domain.UploadFile;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.blog.BlogAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.blog.BlogSaveRequestDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
+import com.skhuedin.skhuedin.file.FileStore;
 import com.skhuedin.skhuedin.repository.BlogRepository;
-import com.skhuedin.skhuedin.repository.FileRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
+import com.skhuedin.skhuedin.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,37 +31,37 @@ public class BlogService {
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
     private final PostsRepository postsRepository;
-    private final FileRepository fileRepository;
-
-    @Value("${resources.storage_location}")
-    private String resourcesLocation;
+    private final FileStore fileStore;
 
     @Transactional
-    public Long save(BlogSaveRequestDto requestDto, Long fileId) {
-        User user = getUser(requestDto.getUserId());
-        File file = getFile(fileId);
+    public Long save(BlogSaveRequestDto requestDto, MultipartFile file) throws IOException {
+        UploadFile uploadFile = fileStore.storeFile(file);
 
-        return blogRepository.save(requestDto.toEntity(user, file)).getId();
+        String email = SecurityUtil.getCurrentEmail().orElseThrow(() ->
+                new RuntimeException("존재하지 않는 user email 입니다. "));
+
+        User user = getUser(email);
+
+        Blog blog = requestDto.toEntity(user, uploadFile);
+
+        return blogRepository.save(blog).getId();
     }
 
     @Transactional
-    public Long update(Long id, BlogSaveRequestDto requestDto, Long fileId) {
-        Blog blog = getBlog(id);
-        User user = getUser(blog.getUser().getId());
+    public Long update(BlogSaveRequestDto updateDto, MultipartFile file) throws IOException {
+        String email = SecurityUtil.getCurrentEmail().orElseThrow(() ->
+                new RuntimeException("존재하지 않는 user email 입니다. "));
 
-        if (blog.getProfile().getId() != 1L) { // default image를 제외한 나머지 이미지는 update가 이뤄지면 삭제
-            File removeFile = getFile(blog.getProfile().getId());
-            java.io.File file = new java.io.File(resourcesLocation + removeFile.getName());
-            if (file.delete()) {
-                log.info(blog.getId() + " 기존 profile 삭제 성공");
-            } else {
-                log.info(blog.getId() + " 기존 profile 삭제 실패");
-            }
-            fileRepository.deleteById(blog.getProfile().getId()); // DB에서 삭제
+        User user = getUser(email);
+        Blog blog = user.getBlog();
+
+        if (blog.getUploadFile() != null) {
+            fileStore.removeFile(blog.getUploadFile().getStoreFileName());
         }
+        UploadFile uploadFile = fileStore.storeFile(file);
 
-        File file = getFile(fileId);
-        blog.updateBlog(requestDto.toEntity(user, file));
+        Blog updateBlog = updateDto.toEntity(user, uploadFile);
+        blog.updateBlog(updateBlog);
 
         return blog.getId();
     }
@@ -67,6 +70,11 @@ public class BlogService {
     public void delete(Long id) {
         Blog blog = getBlog(id);
         blogRepository.delete(blog);
+    }
+
+    public BlogMainResponseDto findById(Long id) {
+        Blog blog = getBlog(id);
+        return new BlogMainResponseDto(blog);
     }
 
     public BlogMainResponseDto findById(Long id, Pageable pageable) {
@@ -116,8 +124,8 @@ public class BlogService {
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
     }
 
-    private File getFile(Long fileId) {
-        return fileRepository.findById(fileId).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 file id 입니다."));
+    private User getUser(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() ->
+                new IllegalArgumentException("해당 user 가 존재하지 않습니다. email=" + email));
     }
 }
