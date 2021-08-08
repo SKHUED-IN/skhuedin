@@ -57,7 +57,6 @@ class PostsServiceTest {
         blog = Blog.builder()
                 .user(user)
                 .content("테스트 블로그 컨텐츠")
-                .profile(null)
                 .build();
 
         blogRepository.save(blog);

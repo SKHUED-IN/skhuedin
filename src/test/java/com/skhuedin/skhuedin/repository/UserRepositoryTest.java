@@ -64,7 +64,6 @@ class UserRepositoryTest {
         return Blog.builder()
                 .user(user)
                 .content(user.getName() + "의 책장 ")
-                .profile(null)
                 .build();
     }
 }

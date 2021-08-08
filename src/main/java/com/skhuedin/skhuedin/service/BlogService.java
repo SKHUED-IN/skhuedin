@@ -11,7 +11,6 @@ import com.skhuedin.skhuedin.file.FileStore;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
-import com.skhuedin.skhuedin.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,11 +36,7 @@ public class BlogService {
     public Long save(BlogSaveRequestDto requestDto, MultipartFile file) throws IOException {
         UploadFile uploadFile = fileStore.storeFile(file);
 
-        String email = SecurityUtil.getCurrentEmail().orElseThrow(() ->
-                new RuntimeException("존재하지 않는 user email 입니다. "));
-
-        User user = getUser(email);
-
+        User user = getUser(requestDto.getUserId());
         Blog blog = requestDto.toEntity(user, uploadFile);
 
         return blogRepository.save(blog).getId();
@@ -49,10 +44,8 @@ public class BlogService {
 
     @Transactional
     public Long update(BlogSaveRequestDto updateDto, MultipartFile file) throws IOException {
-        String email = SecurityUtil.getCurrentEmail().orElseThrow(() ->
-                new RuntimeException("존재하지 않는 user email 입니다. "));
 
-        User user = getUser(email);
+        User user = getUser(updateDto.getUserId());
         Blog blog = user.getBlog();
 
         if (blog.getUploadFile() != null) {
@@ -122,10 +115,5 @@ public class BlogService {
     private User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
-    }
-
-    private User getUser(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() ->
-                new IllegalArgumentException("해당 user 가 존재하지 않습니다. email=" + email));
     }
 }
