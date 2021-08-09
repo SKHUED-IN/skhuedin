@@ -12,16 +12,16 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class FollowDeleteRequestDto {
 
-    @NotNull(message = "toUser의 id는 null이 될 수 없습니다.")
-    private Long toUserId;
-
     @NotNull(message = "fromUser의 id는 null이 될 수 없습니다.")
     private Long fromUserId;
 
+    @NotNull(message = "toUser의 id는 null이 될 수 없습니다.")
+    private Long toUserId;
+
     @Builder
-    public FollowDeleteRequestDto(Long toUserId, Long fromUserId) {
-        this.toUserId = toUserId;
+    public FollowDeleteRequestDto(Long fromUserId, Long toUserId) {
         this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
     }
 
     public Follow toEntity(User toUser, User fromUser) {

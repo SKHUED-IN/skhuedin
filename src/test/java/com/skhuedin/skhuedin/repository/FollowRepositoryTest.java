@@ -2,160 +2,118 @@ package com.skhuedin.skhuedin.repository;
 
 import com.skhuedin.skhuedin.domain.Follow;
 import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @DataJpaTest
 @Sql("/truncate.sql")
-@Transactional
 class FollowRepositoryTest {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    FollowRepository followRepository;
+    private FollowRepository followRepository;
 
-    User toUser;
-    User fromUser1;
-    User fromUser2;
-    User fromUser3;
-
-    @BeforeEach
-    void beforeEach() {
-        toUser = User.builder()
-                .email("target@email.com")
-                .name("toUser")
-                .userImageUrl("/img")
+    static User generateUser(String email, String name) {
+        return User.builder()
+                .email(email)
+                .name(name)
                 .provider(Provider.SELF)
+                .userImageUrl("/images/user.png")
+                .role(Role.ROLE_USER)
                 .build();
+    }
 
-        fromUser1 = User.builder()
-                .email("target@email.com")
-                .name("fromUser1")
-                .userImageUrl("/img")
-                .provider(Provider.SELF)
+    static Follow generateFollow(User fromUser, User toUser) {
+        return Follow.builder()
+                .fromUser(fromUser)
+                .toUser(toUser)
                 .build();
-
-        fromUser2 = User.builder()
-                .email("target@email.com")
-                .name("fromUser2")
-                .userImageUrl("/img")
-                .provider(Provider.SELF)
-                .build();
-
-        fromUser3 = User.builder()
-                .email("target@email.com")
-                .name("fromUser3")
-                .userImageUrl("/img")
-                .provider(Provider.SELF)
-                .build();
-
-        userRepository.save(toUser);
-        userRepository.save(fromUser1);
-        userRepository.save(fromUser2);
-        userRepository.save(fromUser3);
     }
 
     @Test
-    @DisplayName("fromUser 3명이 toUser로 follow 하여 toUser로 조회하는 테스트")
+    @DisplayName("toUser 의 id를 활용하여 조회하는 테스트 - 성공")
     void findByToUserId() {
 
         // given
-        Follow follow1 = Follow.builder()
-                .toUser(toUser)
-                .fromUser(fromUser1)
-                .build();
+        User fromUser1 = generateUser("fromUser1@email.com", "fromUser1");
+        User fromUser2 = generateUser("fromUser2@email.com", "fromUser2");
+        User toUser = generateUser("toUser@email.com", "toUser");
 
-        Follow follow2 = Follow.builder()
-                .toUser(toUser)
-                .fromUser(fromUser2)
-                .build();
+        fromUser1 = userRepository.save(fromUser1);
+        fromUser2 = userRepository.save(fromUser2);
+        toUser = userRepository.save(toUser);
 
-        Follow follow3 = Follow.builder()
-                .toUser(toUser)
-                .fromUser(fromUser3)
-                .build();
+        Follow follow1 = generateFollow(fromUser1, toUser);
+        Follow follow2 = generateFollow(fromUser2, toUser);
 
         followRepository.save(follow1);
         followRepository.save(follow2);
-        followRepository.save(follow3);
 
         // when
         List<Follow> follows = followRepository.findByToUserId(toUser.getId());
 
         // then
-        assertEquals(follows.size(), 3);
+        Assertions.assertEquals(2, follows.size());
     }
 
     @Test
-    @DisplayName("fromUser 가 follow 한 toUser 목록을 조회하는 테스트")
+    @DisplayName("fromUser의 id를 활용하여 조회하는 테스트 - 성공")
     void findByFromUserId() {
 
         // given
-        Follow follow = Follow.builder()
-                .toUser(toUser)
-                .fromUser(fromUser1)
-                .build();
+        User fromUser = generateUser("fromUser@email.com", "fromUser");
+        User toUser1 = generateUser("toUser1@email.com", "toUser1");
+        User toUser2 = generateUser("toUser2@email.com", "toUser2");
+
+        fromUser = userRepository.save(fromUser);
+        toUser1 = userRepository.save(toUser1);
+        toUser2 = userRepository.save(toUser2);
+
+        Follow follow1 = generateFollow(fromUser, toUser1);
+        Follow follow2 = generateFollow(fromUser, toUser2);
+
+        followRepository.save(follow1);
+        followRepository.save(follow2);
+
+        // when
+        List<Follow> follows = followRepository.findByFromUserId(fromUser.getId());
+
+        // then
+        Assertions.assertEquals(2, follows.size());
+    }
+
+    @Test
+    @DisplayName("fromUser와 toUser id를 활용하여 조회하는 테스트 - 성공")
+    void findByFromUserIdAndToUserId() {
+
+        // given
+        User fromUser = generateUser("fromUser@email.com", "fromUser");
+        User toUser = generateUser("toUser@email.com", "toUser");
+
+        userRepository.save(fromUser);
+        userRepository.save(toUser);
+
+        Follow follow = generateFollow(fromUser, toUser);
 
         followRepository.save(follow);
 
         // when
-        List<Follow> follows = followRepository.findByFromUserId(follow.getFromUser().getId());
+        Follow findFollow = followRepository.findByFromUserIdAndToUserId(fromUser.getId(), toUser.getId()).get();
 
         // then
-        assertEquals(1, follows.size());
-    }
-
-    @Test
-    @DisplayName("toUserId 와 fromUserId 로 follow 를 조회하는 테스트")
-    void findByToUserIdAndFromUserId() {
-
-        // given
-        Follow follow = Follow.builder()
-                .toUser(toUser)
-                .fromUser(fromUser1)
-                .build();
-
-        followRepository.save(follow);
-
-        // when
-        Follow findFollow = followRepository.findByToUserIdAndFromUserId(
-                follow.getToUser().getId(),
-                follow.getFromUser().getId());
-
-        // then
-        assertEquals(follow, findFollow);
-    }
-
-    @Test
-    @DisplayName("fromUser 가 toUser 의 follow 유무를 확인하는 테스트")
-    void existsByToUserIdAndFromUserId() {
-
-        // given
-        Follow follow = Follow.builder()
-                .toUser(toUser)
-                .fromUser(fromUser1)
-                .build();
-
-        Follow save = followRepository.save(follow);
-
-        // when
-        Boolean exists = followRepository.existsByToUserIdAndFromUserId(
-                follow.getToUser().getId(),
-                follow.getFromUser().getId());
-
-        // then
-        assertEquals(true, exists);
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(fromUser, findFollow.getFromUser()),
+                () -> Assertions.assertEquals(toUser, findFollow.getToUser())
+        );
     }
 }
