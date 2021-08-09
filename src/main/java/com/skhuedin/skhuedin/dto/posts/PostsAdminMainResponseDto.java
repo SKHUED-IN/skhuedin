@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.dto.posts;
 
-import com.skhuedin.skhuedin.domain.Posts;
+import com.skhuedin.skhuedin.domain.posts.Posts;
 import com.skhuedin.skhuedin.dto.blog.BlogMainResponseDto;
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
 import lombok.Getter;

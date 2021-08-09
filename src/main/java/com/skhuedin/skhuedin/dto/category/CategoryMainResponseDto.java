@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.dto.category;
 
-import com.skhuedin.skhuedin.domain.Category;
+import com.skhuedin.skhuedin.domain.category.Category;
 import lombok.Getter;
 
 @Getter

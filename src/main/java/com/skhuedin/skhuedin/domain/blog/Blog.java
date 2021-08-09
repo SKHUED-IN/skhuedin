@@ -1,5 +1,8 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.skhuedin.domain.blog;
 
+import com.skhuedin.skhuedin.domain.BaseEntity;
+import com.skhuedin.skhuedin.domain.posts.Posts;
+import com.skhuedin.skhuedin.domain.UploadFile;
 import com.skhuedin.skhuedin.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;

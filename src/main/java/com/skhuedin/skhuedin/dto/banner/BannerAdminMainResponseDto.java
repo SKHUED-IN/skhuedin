@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.dto.banner;
 
-import com.skhuedin.skhuedin.domain.Banner;
+import com.skhuedin.skhuedin.domain.banner.Banner;
 import lombok.Getter;
 
 import java.time.format.DateTimeFormatter;

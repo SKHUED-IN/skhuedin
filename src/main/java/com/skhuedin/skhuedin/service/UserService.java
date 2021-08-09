@@ -1,9 +1,9 @@
 package com.skhuedin.skhuedin.service;
 
-import com.skhuedin.skhuedin.domain.Blog;
-import com.skhuedin.skhuedin.domain.Comment;
-import com.skhuedin.skhuedin.domain.Posts;
-import com.skhuedin.skhuedin.domain.Question;
+import com.skhuedin.skhuedin.domain.blog.Blog;
+import com.skhuedin.skhuedin.domain.comment.Comment;
+import com.skhuedin.skhuedin.domain.posts.Posts;
+import com.skhuedin.skhuedin.domain.question.Question;
 import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.user.UserAdminMainResponseDto;

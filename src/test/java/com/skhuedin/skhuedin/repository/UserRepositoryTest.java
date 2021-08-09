@@ -1,7 +1,7 @@
 package com.skhuedin.skhuedin.repository;
 
-import com.skhuedin.skhuedin.domain.Blog;
-import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.blog.Blog;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,5 +1,6 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.skhuedin.domain.question;
 
+import com.skhuedin.skhuedin.domain.BaseEntity;
 import com.skhuedin.skhuedin.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;

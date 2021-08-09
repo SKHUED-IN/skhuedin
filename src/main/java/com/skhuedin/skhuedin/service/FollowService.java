@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.service;
 
-import com.skhuedin.skhuedin.domain.Follow;
+import com.skhuedin.skhuedin.domain.follow.Follow;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.follow.FollowDeleteRequestDto;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;

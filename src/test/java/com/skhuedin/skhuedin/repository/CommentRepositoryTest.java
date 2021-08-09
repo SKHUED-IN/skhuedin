@@ -1,8 +1,8 @@
 package com.skhuedin.skhuedin.repository;
 
-import com.skhuedin.skhuedin.domain.Comment;
-import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.Question;
+import com.skhuedin.skhuedin.domain.comment.Comment;
+import com.skhuedin.skhuedin.domain.user.Provider;
+import com.skhuedin.skhuedin.domain.question.Question;
 import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.dto.follow;
 
-import com.skhuedin.skhuedin.domain.Follow;
+import com.skhuedin.skhuedin.domain.follow.Follow;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package com.skhuedin.skhuedin.controller.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.follow.FollowDeleteRequestDto;

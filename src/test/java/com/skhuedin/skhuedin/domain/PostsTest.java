@@ -1,5 +1,8 @@
 package com.skhuedin.skhuedin.domain;
 
+import com.skhuedin.skhuedin.domain.blog.Blog;
+import com.skhuedin.skhuedin.domain.posts.Posts;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

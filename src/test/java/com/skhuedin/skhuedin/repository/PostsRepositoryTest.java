@@ -1,9 +1,9 @@
 package com.skhuedin.skhuedin.repository;
 
-import com.skhuedin.skhuedin.domain.Blog;
-import com.skhuedin.skhuedin.domain.Category;
-import com.skhuedin.skhuedin.domain.Posts;
-import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.blog.Blog;
+import com.skhuedin.skhuedin.domain.category.Category;
+import com.skhuedin.skhuedin.domain.posts.Posts;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,5 +1,6 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.skhuedin.domain.category;
 
+import com.skhuedin.skhuedin.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

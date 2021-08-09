@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.service;
 
-import com.skhuedin.skhuedin.domain.Category;
+import com.skhuedin.skhuedin.domain.category.Category;
 import com.skhuedin.skhuedin.dto.category.CategoryMainResponseDto;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
 import com.skhuedin.skhuedin.repository.CategoryRepository;

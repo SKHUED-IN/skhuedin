@@ -1,4 +1,4 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.skhuedin.domain.user;
 
 public enum Provider {
 

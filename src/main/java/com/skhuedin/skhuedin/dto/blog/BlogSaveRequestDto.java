@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.dto.blog;
 
-import com.skhuedin.skhuedin.domain.Blog;
+import com.skhuedin.skhuedin.domain.blog.Blog;
 import com.skhuedin.skhuedin.domain.UploadFile;
 import com.skhuedin.skhuedin.domain.user.User;
 import lombok.Builder;

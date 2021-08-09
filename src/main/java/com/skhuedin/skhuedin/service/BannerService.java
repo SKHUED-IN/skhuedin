@@ -1,7 +1,7 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.controller.admin.form.BannerForm;
-import com.skhuedin.skhuedin.domain.Banner;
+import com.skhuedin.skhuedin.domain.banner.Banner;
 import com.skhuedin.skhuedin.domain.UploadFile;
 import com.skhuedin.skhuedin.dto.banner.BannerAdminMainResponseDto;
 import com.skhuedin.skhuedin.file.FileStore;

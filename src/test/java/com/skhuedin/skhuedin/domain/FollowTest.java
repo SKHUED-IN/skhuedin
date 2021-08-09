@@ -1,5 +1,7 @@
 package com.skhuedin.skhuedin.domain;
 
+import com.skhuedin.skhuedin.domain.follow.Follow;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.Assertions;

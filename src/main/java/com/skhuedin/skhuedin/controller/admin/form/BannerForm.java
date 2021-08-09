@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.controller.admin.form;
 
-import com.skhuedin.skhuedin.domain.Banner;
+import com.skhuedin.skhuedin.domain.banner.Banner;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
