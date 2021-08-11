@@ -36,6 +36,7 @@ public class AuthService {
     public TokenMainResponseDto login(String socialLoginType, String accessToken) {
 
         UserInfo userInfo = null;
+        boolean isFirstVisit = false;
         if (socialLoginType.equals(GOOGLE)) {
             userInfo = googleService.getUserInfo(accessToken);
         } else if (socialLoginType.equals(KAKAO)) {
@@ -44,6 +45,14 @@ public class AuthService {
 
         User user = userRepository.findByEmail(userInfo.getEmail()).orElse(null);
 
+        // 최초 로그인 시도인 경우
+        if (user == null) {
+            user = userRepository.save(userInfo.toEntity());
+            isFirstVisit = true;
+        } else {
+            user.update(userInfo.toEntity());
+        }
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userInfo.getEmail(), "");
 
@@ -51,14 +60,7 @@ public class AuthService {
 
         String jwt = tokenProvider.createToken(authentication);
 
-        // 최초 로그인 시도인 경우
-        if (user == null) {
-            userRepository.save(user);
-            return new TokenMainResponseDto(new UserMainResponseDto(userRepository.save(user)), jwt, false);
-        }
-
-        user.update(userInfo.toEntity());
-        return new TokenMainResponseDto(new UserMainResponseDto(user), jwt, true);
+        return new TokenMainResponseDto(new UserMainResponseDto(user), jwt, isFirstVisit);
     }
 
     public boolean isSameUser(Long userId) {

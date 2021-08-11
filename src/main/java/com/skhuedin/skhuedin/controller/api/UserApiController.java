@@ -3,7 +3,9 @@ package com.skhuedin.skhuedin.controller.api;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
+import com.skhuedin.skhuedin.dto.user.UserTokenValidationDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
+import com.skhuedin.skhuedin.jwt.TokenProvider;
 import com.skhuedin.skhuedin.service.BlogService;
 import com.skhuedin.skhuedin.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class UserApiController {
 
     private final UserService userService;
     private final BlogService blogService;
+    private final TokenProvider tokenProvider;
 
     @GetMapping("users/{userId}")
     public ResponseEntity<? extends BasicResponse> findById(@PathVariable("userId") Long id) {
@@ -58,5 +61,15 @@ public class UserApiController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(blogService.findByUserId(userId)));
+    }
+
+    @PostMapping("token/validate")
+    public ResponseEntity<? extends BasicResponse> validate(@RequestBody UserTokenValidationDto requestDto) {
+
+        String token = requestDto.getToken();
+        if (token.contains("Bearer")) {
+            token = token.split("Bearer ")[1];
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(tokenProvider.validateToken(token)));
     }
 }
