@@ -2,53 +2,69 @@ package com.skhuedin.skhuedin.domain;
 
 import com.skhuedin.skhuedin.domain.question.Question;
 import com.skhuedin.skhuedin.domain.user.Provider;
+import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class QuestionTest {
 
-    private Question question;
-
-    @BeforeEach
-    void beforeEach() {
-        User targetUser = User.builder()
-                .email("target@email.com")
-                .name("target")
-                .userImageUrl("/img")
+    static User generateUser(String email, String name) {
+        return User.builder()
+                .email(email)
+                .name(name)
                 .provider(Provider.SELF)
-                .build();
-
-        User writerUser = User.builder()
-                .email("writer@email.com")
-                .name("writer")
-                .userImageUrl("/img")
-                .provider(Provider.SELF)
-                .build();
-
-        question = Question.builder()
-                .targetUser(targetUser)
-                .writerUser(writerUser)
-                .title("테스트 코드 관련 질문")
-                .content("테스트 코드를 어떻게 작성하면 좋을까요?")
-                .status(false)
-                .fix(false)
+                .userImageUrl("/images/user.png")
+                .role(Role.ROLE_USER)
                 .build();
     }
 
     @Test
-    @DisplayName("조회수를 3 증가 시키는 테스트")
+    @DisplayName("Builder를 활용하여 Question 객체를 생성하는 테스트 - 성공")
+    void createByBuilder() {
+
+        // given
+        User targetUser = generateUser("targetUser@email.com", "targetUser");
+        User writerUser = generateUser("writerUser@email.com", "writerUser");
+
+        // when
+        Question question = Question.builder()
+                .targetUser(targetUser)
+                .writerUser(writerUser)
+                .title("테스트 question")
+                .content("테스트 question content")
+                .build();
+
+        // then
+        assertAll(
+                () -> assertEquals(targetUser, question.getTargetUser()),
+                () -> assertEquals(writerUser, question.getWriterUser())
+        );
+    }
+
+    @Test
+    @DisplayName("조회수를 2 증가 시키는 테스트 - 성공")
     void addView() {
+
+        // given
+        User targetUser = generateUser("targetUser@email.com", "targetUser");
+        User writerUser = generateUser("writerUser@email.com", "writerUser");
+
+        Question question = Question.builder()
+                .targetUser(targetUser)
+                .writerUser(writerUser)
+                .title("테스트 question")
+                .content("테스트 question content")
+                .build();
 
         // when
         question.addView();
         question.addView();
-        question.addView();
 
         // then
-        assertEquals(question.getView(), 3);
+        assertEquals(2, question.getView());
     }
 }

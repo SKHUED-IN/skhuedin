@@ -4,12 +4,11 @@ import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
+import com.skhuedin.skhuedin.security.AuthService;
 import com.skhuedin.skhuedin.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,10 +29,16 @@ import javax.validation.Valid;
 public class QuestionApiController {
 
     private final QuestionService questionService;
+    private final AuthService authService;
 
     @PostMapping("questions")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> save(@Valid @RequestBody QuestionSaveRequestDto requestDto) {
+
+        if (!authService.isSameUser(requestDto.getWriterUserId())) {
+            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+        }
+
         Long saveId = questionService.save(requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -49,8 +54,7 @@ public class QuestionApiController {
 
     @GetMapping("users/{targetUserId}/questions")
     public ResponseEntity<? extends BasicResponse> findByTargetId(
-            @PathVariable("targetUserId") Long id,
-            @PageableDefault(sort = "lastModifiedDate", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PathVariable("targetUserId") Long id, Pageable pageable) {
 
         Page<QuestionMainResponseDto> questions = questionService.findByTargetUserId(id, pageable);
 
@@ -61,6 +65,11 @@ public class QuestionApiController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("questionId") Long id,
                                                           @Valid @RequestBody QuestionSaveRequestDto updateDto) {
+
+        if (!authService.isSameUser(updateDto.getWriterUserId())) {
+            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+        }
+
         Long questionId = questionService.update(id, updateDto);
         QuestionMainResponseDto responseDto = questionService.findById(questionId);
 
@@ -70,6 +79,13 @@ public class QuestionApiController {
     @DeleteMapping("questions/{questionId}")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("questionId") Long id) {
+
+        QuestionMainResponseDto responseDto = questionService.findById(id);
+
+        if (!authService.isSameUser(responseDto.getWriterUser().getId())) {
+            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+        }
+
         questionService.delete(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -78,6 +94,6 @@ public class QuestionApiController {
     @PostMapping("questions/{questionId}/views")
     public ResponseEntity<? extends BasicResponse> addView(@PathVariable("questionId") Long id) {
         questionService.addView(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(id + " 게시물의 조회수가 증가하였습니다."));
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -59,8 +59,8 @@ public class UserService {
 
         Optional<Blog> blogOptional = blogRepository.findByUserId(id);
         List<Comment> comments = commentRepository.findByWriterUserId(id);
-        List<Question> questions = questionRepository.findQuestionByUserId(id);
-        List<Question> targetQuestions = questionRepository.findQuestionByTargetUserId(id);
+        List<Question> questions = questionRepository.findByWriterUserId(id);
+        List<Question> targetQuestions = questionRepository.findByTargetUserId(id);
 
         deleteComments(comments);
         deleteQuestions(questions);

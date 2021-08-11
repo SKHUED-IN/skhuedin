@@ -13,6 +13,8 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @DataJpaTest
 @Sql("/truncate.sql")
 class FollowRepositoryTest {
@@ -63,7 +65,7 @@ class FollowRepositoryTest {
         List<Follow> follows = followRepository.findByToUserId(toUser.getId());
 
         // then
-        Assertions.assertEquals(2, follows.size());
+        assertEquals(2, follows.size());
     }
 
     @Test
@@ -89,7 +91,7 @@ class FollowRepositoryTest {
         List<Follow> follows = followRepository.findByFromUserId(fromUser.getId());
 
         // then
-        Assertions.assertEquals(2, follows.size());
+        assertEquals(2, follows.size());
     }
 
     @Test
@@ -111,9 +113,9 @@ class FollowRepositoryTest {
         Follow findFollow = followRepository.findByFromUserIdAndToUserId(fromUser.getId(), toUser.getId()).get();
 
         // then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(fromUser, findFollow.getFromUser()),
-                () -> Assertions.assertEquals(toUser, findFollow.getToUser())
+        assertAll(
+                () -> assertEquals(fromUser, findFollow.getFromUser()),
+                () -> assertEquals(toUser, findFollow.getToUser())
         );
     }
 }

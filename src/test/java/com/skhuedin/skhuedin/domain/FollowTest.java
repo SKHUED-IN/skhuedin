@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class FollowTest {
 
     static User generateUser(String email, String name) {
@@ -35,9 +37,9 @@ class FollowTest {
                 .build();
 
         // then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(fromUser, follow.getFromUser()),
-                () -> Assertions.assertEquals(toUser, follow.getToUser())
+        assertAll(
+                () -> assertEquals(fromUser, follow.getFromUser()),
+                () -> assertEquals(toUser, follow.getToUser())
         );
     }
 }

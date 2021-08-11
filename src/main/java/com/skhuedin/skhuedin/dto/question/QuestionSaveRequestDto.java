@@ -51,7 +51,7 @@ public class QuestionSaveRequestDto {
                 .title(this.title)
                 .content(this.content)
                 .status(this.status)
-                .fix(this.fix)
+                .status(this.fix)
                 .build();
     }
 }

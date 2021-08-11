@@ -61,8 +61,6 @@ class CommentRepositoryTest {
                 .writerUser(writerUser)
                 .title("질문 1")
                 .content("질문1의 질문 내용")
-                .status(false)
-                .fix(false)
                 .build();
 
         questionRepository.save(question);
