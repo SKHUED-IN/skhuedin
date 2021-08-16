@@ -3,8 +3,6 @@ package com.skhuedin.skhuedin.controller.admin.api;
 import com.skhuedin.skhuedin.controller.admin.form.BannerForm;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
-import com.skhuedin.skhuedin.infra.MyRole;
-import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.BannerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +28,6 @@ public class AdminBannerApiController {
 
     private final BannerService bannerService;
 
-    @MyRole(role = Role.ADMIN)
     @PostMapping("banners")
     public ResponseEntity<? extends BasicResponse> save(@ModelAttribute BannerForm bannerForm) throws IOException {
 
@@ -40,21 +37,18 @@ public class AdminBannerApiController {
                 .body(new CommonResponse<>(bannerService.findById(saveId)));
     }
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("banners")
     public ResponseEntity<? extends BasicResponse> findAll(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(bannerService.findAll(pageable)));
     }
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("banners/{bannerId}")
     public ResponseEntity<? extends BasicResponse> findById(@PathVariable Long bannerId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(bannerService.findById(bannerId)));
     }
 
-    @MyRole(role = Role.ADMIN)
     @PutMapping("banners/{bannerId}")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable Long bannerId,
                                                           @ModelAttribute BannerForm bannerForm) throws IOException {
@@ -63,7 +57,6 @@ public class AdminBannerApiController {
                 .body(new CommonResponse<>(bannerService.findById(bannerId)));
     }
 
-    @MyRole(role = Role.ADMIN)
     @DeleteMapping("banners/{bannerId}")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable Long bannerId) {
         bannerService.delete(bannerId);

@@ -1,9 +1,13 @@
-package com.skhuedin.skhuedin.social.kakao;
+package com.skhuedin.skhuedin.social.dto.kakao;
 
+import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.user.Role;
+import com.skhuedin.skhuedin.domain.user.User;
+import com.skhuedin.skhuedin.social.dto.UserInfo;
 import lombok.Data;
 
 @Data
-public class KakaoProfile {
+public class KakaoUserInfo implements UserInfo {
 
     private Integer id;
     private String connected_at;
@@ -38,9 +42,20 @@ public class KakaoProfile {
             private Boolean is_default_image;
         }
     }
+
+    @Override
+    public User toEntity() {
+        return User.builder()
+                .email(this.kakao_account.email)
+                .name(this.properties.nickname)
+                .provider(Provider.KAKAO)
+                .userImageUrl(this.kakao_account.profile.profile_image_url)
+                .role(Role.ROLE_USER)
+                .build();
+    }
+
+    @Override
+    public String getEmail() {
+        return this.kakao_account.email;
+    }
 }
-
-
-
-
-

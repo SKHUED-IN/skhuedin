@@ -3,8 +3,6 @@ package com.skhuedin.skhuedin.controller.admin.api;
 import com.skhuedin.skhuedin.controller.response.BasicResponse;
 import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.category.CategoryRequestDto;
-import com.skhuedin.skhuedin.infra.MyRole;
-import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminCategoryApiController {
     private final CategoryService categoryService;
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("categories")
     public ResponseEntity<? extends BasicResponse> categories() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(categoryService.findAll()));
     }
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("category")
     public ResponseEntity<? extends BasicResponse> getCategory(
             Pageable pageable,
@@ -49,35 +45,30 @@ public class AdminCategoryApiController {
         }
     }
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("category/{categoryId}")
     public ResponseEntity<? extends BasicResponse> getCategory(@PathVariable("categoryId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(categoryService.findByIdByAdmin(id)));
     }
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("category/up/{categoryId}")
     public ResponseEntity<? extends BasicResponse> upCategory(@PathVariable("categoryId") Long id) {
         categoryService.addWeight(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @MyRole(role = Role.ADMIN)
     @GetMapping("category/down/{categoryId}")
     public ResponseEntity<? extends BasicResponse> downCategory(@PathVariable("categoryId") Long id) {
         categoryService.subtractWeight(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @MyRole(role = Role.ADMIN)
     @PostMapping("category")
     public ResponseEntity<? extends BasicResponse> createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
         categoryService.save(categoryRequestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @MyRole(role = Role.ADMIN)
     @DeleteMapping("category/{categoryId}")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("categoryId") Long id) {
         categoryService.delete(id);

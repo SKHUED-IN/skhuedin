@@ -4,7 +4,7 @@ import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Category;
 import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,11 +43,8 @@ class PostsRepositoryTest {
     void beforeEach() {
         User user = User.builder()
                 .email("user@email.com")
-                .password("1234")
                 .name("user")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 

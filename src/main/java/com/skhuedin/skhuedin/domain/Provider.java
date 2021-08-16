@@ -6,5 +6,4 @@ public enum Provider {
     KAKAO,
     NAVER,
     GOOGLE
-
 }

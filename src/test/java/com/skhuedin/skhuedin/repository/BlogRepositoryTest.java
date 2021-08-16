@@ -3,7 +3,7 @@ package com.skhuedin.skhuedin.repository;
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Posts;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -77,21 +77,15 @@ class BlogRepositoryTest {
 
         User user1 = User.builder()
                 .email("user1@email.com")
-                .password("1234")
                 .name("user1")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
         User user2 = User.builder()
                 .email("user2@email.com")
-                .password("1234")
                 .name("user2")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2021")
                 .provider(Provider.SELF)
                 .build();
 
@@ -128,21 +122,15 @@ class BlogRepositoryTest {
 
         User user1 = User.builder()
                 .email("user1@email.com")
-                .password("1234")
                 .name("user1")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2020")
                 .provider(Provider.SELF)
                 .build();
 
         User user2 = User.builder()
                 .email("user2@email.com")
-                .password("1234")
                 .name("user2")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2019")
                 .provider(Provider.SELF)
                 .build();
 
@@ -235,11 +223,8 @@ class BlogRepositoryTest {
     User generateUser(int index) {
         return User.builder()
                 .email("user" + index + "@email.com")
-                .password("1234")
                 .name("user" + index)
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
     }

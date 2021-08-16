@@ -3,7 +3,7 @@ package com.skhuedin.skhuedin.service;
 import com.skhuedin.skhuedin.domain.Blog;
 import com.skhuedin.skhuedin.domain.Category;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
 import com.skhuedin.skhuedin.repository.BlogRepository;
@@ -47,11 +47,8 @@ class PostsServiceTest {
     void beforeEach() {
         User user = User.builder()
                 .email("user@email.com")
-                .password("1234")
                 .name("user")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 

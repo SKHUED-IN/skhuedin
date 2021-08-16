@@ -2,7 +2,7 @@ package com.skhuedin.skhuedin.dto.comment;
 
 import com.skhuedin.skhuedin.domain.Comment;
 import com.skhuedin.skhuedin.domain.Question;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

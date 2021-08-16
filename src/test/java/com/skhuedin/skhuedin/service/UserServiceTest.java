@@ -1,11 +1,11 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.Role;
+import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.user.UserAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
-import com.skhuedin.skhuedin.infra.Role;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Sql("/truncate.sql")
@@ -37,10 +41,7 @@ class UserServiceTest {
         user = User.builder()
                 .name("홍길동")
                 .email("hong@email.com")
-                .password("1234")
                 .userImageUrl("/img")
-                .entranceYear("2016")
-                .graduationYear("2022")
                 .provider(Provider.KAKAO)
                 .build();
     }
@@ -53,10 +54,7 @@ class UserServiceTest {
         User user = User.builder()
                 .name("홍길동")
                 .email("hong@email.com")
-                .password("1234")
                 .userImageUrl("/img")
-                .entranceYear("2016")
-                .graduationYear("2022")
                 .provider(Provider.KAKAO)
                 .build();
 
@@ -82,10 +80,7 @@ class UserServiceTest {
         User user = User.builder()
                 .name("홍길동")
                 .email("hong@email.com")
-                .password("1234")
                 .userImageUrl("/img")
-                .entranceYear("2012")
-                .graduationYear("2013")
                 .provider(Provider.KAKAO)
                 .build();
 
@@ -182,7 +177,7 @@ class UserServiceTest {
 
         // when
         PageRequest pageRequest = PageRequest.of(0, 5);
-        Page<UserAdminMainResponseDto> users = userService.findByUserRole(pageRequest, "USER");
+        Page<UserAdminMainResponseDto> users = userService.findByUserRole(pageRequest, Role.ROLE_USER);
 
         // then
         assertAll(
@@ -200,10 +195,8 @@ class UserServiceTest {
                 .email("user" + index + "@email.com")
                 .name("user" + index)
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
     }
 

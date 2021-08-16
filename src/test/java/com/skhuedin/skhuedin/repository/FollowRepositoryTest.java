@@ -2,7 +2,7 @@ package com.skhuedin.skhuedin.repository;
 
 import com.skhuedin.skhuedin.domain.Follow;
 import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,41 +35,29 @@ class FollowRepositoryTest {
     void beforeEach() {
         toUser = User.builder()
                 .email("target@email.com")
-                .password("1234")
                 .name("toUser")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
         fromUser1 = User.builder()
                 .email("target@email.com")
-                .password("1234")
                 .name("fromUser1")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
         fromUser2 = User.builder()
                 .email("target@email.com")
-                .password("1234")
                 .name("fromUser2")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
         fromUser3 = User.builder()
                 .email("target@email.com")
-                .password("1234")
                 .name("fromUser3")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 

@@ -2,7 +2,7 @@ package com.skhuedin.skhuedin.repository;
 
 import com.skhuedin.skhuedin.domain.Provider;
 import com.skhuedin.skhuedin.domain.Question;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,21 +38,15 @@ class QuestionRepositoryTest {
     void beforeEach() {
         targetUser = User.builder()
                 .email("target@email.com")
-                .password("1234")
                 .name("target")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
         writerUser = User.builder()
                 .email("writer@email.com")
-                .password("1234")
                 .name("writer")
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
 
@@ -145,11 +136,8 @@ class QuestionRepositoryTest {
     User generateUser(int index) {
         return User.builder()
                 .email("user" + index + "@email.com")
-                .password("1234")
                 .name("user" + index)
                 .userImageUrl("/img")
-                .graduationYear("2016")
-                .entranceYear("2022")
                 .provider(Provider.SELF)
                 .build();
     }

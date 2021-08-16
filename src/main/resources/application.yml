@@ -7,13 +7,16 @@ spring:
         - local
         - local-resources
         - real-oauth
+        - real-jwt
       real1:
         - real1
         - real-db
         - real-resources
         - real-oauth
+        - real-jwt
       real2:
         - real2
         - real-db
         - real-resources
         - real-oauth
+        - real-jwt

@@ -5,13 +5,13 @@ import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
 import com.skhuedin.skhuedin.dto.posts.SuggestionsSaveRequestDto;
-import com.skhuedin.skhuedin.infra.MyRole;
 import com.skhuedin.skhuedin.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,8 +30,8 @@ public class PostsApiController {
 
     private final PostsService postsService;
 
-    @MyRole
     @PostMapping("posts")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> save(@Valid @RequestBody PostsSaveRequestDto requestDto) {
         Long saveId = postsService.save(requestDto);
 
@@ -46,8 +46,8 @@ public class PostsApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @MyRole
     @PutMapping("posts/{postsId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> update(@PathVariable("postsId") Long id,
                                                           @Valid @RequestBody PostsSaveRequestDto updateDto) {
         Long postsId = postsService.update(id, updateDto);
@@ -56,8 +56,8 @@ public class PostsApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @MyRole
     @DeleteMapping("posts/{postsId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> delete(@PathVariable("postsId") Long id) {
         postsService.delete(id);
 
@@ -71,8 +71,8 @@ public class PostsApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(posts));
     }
 
-    @MyRole
     @PostMapping("suggestions")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> saveSuggestions(
             @RequestBody SuggestionsSaveRequestDto requestDto) {
 

@@ -1,7 +1,7 @@
 package com.skhuedin.skhuedin.service;
 
 import com.skhuedin.skhuedin.domain.Question;
-import com.skhuedin.skhuedin.domain.User;
+import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
