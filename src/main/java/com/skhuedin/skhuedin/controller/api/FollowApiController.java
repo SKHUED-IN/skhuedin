@@ -5,20 +5,20 @@ import com.skhuedin.skhuedin.controller.response.CommonResponse;
 import com.skhuedin.skhuedin.dto.follow.FollowDeleteRequestDto;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;
 import com.skhuedin.skhuedin.dto.follow.FollowSaveRequestDto;
+import com.skhuedin.skhuedin.security.AuthService;
 import com.skhuedin.skhuedin.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -27,9 +27,16 @@ import java.util.List;
 public class FollowApiController {
 
     private final FollowService followService;
+    private final AuthService authService;
 
     @PostMapping("follows")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> save(@RequestBody FollowSaveRequestDto requestDto) {
+
+        if (!authService.isSameUser(requestDto.getFromUserId())) {
+            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+        }
+
         Long saveId = followService.save(requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -43,39 +50,29 @@ public class FollowApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
     }
 
-    @GetMapping("follows")
-    public ResponseEntity<? extends BasicResponse> findAll() {
-        List<FollowMainResponseDto> follows = followService.findAll();
-
-        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(follows));
-    }
-
-    @PutMapping("follows/{followId}")
-    public ResponseEntity<? extends BasicResponse> update(@PathVariable("followId") Long id,
-                                                          @Valid @RequestBody FollowSaveRequestDto updateDto) {
-        Long blogId = followService.update(id, updateDto);
-        FollowMainResponseDto responseDto = followService.findById(blogId);
-
-        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(responseDto));
-    }
-
     @DeleteMapping("follows")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<? extends BasicResponse> delete(@RequestBody FollowDeleteRequestDto requestDto) {
+
+        if (!authService.isSameUser(requestDto.getFromUserId())) {
+            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+        }
+
         followService.delete(requestDto);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("follows/to-user/{toUserId}")
-    public ResponseEntity<? extends BasicResponse> findByToUserId(@PathVariable("toUserId") Long toUserId) {
-        List<FollowMainResponseDto> follows = followService.findByToUserId(toUserId);
+    @GetMapping("follows/from-user/{fromUserId}")
+    public ResponseEntity<? extends BasicResponse> findByFromUserId(@PathVariable("fromUserId") Long fromUserId) {
+        List<FollowMainResponseDto> follows = followService.findByFromUserId(fromUserId);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(follows));
     }
 
-    @GetMapping("follows/from-user/{fromUserId}")
-    public ResponseEntity<? extends BasicResponse> findByFromUserId(@PathVariable("fromUserId") Long fromUserId) {
-        List<FollowMainResponseDto> follows = followService.findByFromUserId(fromUserId);
+    @GetMapping("follows/to-user/{toUserId}")
+    public ResponseEntity<? extends BasicResponse> findByToUserId(@PathVariable("toUserId") Long toUserId) {
+        List<FollowMainResponseDto> follows = followService.findByToUserId(toUserId);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(follows));
     }

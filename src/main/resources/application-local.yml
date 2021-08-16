@@ -1,6 +1,7 @@
 spring:
-  console:
-    enabled: true
+  h2:
+    console:
+      enabled: true
 
   datasource:
     hikari:

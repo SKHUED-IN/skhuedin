@@ -12,22 +12,23 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class FollowSaveRequestDto {
 
-    @NotNull(message = "toUser의 id는 null이 될 수 없습니다.")
-    private Long toUserId;
-
     @NotNull(message = "fromUser의 id는 null이 될 수 없습니다.")
     private Long fromUserId;
 
+
+    @NotNull(message = "toUser의 id는 null이 될 수 없습니다.")
+    private Long toUserId;
+
     @Builder
-    public FollowSaveRequestDto(Long toUserId, Long fromUserId) {
-        this.toUserId = toUserId;
+    public FollowSaveRequestDto(Long fromUserId, Long toUserId) {
         this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
     }
 
-    public Follow toEntity(User toUser, User fromUser) {
+    public Follow toEntity(User fromUser, User toUser) {
         return Follow.builder()
-                .toUser(toUser)
                 .fromUser(fromUser)
+                .toUser(toUser)
                 .build();
     }
 }

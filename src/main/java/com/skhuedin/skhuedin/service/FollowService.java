@@ -25,43 +25,17 @@ public class FollowService {
     @Transactional
     public Long save(FollowSaveRequestDto requestDto) {
 
-        if (followRepository.existsByToUserIdAndFromUserId(requestDto.getToUserId(), requestDto.getFromUserId())) {
-            return followRepository.findByToUserIdAndFromUserId(
-                    requestDto.getToUserId(),
-                    requestDto.getFromUserId())
-                    .getId();
+        Follow follow = followRepository.findByFromUserIdAndToUserId(requestDto.getFromUserId(), requestDto.getToUserId())
+                .orElse(null);
+
+        if (follow != null) {
+            return follow.getId();
         }
 
         User toUser = getUser(requestDto.getToUserId());
         User fromUser = getUser(requestDto.getFromUserId());
 
-        return followRepository.save(requestDto.toEntity(toUser, fromUser)).getId();
-    }
-
-    @Transactional
-    public Long update(Long id, FollowSaveRequestDto requestDto) {
-        Follow follow = getFollow(id);
-        User toUser = getUser(requestDto.getToUserId());
-        User fromUser = getUser(requestDto.getFromUserId());
-
-        follow.UpdateFollow(requestDto.toEntity(toUser, fromUser));
-
-        return follow.getId();
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        Follow follow = getFollow(id);
-        followRepository.delete(follow);
-    }
-
-    @Transactional
-    public void delete(FollowDeleteRequestDto requestDto) {
-        if (followRepository.existsByToUserIdAndFromUserId(requestDto.getToUserId(), requestDto.getFromUserId())) {
-            Follow follow = followRepository.findByToUserIdAndFromUserId(
-                    requestDto.getToUserId(), requestDto.getFromUserId());
-            followRepository.delete(follow);
-        }
+        return followRepository.save(requestDto.toEntity(fromUser, toUser)).getId();
     }
 
     public FollowMainResponseDto findById(Long id) {
@@ -70,8 +44,9 @@ public class FollowService {
         return new FollowMainResponseDto(follow);
     }
 
-    public List<FollowMainResponseDto> findAll() {
-        return followRepository.findAll().stream()
+    public List<FollowMainResponseDto> findByFromUserId(Long fromUserId) {
+        return followRepository.findByFromUserId(fromUserId)
+                .stream()
                 .map(follow -> new FollowMainResponseDto(follow))
                 .collect(Collectors.toList());
     }
@@ -83,13 +58,15 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    public List<FollowMainResponseDto> findByFromUserId(Long fromUserId) {
-        return followRepository.findByFromUserId(fromUserId)
-                .stream()
-                .map(follow -> new FollowMainResponseDto(follow))
-                .collect(Collectors.toList());
+    @Transactional
+    public void delete(FollowDeleteRequestDto requestDto) {
+        Follow follow = followRepository.findByFromUserIdAndToUserId(requestDto.getFromUserId(), requestDto.getToUserId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 follow 입니다."));
+
+        followRepository.delete(follow);
     }
 
+    /* private 메소드 */
     private Follow getFollow(Long id) {
         return followRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 follow 가 존재하지 않습니다. id=" + id));

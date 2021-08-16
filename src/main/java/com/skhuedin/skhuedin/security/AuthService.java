@@ -8,6 +8,7 @@ import com.skhuedin.skhuedin.repository.UserRepository;
 import com.skhuedin.skhuedin.social.dto.UserInfo;
 import com.skhuedin.skhuedin.social.service.GoogleService;
 import com.skhuedin.skhuedin.social.service.KakaoService;
+import com.skhuedin.skhuedin.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,5 +59,19 @@ public class AuthService {
 
         user.update(userInfo.toEntity());
         return new TokenMainResponseDto(new UserMainResponseDto(user), jwt, true);
+    }
+
+    public boolean isSameUser(Long userId) {
+        String email = SecurityUtil.getCurrentEmail().orElseThrow(() ->
+                new RuntimeException("security context에 인증 정보가 없습니다."));
+
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 user id 입니다. id=" + userId));
+
+        if (email.equals(user.getEmail())) {
+            return true;
+        }
+
+        return false;
     }
 }
