@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.service;
 
-import com.skhuedin.skhuedin.domain.Question;
+import com.skhuedin.skhuedin.domain.question.Question;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionAdminMainResponseDto;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,6 +39,12 @@ public class QuestionService {
         User writerUser = getUser(requestDto.getWriterUserId());
 
         Question question = getQuestion(id);
+
+        if (question.getWriterUser().getId() != writerUser.getId() ||
+                question.getWriterUser().getId() != requestDto.getWriterUserId()) {
+            throw new RuntimeException("일치하지 않는 user 정보입니다.");
+        }
+
         question.updateQuestion(requestDto.toEntity(targetUser, writerUser));
 
         return question.getId();
@@ -57,17 +62,12 @@ public class QuestionService {
         return new QuestionMainResponseDto(question, comments);
     }
 
-    public List<QuestionMainResponseDto> findAll() {
-        return questionRepository.findAll().stream()
-                .map(question -> new QuestionMainResponseDto(question)).collect(Collectors.toList());
-    }
-
     public Page<QuestionMainResponseDto> findByTargetUserId(Long id, Pageable pageable) {
         Page<Question> questions = questionRepository.findByTargetUserId(id, pageable);
         return questions.map(question -> {
                     List<CommentMainResponseDto> comments = commentService.findByQuestionId(question.getId());
                     return new QuestionMainResponseDto(question, comments);
-                });
+        });
     }
 
     @Transactional
@@ -83,12 +83,12 @@ public class QuestionService {
     }
 
     public Page<QuestionAdminMainResponseDto> findByWriterUserName(Pageable pageable, String writerUserName) {
-        return questionRepository.findWriterUserName(pageable, writerUserName)
+        return questionRepository.findByWriterUserName(pageable, writerUserName)
                 .map(question -> new QuestionAdminMainResponseDto(question));
     }
 
     public Page<QuestionAdminMainResponseDto> findByTargetUserName(Pageable pageable, String targetUserName) {
-        return questionRepository.findTargetUserName(pageable, targetUserName)
+        return questionRepository.findByTargetUserName(pageable, targetUserName)
                 .map(question -> new QuestionAdminMainResponseDto(question));
     }
 

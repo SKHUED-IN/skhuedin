@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.social.dto.kakao;
 
-import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.social.dto.UserInfo;

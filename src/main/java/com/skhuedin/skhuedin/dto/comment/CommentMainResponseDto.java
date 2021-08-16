@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.dto.comment;
 
-import com.skhuedin.skhuedin.domain.Comment;
+import com.skhuedin.skhuedin.domain.comment.Comment;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import lombok.Getter;
 

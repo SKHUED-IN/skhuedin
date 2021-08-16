@@ -1,8 +1,8 @@
 package com.skhuedin.skhuedin.service;
 
-import com.skhuedin.skhuedin.domain.Comment;
-import com.skhuedin.skhuedin.domain.Provider;
-import com.skhuedin.skhuedin.domain.Question;
+import com.skhuedin.skhuedin.domain.comment.Comment;
+import com.skhuedin.skhuedin.domain.user.Provider;
+import com.skhuedin.skhuedin.domain.question.Question;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
@@ -65,8 +65,6 @@ class CommentServiceTest {
                 .writerUser(writerUser)
                 .title("질문 1")
                 .content("질문1의 질문 내용")
-                .status(false)
-                .fix(false)
                 .build();
 
         questionRepository.save(question);

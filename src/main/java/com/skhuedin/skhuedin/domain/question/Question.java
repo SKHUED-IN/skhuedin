@@ -1,5 +1,6 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.skhuedin.domain.question;
 
+import com.skhuedin.skhuedin.domain.BaseEntity;
 import com.skhuedin.skhuedin.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,20 +38,32 @@ public class Question extends BaseEntity {
 
     private String content;
 
-    private Boolean status;
+    private Boolean status; // false => 보이기, true => 숨기기
 
-    private Boolean fix;
+    private Boolean fix; // false => 상단 고정 x, true => 상단 고정 o
 
     private Integer view;
 
     @Builder
-    public Question(User targetUser, User writerUser, String title, String content, Boolean status, Boolean fix) {
+    public Question(User targetUser, User writerUser, String title,
+                    String content, Boolean status, Boolean fix) {
         this.targetUser = targetUser;
         this.writerUser = writerUser;
         this.title = title;
         this.content = content;
-        this.status = status;
-        this.fix = fix;
+
+        // TODO status 및 fix 용도 다시 한번 확인
+        if (status == null) {
+            this.status = false;
+        } else {
+            this.status = status;
+        }
+        if (fix == null) {
+            this.fix = false;
+        } else {
+            this.fix = fix;
+        }
+
         this.view = 0;
     }
 
@@ -61,14 +74,10 @@ public class Question extends BaseEntity {
         this.content = question.content;
         this.status = question.status;
         this.fix = question.fix;
-        this.view = question.view;
+        // this.view = question.view x => update 시 view는 반영 x 기존 값을 그대로 유지
     }
 
     public void addView() {
         this.view++;
-    }
-
-    public void updateStatus(Boolean status) {
-        this.status = status;
     }
 }

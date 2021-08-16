@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.repository;
 
-import com.skhuedin.skhuedin.domain.Comment;
+import com.skhuedin.skhuedin.domain.comment.Comment;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

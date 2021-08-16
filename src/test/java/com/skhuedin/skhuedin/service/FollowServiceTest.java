@@ -1,12 +1,11 @@
 package com.skhuedin.skhuedin.service;
 
-import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.follow.FollowDeleteRequestDto;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;
 import com.skhuedin.skhuedin.dto.follow.FollowSaveRequestDto;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Sql("/truncate.sql")
@@ -60,9 +63,9 @@ class FollowServiceTest {
         FollowMainResponseDto responseDto = followService.findById(followId);
 
         // then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(fromUserId, responseDto.getFromUser().getId()),
-                () -> Assertions.assertEquals(toUserId, responseDto.getToUser().getId())
+        assertAll(
+                () -> assertEquals(fromUserId, responseDto.getFromUser().getId()),
+                () -> assertEquals(toUserId, responseDto.getToUser().getId())
         );
     }
 
@@ -85,7 +88,7 @@ class FollowServiceTest {
         Long follow2Id = followService.save(requestDto2); // 기존에 동일한 id로 입력한다면 기존 것을 조회하여 반환
 
         // then
-        Assertions.assertEquals(follow1Id, follow2Id);
+        assertEquals(follow1Id, follow2Id);
     }
 
     @Test
@@ -106,9 +109,9 @@ class FollowServiceTest {
         FollowMainResponseDto responseDto = followService.findById(followId);
 
         // then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(fromUserId, responseDto.getFromUser().getId()),
-                () -> Assertions.assertEquals(toUserId, responseDto.getToUser().getId())
+        assertAll(
+                () -> assertEquals(fromUserId, responseDto.getFromUser().getId()),
+                () -> assertEquals(toUserId, responseDto.getToUser().getId())
         );
     }
 
@@ -117,7 +120,7 @@ class FollowServiceTest {
     void findByNotExistId() {
 
         // given & when & then
-        Assertions.assertThrows(IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> followService.findById(0L)
         );
     }
@@ -144,7 +147,7 @@ class FollowServiceTest {
         List<FollowMainResponseDto> follows = followService.findByFromUserId(fromUserId);
 
         // then
-        Assertions.assertEquals(2, follows.size());
+        assertEquals(2, follows.size());
     }
 
     @Test
@@ -170,7 +173,7 @@ class FollowServiceTest {
         List<FollowMainResponseDto> follows = followService.findByToUserId(toUserId);
 
         // then
-        Assertions.assertEquals(2, follows.size());
+        assertEquals(2, follows.size());
     }
 
     @Test
@@ -196,7 +199,7 @@ class FollowServiceTest {
         followService.delete(followDeleteRequestDto);
 
         // then
-        Assertions.assertThrows(IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> followService.findById(followId)
         );
     }
@@ -212,7 +215,7 @@ class FollowServiceTest {
                 .build();
 
         // when & then
-        Assertions.assertThrows(IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> followService.delete(requestDto)
         );
     }

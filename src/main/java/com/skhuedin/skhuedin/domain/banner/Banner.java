@@ -1,5 +1,7 @@
-package com.skhuedin.skhuedin.domain;
+package com.skhuedin.skhuedin.domain.banner;
 
+import com.skhuedin.skhuedin.domain.BaseEntity;
+import com.skhuedin.skhuedin.domain.UploadFile;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

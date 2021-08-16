@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.repository;
 
-import com.skhuedin.skhuedin.domain.Blog;
+import com.skhuedin.skhuedin.domain.blog.Blog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;

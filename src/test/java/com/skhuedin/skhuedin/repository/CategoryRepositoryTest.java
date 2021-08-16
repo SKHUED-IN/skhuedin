@@ -1,6 +1,6 @@
 package com.skhuedin.skhuedin.repository;
 
-import com.skhuedin.skhuedin.domain.Category;
+import com.skhuedin.skhuedin.domain.category.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

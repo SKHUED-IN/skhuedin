@@ -1,8 +1,7 @@
 package com.skhuedin.skhuedin.domain.user;
 
 import com.skhuedin.skhuedin.domain.BaseEntity;
-import com.skhuedin.skhuedin.domain.Blog;
-import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.blog.Blog;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,10 +1,14 @@
 package com.skhuedin.skhuedin.domain;
 
+import com.skhuedin.skhuedin.domain.follow.Follow;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class FollowTest {
 
@@ -33,9 +37,9 @@ class FollowTest {
                 .build();
 
         // then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(fromUser, follow.getFromUser()),
-                () -> Assertions.assertEquals(toUser, follow.getToUser())
+        assertAll(
+                () -> assertEquals(fromUser, follow.getFromUser()),
+                () -> assertEquals(toUser, follow.getToUser())
         );
     }
 }

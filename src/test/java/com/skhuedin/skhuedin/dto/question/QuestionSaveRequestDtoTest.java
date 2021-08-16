@@ -32,8 +32,6 @@ class QuestionSaveRequestDtoTest {
                 .writerUserId(null)
                 .title(null)
                 .content(stringBuilder.toString())
-                .status(null)
-                .fix(null)
                 .build();
 
         ArrayList<String> errorMessages = new ArrayList<>();

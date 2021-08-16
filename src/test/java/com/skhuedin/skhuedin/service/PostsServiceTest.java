@@ -1,8 +1,8 @@
 package com.skhuedin.skhuedin.service;
 
-import com.skhuedin.skhuedin.domain.Blog;
-import com.skhuedin.skhuedin.domain.Category;
-import com.skhuedin.skhuedin.domain.Provider;
+import com.skhuedin.skhuedin.domain.blog.Blog;
+import com.skhuedin.skhuedin.domain.category.Category;
+import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
