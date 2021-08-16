@@ -1,7 +1,7 @@
 package com.skhuedin.skhuedin.dto.blog;
 
 import com.skhuedin.skhuedin.domain.Blog;
-import com.skhuedin.skhuedin.domain.File;
+import com.skhuedin.skhuedin.domain.UploadFile;
 import com.skhuedin.skhuedin.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,10 +35,10 @@ public class BlogSaveRequestDto {
                 .build();
     }
 
-    public Blog toEntity(User user, File file) {
+    public Blog toEntity(User user, UploadFile UploadFile) {
         return Blog.builder()
                 .user(user)
-                .profile(file)
+                .uploadFile(UploadFile)
                 .content(this.content)
                 .build();
     }

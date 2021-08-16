@@ -15,7 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,13 +55,13 @@ class BlogServiceTest {
 
     @Test
     @DisplayName("dto 를 받아 blog 를 저장하고 조회하는 테스트")
-    void save() {
+    void save() throws IOException {
 
         // given
         BlogSaveRequestDto requestDto = generateBlog();
 
         // when
-        Long saveId = blogService.save(requestDto, 1L);
+        Long saveId = blogService.save(requestDto, generateFile());
         PageRequest pageRequest = PageRequest.of(0, 5);
         BlogMainResponseDto responseDto = blogService.findById(saveId, pageRequest);
 
@@ -80,13 +84,13 @@ class BlogServiceTest {
 
         // when & then
         assertThrows(IllegalArgumentException.class, () ->
-                blogService.save(requestDto, 1L)
+                blogService.save(requestDto, generateFile())
         );
     }
 
     @Test
     @DisplayName("blog 를 갱신하고 조회하는 테스트")
-    void update() {
+    void update() throws IOException {
 
         // given
         BlogSaveRequestDto requestDto = generateBlog();
@@ -97,8 +101,8 @@ class BlogServiceTest {
                 .build();
 
         // when
-        Long saveId = blogService.save(requestDto, 1L);
-        Long updateId = blogService.update(saveId, updateDto, 1L);
+        Long saveId = blogService.save(requestDto, generateFile());
+        Long updateId = blogService.update(updateDto, generateFile());
         PageRequest pageRequest = PageRequest.of(0, 5);
         BlogMainResponseDto responseDto = blogService.findById(updateId, pageRequest);
 
@@ -111,11 +115,11 @@ class BlogServiceTest {
 
     @Test
     @DisplayName("blog 를 삭제하는 테스트")
-    void delete() {
+    void delete() throws IOException {
 
         // given
         BlogSaveRequestDto requestDto = generateBlog();
-        Long saveId = blogService.save(requestDto, 1L);
+        Long saveId = blogService.save(requestDto, generateFile());
 
         // when
         blogService.delete(saveId);
@@ -138,13 +142,13 @@ class BlogServiceTest {
 
     @Test
     @DisplayName("blog의 목록을 paging하여 조회하는 테스트")
-    void findAll() {
+    void findAll() throws IOException {
 
         // given
         for (int i = 0; i < 10; i++) {
             User user = generateUser(i);
             BlogSaveRequestDto blogSaveRequestDto = generateBlog(user, i);
-            blogService.save(blogSaveRequestDto, 1L);
+            blogService.save(blogSaveRequestDto, generateFile());
         }
 
         // when
@@ -164,13 +168,13 @@ class BlogServiceTest {
 
     @Test
     @DisplayName("조회수 기준으로 paging 하여 조회하는 테스트")
-    void findAllOrderByPostsView() {
+    void findAllOrderByPostsView() throws IOException {
 
         // given
         for (int i = 0; i < 10; i++) {
             User user = generateUser(i);
             BlogSaveRequestDto blogSaveRequestDto = generateBlog(user, i);
-            blogService.save(blogSaveRequestDto, 1L);
+            blogService.save(blogSaveRequestDto, generateFile());
         }
 
         // when
@@ -190,11 +194,11 @@ class BlogServiceTest {
 
     @Test
     @DisplayName("user id를 활용하여 blog의 존재 여부를 확인하는 테스트")
-    void existsByUserId() {
+    void existsByUserId() throws IOException {
 
         // given
         BlogSaveRequestDto blogSaveRequestDto = generateBlog();
-        blogService.save(blogSaveRequestDto, 1L);
+        blogService.save(blogSaveRequestDto, generateFile());
 
         Long userId = user.getId();
 
@@ -207,11 +211,11 @@ class BlogServiceTest {
 
     @Test
     @DisplayName("user id를 활용하여 blog를 조회하는 테스트")
-    void findByUserId() {
+    void findByUserId() throws IOException {
         
         // given
         BlogSaveRequestDto blogSaveRequestDto = generateBlog();
-        blogService.save(blogSaveRequestDto, 1L);
+        blogService.save(blogSaveRequestDto, generateFile());
 
         Long userId = user.getId();
 
@@ -257,6 +261,10 @@ class BlogServiceTest {
                 .userId(user.getId())
                 .content("저의 공간에 와주셔서 감사합니다." + index)
                 .build();
+    }
+
+    private MultipartFile generateFile() {
+        return new MockMultipartFile("file", "file".getBytes());
     }
 
     @AfterEach

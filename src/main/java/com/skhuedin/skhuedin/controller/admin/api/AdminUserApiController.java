@@ -27,7 +27,7 @@ public class AdminUserApiController {
     @GetMapping("users")
     public ResponseEntity<? extends BasicResponse> getUsers(
             Pageable pageable,
-            @RequestParam(name = "role") Role role,
+            @RequestParam(name = "role", defaultValue = "") Role role,
             @RequestParam(name = "username", defaultValue = "") String username) {
 
         if (username.isEmpty() && role != null) {

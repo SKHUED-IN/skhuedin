@@ -23,7 +23,6 @@ class PostsTest {
         Blog blog = Blog.builder()
                 .user(user)
                 .content("테스트 블로그 컨텐츠")
-                .profile(null)
                 .build();
 
         posts = Posts.builder()

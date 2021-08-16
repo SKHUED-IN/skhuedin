@@ -233,7 +233,6 @@ class BlogRepositoryTest {
         return Blog.builder()
                 .user(user)
                 .content(user.getName() + "의 책장 " + index)
-                .profile(null)
                 .build();
     }
 
