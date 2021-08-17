@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class QuestionApiController {
     public ResponseEntity<? extends BasicResponse> save(@Valid @RequestBody QuestionSaveRequestDto requestDto) {
 
         if (!authService.isSameUser(requestDto.getWriterUserId())) {
-            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+            throw new AccessDeniedException("동일하지 않은 유저 정보입니다.");
         }
 
         Long saveId = questionService.save(requestDto);
@@ -67,7 +68,7 @@ public class QuestionApiController {
                                                           @Valid @RequestBody QuestionSaveRequestDto updateDto) {
 
         if (!authService.isSameUser(updateDto.getWriterUserId())) {
-            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+            throw new AccessDeniedException("일치하지 않는 user 정보입니다.");
         }
 
         Long questionId = questionService.update(id, updateDto);
@@ -83,7 +84,7 @@ public class QuestionApiController {
         QuestionMainResponseDto responseDto = questionService.findById(id);
 
         if (!authService.isSameUser(responseDto.getWriterUser().getId())) {
-            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+            throw new AccessDeniedException("동일하지 않은 유저 정보입니다.");
         }
 
         questionService.delete(id);

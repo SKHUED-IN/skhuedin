@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuedin.skhuedin.domain.user.Provider;
 import com.skhuedin.skhuedin.domain.user.Role;
 import com.skhuedin.skhuedin.domain.user.User;
-import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
 import com.skhuedin.skhuedin.service.CommentService;
@@ -74,14 +73,6 @@ class QuestionApiControllerTest {
                 .content("테스트 question content")
                 .status(false)
                 .fix(false)
-                .build();
-    }
-
-    static CommentSaveRequestDto generateCommentSaveRequestDto(Long questionId, Long writerUserId) {
-        return CommentSaveRequestDto.builder()
-                .questionId(questionId)
-                .writerUserId(writerUserId)
-                .content("테스트 comment")
                 .build();
     }
 

@@ -9,6 +9,7 @@ import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.user.UserAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CommentRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
@@ -54,8 +55,7 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        User findUser = userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
+        User findUser = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         Optional<Blog> blogOptional = blogRepository.findByUserId(id);
         List<Comment> comments = commentRepository.findByWriterUserId(id);
@@ -97,8 +97,7 @@ public class UserService {
     }
 
     public UserMainResponseDto findById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
+        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         return new UserMainResponseDto(user);
     }
 
