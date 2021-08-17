@@ -5,6 +5,7 @@ import com.skhuedin.skhuedin.domain.question.Question;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import com.skhuedin.skhuedin.repository.CommentRepository;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
@@ -63,17 +64,14 @@ public class CommentService {
 
     /* private 메소드 */
     private Question getQuestion(Long id) {
-        return questionRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + id));
+        return questionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     private User getUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     private Comment getComment(Long id) {
-        return commentRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 comment 가 존재하지 않습니다. id=" + id));
+        return commentRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
