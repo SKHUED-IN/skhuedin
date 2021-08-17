@@ -5,6 +5,7 @@ import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.follow.FollowDeleteRequestDto;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;
 import com.skhuedin.skhuedin.dto.follow.FollowSaveRequestDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import com.skhuedin.skhuedin.repository.FollowRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,19 +62,17 @@ public class FollowService {
     @Transactional
     public void delete(FollowDeleteRequestDto requestDto) {
         Follow follow = followRepository.findByFromUserIdAndToUserId(requestDto.getFromUserId(), requestDto.getToUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 follow 입니다."));
+                .orElseThrow(EntityNotFoundException::new);
 
         followRepository.delete(follow);
     }
 
     /* private 메소드 */
     private Follow getFollow(Long id) {
-        return followRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 follow 가 존재하지 않습니다. id=" + id));
+        return followRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     private User getUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }

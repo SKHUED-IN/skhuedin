@@ -6,6 +6,7 @@ import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.follow.FollowDeleteRequestDto;
 import com.skhuedin.skhuedin.dto.follow.FollowMainResponseDto;
 import com.skhuedin.skhuedin.dto.follow.FollowSaveRequestDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +121,7 @@ class FollowServiceTest {
     void findByNotExistId() {
 
         // given & when & then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> followService.findById(0L)
         );
     }
@@ -199,7 +200,7 @@ class FollowServiceTest {
         followService.delete(followDeleteRequestDto);
 
         // then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> followService.findById(followId)
         );
     }
@@ -215,7 +216,7 @@ class FollowServiceTest {
                 .build();
 
         // when & then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> followService.delete(requestDto)
         );
     }
