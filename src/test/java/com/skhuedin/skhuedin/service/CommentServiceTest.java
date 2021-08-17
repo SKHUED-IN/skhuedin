@@ -6,6 +6,7 @@ import com.skhuedin.skhuedin.domain.question.Question;
 import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import com.skhuedin.skhuedin.repository.CommentRepository;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
@@ -101,7 +102,7 @@ class CommentServiceTest {
                 .build();
 
         // when & then
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(EntityNotFoundException.class, () ->
                 commentService.save(requestDto)
         );
     }
@@ -118,7 +119,7 @@ class CommentServiceTest {
                 .build();
 
         // when & then
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(EntityNotFoundException.class, () ->
                 commentService.save(requestDto)
         );
     }
@@ -160,7 +161,7 @@ class CommentServiceTest {
         Long saveId = commentService.save(requestDto);
 
         // when & then
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(EntityNotFoundException.class, () ->
                 commentService.update(saveId, updateDto)
         );
     }
@@ -179,7 +180,7 @@ class CommentServiceTest {
         Long saveId = commentService.save(requestDto);
 
         // when & then
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(EntityNotFoundException.class, () ->
                 commentService.update(saveId, updateDto)
         );
     }
@@ -204,7 +205,7 @@ class CommentServiceTest {
     void delete_false() {
 
         // given & when & then
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(EntityNotFoundException.class, () ->
                 commentService.delete(0L)
         );
     }
