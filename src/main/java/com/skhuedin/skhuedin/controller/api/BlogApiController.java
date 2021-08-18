@@ -46,10 +46,6 @@ public class BlogApiController {
             throw new AccessDeniedException("일치하지 않는 user 정보 입니다.");
         }
 
-        if (!blogService.existsByUserId(requestDto.getUserId())) {
-            throw new AccessDeniedException("일치하지 않는 user 정보 입니다.");
-        }
-
         Long saveId = blogService.save(requestDto, file);
 
         PageRequest pageRequest = PageRequest.of(0, 10);
@@ -66,8 +62,10 @@ public class BlogApiController {
     }
 
     @GetMapping("blogs")
-    public ResponseEntity<? extends BasicResponse> findAll(@RequestParam(value = "cmd", defaultValue = "") String cmd,
-                                                           Pageable pageable) {
+    public ResponseEntity<? extends BasicResponse> findAll(
+            @RequestParam(value = "cmd", defaultValue = "") String cmd,
+            Pageable pageable) {
+
         Page<BlogMainResponseDto> blogs;
         if (cmd.equals("view")) {
             blogs = blogService.findAllOrderByPostsView(pageable);
@@ -86,10 +84,6 @@ public class BlogApiController {
             BlogSaveRequestDto updateDto) throws NoSuchAlgorithmException, IOException {
 
         if (!authService.isSameUser(updateDto.getUserId())) {
-            throw new AccessDeniedException("일치하지 않는 user 정보 입니다.");
-        }
-
-        if (!blogService.existsByUserId(updateDto.getUserId())) {
             throw new AccessDeniedException("일치하지 않는 user 정보 입니다.");
         }
 

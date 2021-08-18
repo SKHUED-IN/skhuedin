@@ -89,14 +89,8 @@ public class BlogService {
                 .map(blog -> new BlogMainResponseDto(blog));
     }
 
-    public Boolean existsByUserId(Long userId) {
-        return blogRepository.existsByUserId(userId);
-    }
-
     public BlogMainResponseDto findByUserId(Long userId) {
-
         Blog blog = blogRepository.findByUserId(userId).orElseThrow(EntityNotFoundException::new);
-
         return new BlogMainResponseDto(blog);
     }
 

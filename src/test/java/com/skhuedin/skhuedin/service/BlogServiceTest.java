@@ -195,23 +195,6 @@ class BlogServiceTest {
     }
 
     @Test
-    @DisplayName("user id를 활용하여 blog의 존재 여부를 확인하는 테스트")
-    void existsByUserId() throws IOException {
-
-        // given
-        BlogSaveRequestDto blogSaveRequestDto = generateBlog();
-        blogService.save(blogSaveRequestDto, generateFile());
-
-        Long userId = user.getId();
-
-        // when
-        Boolean isBlog = blogService.existsByUserId(userId);
-
-        // then
-        assertTrue(isBlog);
-    }
-
-    @Test
     @DisplayName("user id를 활용하여 blog를 조회하는 테스트")
     void findByUserId() throws IOException {
         

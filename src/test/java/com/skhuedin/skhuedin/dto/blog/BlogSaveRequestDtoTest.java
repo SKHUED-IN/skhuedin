@@ -40,7 +40,7 @@ class BlogSaveRequestDtoTest {
 
         // given
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 1001; i++) {
+        for (int i = 0; i < 20001; i++) {
             stringBuilder.append(i);
         }
 
@@ -55,6 +55,6 @@ class BlogSaveRequestDtoTest {
 
         // then
         assertEquals(1, constraintViolations.size());
-        assertEquals("content의 size는 1000을 넘을 수 없습니다.", constraintViolations.iterator().next().getMessage());
+        assertEquals("content의 size는 20000을 넘을 수 없습니다.", constraintViolations.iterator().next().getMessage());
     }
 }
