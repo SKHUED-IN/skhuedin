@@ -47,7 +47,7 @@ public class BlogService {
     public Long update(BlogSaveRequestDto updateDto, MultipartFile file) throws IOException {
 
         User user = getUser(updateDto.getUserId());
-        Blog blog = user.getBlog();
+        Blog blog = blogRepository.findByUserEmail(user.getEmail()).orElseThrow(EntityNotFoundException::new);
 
         if (blog.getUploadFile() != null) {
             fileStore.removeFile(blog.getUploadFile().getStoreFileName());
