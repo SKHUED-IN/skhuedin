@@ -7,6 +7,7 @@ import com.skhuedin.skhuedin.dto.comment.CommentSaveRequestDto;
 import com.skhuedin.skhuedin.dto.question.QuestionAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,7 @@ class QuestionServiceTest {
         QuestionSaveRequestDto requestDto = generateQuestionSaveRequestDto(0L, 0L);
 
         // when & then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> questionService.save(requestDto)
         );
     }
@@ -159,7 +160,7 @@ class QuestionServiceTest {
                 .build();
 
         // when & then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> questionService.update(questionId, updateDto)
         );
     }
@@ -183,7 +184,7 @@ class QuestionServiceTest {
                 .build();
 
         // when & then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> questionService.update(0L, updateDto)
         );
     }
@@ -206,7 +207,7 @@ class QuestionServiceTest {
         questionService.delete(questionId);
 
         // then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> userService.findById(questionId)
         );
     }
@@ -216,7 +217,7 @@ class QuestionServiceTest {
     void deleteWithNotExistQuestion() {
 
         // given & when & then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> userService.findById(0L)
         );
     }
@@ -259,7 +260,7 @@ class QuestionServiceTest {
     void findByIdWithNotExistQuestion() {
 
         // given & when & then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> questionService.findById(0L)
         );
     }

@@ -6,8 +6,10 @@ import com.skhuedin.skhuedin.dto.comment.CommentMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionMainResponseDto;
 import com.skhuedin.skhuedin.dto.question.QuestionSaveRequestDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import com.skhuedin.skhuedin.repository.QuestionRepository;
 import com.skhuedin.skhuedin.repository.UserRepository;
+import com.skhuedin.skhuedin.security.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
     private final CommentService commentService;
+    private final AuthService authService;
 
     @Transactional
     public Long save(QuestionSaveRequestDto requestDto) {
@@ -39,11 +42,6 @@ public class QuestionService {
         User writerUser = getUser(requestDto.getWriterUserId());
 
         Question question = getQuestion(id);
-
-        if (question.getWriterUser().getId() != writerUser.getId() ||
-                question.getWriterUser().getId() != requestDto.getWriterUserId()) {
-            throw new RuntimeException("일치하지 않는 user 정보입니다.");
-        }
 
         question.updateQuestion(requestDto.toEntity(targetUser, writerUser));
 
@@ -94,12 +92,10 @@ public class QuestionService {
 
     /* private 메소드 */
     private Question getQuestion(Long id) {
-        return questionRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 question 이 존재하지 않습니다. id=" + id));
+        return questionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     private User getUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 user 가 존재하지 않습니다. id=" + id));
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }

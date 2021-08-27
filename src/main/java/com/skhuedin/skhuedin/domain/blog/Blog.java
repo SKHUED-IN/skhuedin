@@ -35,7 +35,7 @@ public class Blog extends BaseEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     private String content;
@@ -47,22 +47,16 @@ public class Blog extends BaseEntity {
     private UploadFile uploadFile;
 
     @Builder
-    public Blog(User user, UploadFile uploadFile, String content, List<Posts> posts) {
+    public Blog(User user, UploadFile uploadFile, String content) {
         this.user = user;
         this.user.addBlog(this);
         this.uploadFile = uploadFile;
         this.content = content;
-        if (posts != null) {
-            this.posts = posts;
-        }
     }
 
     public void updateBlog(Blog blog) {
-        this.user = blog.user;
-        blog.user.addBlog(this);
         this.uploadFile = blog.uploadFile;
         this.content = blog.content;
-        this.posts = blog.posts;
     }
 
     public void addPosts(Posts posts) {

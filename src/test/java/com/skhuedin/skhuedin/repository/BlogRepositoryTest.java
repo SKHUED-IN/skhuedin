@@ -93,7 +93,7 @@ class BlogRepositoryTest {
         userRepository.save(user2);
 
         Blog blog1 = generateBlog(user1, 1);
-        Blog blog2 = generateBlog(user1, 2);
+        Blog blog2 = generateBlog(user2, 2);
 
         blogRepository.save(blog1);
         blogRepository.save(blog2);
@@ -138,7 +138,7 @@ class BlogRepositoryTest {
         userRepository.save(user2);
 
         Blog blog1 = generateBlog(user1, 1);
-        Blog blog2 = generateBlog(user1, 2);
+        Blog blog2 = generateBlog(user2, 2);
 
         blogRepository.save(blog1);
         blogRepository.save(blog2);

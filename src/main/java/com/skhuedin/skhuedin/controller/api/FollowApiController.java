@@ -10,6 +10,7 @@ import com.skhuedin.skhuedin.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -31,10 +33,10 @@ public class FollowApiController {
 
     @PostMapping("follows")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity<? extends BasicResponse> save(@RequestBody FollowSaveRequestDto requestDto) {
+    public ResponseEntity<? extends BasicResponse> save(@Valid @RequestBody FollowSaveRequestDto requestDto) {
 
         if (!authService.isSameUser(requestDto.getFromUserId())) {
-            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+            throw new AccessDeniedException("동일하지 않은 유저 정보입니다.");
         }
 
         Long saveId = followService.save(requestDto);
@@ -52,10 +54,10 @@ public class FollowApiController {
 
     @DeleteMapping("follows")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity<? extends BasicResponse> delete(@RequestBody FollowDeleteRequestDto requestDto) {
+    public ResponseEntity<? extends BasicResponse> delete(@Valid @RequestBody FollowDeleteRequestDto requestDto) {
 
         if (!authService.isSameUser(requestDto.getFromUserId())) {
-            throw new RuntimeException("동일하지 않은 유저 정보입니다.");
+            throw new AccessDeniedException("동일하지 않은 유저 정보입니다.");
         }
 
         followService.delete(requestDto);

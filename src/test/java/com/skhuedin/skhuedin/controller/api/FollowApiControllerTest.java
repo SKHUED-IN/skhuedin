@@ -133,7 +133,7 @@ class FollowApiControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andDo(print())
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -191,7 +191,7 @@ class FollowApiControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(deleteRequestDto)))
                 .andDo(print())
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isForbidden());
     }
 
     @Test

@@ -31,7 +31,7 @@ public class Posts extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "blog_id")
+    @JoinColumn(name = "blog_id", nullable = false)
     private Blog blog;
 
     private String title;

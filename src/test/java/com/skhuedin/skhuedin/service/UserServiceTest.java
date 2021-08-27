@@ -6,6 +6,7 @@ import com.skhuedin.skhuedin.domain.user.User;
 import com.skhuedin.skhuedin.dto.user.UserAdminMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserMainResponseDto;
 import com.skhuedin.skhuedin.dto.user.UserUpdateDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import com.skhuedin.skhuedin.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,7 +113,7 @@ class UserServiceTest {
     void findById_false() {
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> userService.findById(0L));
+        assertThrows(EntityNotFoundException.class, () -> userService.findById(0L));
     }
 
     @Test

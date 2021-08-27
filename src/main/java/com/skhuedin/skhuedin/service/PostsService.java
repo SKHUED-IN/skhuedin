@@ -9,6 +9,7 @@ import com.skhuedin.skhuedin.dto.posts.PostsAdminUpdateResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsMainResponseDto;
 import com.skhuedin.skhuedin.dto.posts.PostsSaveRequestDto;
 import com.skhuedin.skhuedin.dto.posts.SuggestionsSaveRequestDto;
+import com.skhuedin.skhuedin.error.exception.EntityNotFoundException;
 import com.skhuedin.skhuedin.repository.BlogRepository;
 import com.skhuedin.skhuedin.repository.CategoryRepository;
 import com.skhuedin.skhuedin.repository.PostsRepository;
@@ -103,11 +104,9 @@ public class PostsService {
 
     @Transactional
     public Long saveSuggestions(SuggestionsSaveRequestDto requestDto) {
-        Category category = categoryRepository.findByCategoryName("건의사항").orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 카테고리 입니다."));
+        Category category = categoryRepository.findByCategoryName("건의사항").orElseThrow(EntityNotFoundException::new);
 
-        Blog blog = blogRepository.findByUserEmail("admin@email.com").orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 회원의 이름입니다."));
+        Blog blog = blogRepository.findByUserEmail("admin@email.com").orElseThrow(EntityNotFoundException::new);
 
         return postsRepository.save(requestDto.toEntity(blog, category)).getId();
     }
@@ -147,24 +146,18 @@ public class PostsService {
 
     /* private 메소드 */
     private Blog getBlog(Long id) {
-        return blogRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 blog 입니다. id=" + id)
-        );
+        return blogRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     private Posts getPosts(Long id) {
-        return postsRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 posts 입니다. id=" + id)
-        );
+        return postsRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     private Category getCategory(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 category 입니다. id=" + id));
+        return categoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     private Category getCategory(String categoryName) {
-        return categoryRepository.findByCategoryName(categoryName).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 category name 입니다."));
+        return categoryRepository.findByCategoryName(categoryName).orElseThrow(EntityNotFoundException::new);
     }
 }
